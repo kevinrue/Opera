@@ -44,7 +44,17 @@ export default class App extends Component {
         <header>
           <h1>Experiment List</h1>
         </header>
- 
+          <p>
+            This component renders a <code>DataGrid</code> defined in
+              the <a href="https://www.npmjs.com/package/react-datagrid">
+              <code>react-datagrid</code>
+            </a> module.
+          </p>
+          <p>
+            The grid is set to occupy 200 pixels in height, and
+            the central 90% of the browser window's width with
+            5% margin of either side.
+          </p>
           {this.renderExperiments()}
       </div>
     );
