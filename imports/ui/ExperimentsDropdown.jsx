@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import Select from 'react-select';
@@ -34,7 +35,7 @@ class ExperimentsDropdown extends Component {
 	    // console.log('Remove experiment with ID: ' + this.state.selectedExperimentId);
 	    // console.log(Experiments.findOne({ _id: this.state.selectedExperimentId }));
 	 
-	    Experiments.remove(this.state.selectedExperimentId);
+	 	Meteor.call('experiments.remove', this.state.selectedExperimentId);
 	 
 	    // Clear form
 	    this.setState({selectedExperimentId: ''});
