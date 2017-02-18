@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
  
 import { Experiments } from '../api/experiments.js';
+import ExperimentsDropdown from './ExperimentsDropdown.jsx';
  
 let DataGrid = require('react-datagrid')
 
@@ -11,8 +12,9 @@ class App extends Component {
 
   getDataGridColumns() {
     return [
+      { name: '_id', width: '5%' },
       { name: 'name', width: '85%' }, // the first letter of the 'name' field is automatically capitalised
-      { name: 'Nsamples', title: 'Samples', width: '15%' }
+      { name: 'Nsamples', title: 'Samples', width: '10%' }
     ]
   }
  
@@ -75,6 +77,8 @@ class App extends Component {
               placeholder="Type to add new experiments"
             />
           </form>
+
+          <ExperimentsDropdown label="Delete an experiment" searchable />
       </div>
     );
   }
