@@ -106,6 +106,8 @@ App.propTypes = {
 };
  
 export default createContainer(() => {
+  Meteor.subscribe('experiments');
+
   return {
     experiments: Experiments.find({}).fetch(),
     currentUser: Meteor.user(),
