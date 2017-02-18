@@ -1,22 +1,17 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { createContainer } from 'meteor/react-meteor-data';
+ 
+import { Experiments } from '../api/experiments.js';
  
 let DataGrid = require('react-datagrid')
 
 // App component - represents the whole app
-export default class App extends Component {
-  getExperiments() {
-    return [
-      { _id: 1, name: 'This is experiment 1', Nsamples: 0 },
-      { _id: 2, name: 'This is experiment 2', Nsamples: 0 },
-      { _id: 3, name: 'This is experiment 3', Nsamples: 0 },
-    ];
-  }
+class App extends Component {
 
   getDataGridColumns() {
     return [
-      { name: '_id', width: '5%' },
       { name: 'name', width: '85%' }, // the first letter of the 'name' field is automatically capitalised
-      { name: 'Nsamples', title: 'Samples', width: '10%' }
+      { name: 'Nsamples', title: 'Samples', width: '15%' }
     ]
   }
  
@@ -24,7 +19,7 @@ export default class App extends Component {
     return (
       <DataGrid
         idProperty='id'
-        dataSource={this.getExperiments()}
+        dataSource={this.props.experiments}
         columns={this.getDataGridColumns()}
         style={{
           height: 200,
@@ -60,3 +55,13 @@ export default class App extends Component {
     );
   }
 }
+
+App.propTypes = {
+  experiments: PropTypes.array.isRequired,
+};
+ 
+export default createContainer(() => {
+  return {
+    experiments: Experiments.find({}).fetch(),
+  };
+}, App);
