@@ -67,7 +67,7 @@ class ExperimentsDropdown extends Component {
 						clearable={this.state.clearable}
 						name="selected-experiment"
 						disabled={this.state.disabled}
-						value={this.state.selectedValue}
+						value={this.state.selectedExperimentId}
 						onChange={this.updateValue.bind(this)}
 						searchable={this.state.searchable}
 					/>
