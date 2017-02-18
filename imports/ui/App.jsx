@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { createContainer } from 'meteor/react-meteor-data';
  
 import { Experiments } from '../api/experiments.js';
@@ -15,6 +16,21 @@ class App extends Component {
     ]
   }
  
+  handleSubmit(event) {
+    event.preventDefault();
+ 
+    // Find the text field via the React ref
+    const experimentName = ReactDOM.findDOMNode(this.refs.newExperimentName).value.trim();
+ 
+    Experiments.insert({
+      name: experimentName,
+      Nsamples: 0
+    });
+ 
+    // Clear form
+    ReactDOM.findDOMNode(this.refs.newExperimentName).value = '';
+  }
+
   renderExperiments() {
     return (
       <DataGrid
@@ -51,6 +67,14 @@ class App extends Component {
             5% margin of either side.
           </p>
           {this.renderExperiments()}
+
+          <form className="new-experiment" onSubmit={this.handleSubmit.bind(this)} >
+            <input
+              type="text"
+              ref="newExperimentName"
+              placeholder="Type to add new experiments"
+            />
+          </form>
       </div>
     );
   }
