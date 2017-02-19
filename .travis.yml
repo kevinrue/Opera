@@ -17,4 +17,5 @@ before_script:
   - meteor npm install
 
 script:
-  - meteor bundle mongoclient.tar.gz
+  - meteor build opera.tar.gz
+  - meteor npm test
