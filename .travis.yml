@@ -1,7 +1,9 @@
-language: node_js  
+language: node_js
 node_js:
-  - "0.10"
+  - "4.1.1"
 before_install:
-  - "curl -L http://git.io/3l-rRA | /bin/sh"
+  - "curl -L https://raw.githubusercontent.com/arunoda/travis-ci-laika/master/configure.sh | /bin/sh"
+services:
+  - mongodb
 env:
   - LAIKA_OPTIONS="-t 5000"
