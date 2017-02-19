@@ -1,9 +1,20 @@
+sudo: false
+
 language: node_js
-node_js:
-  - "4.1.1"
+
 before_install:
-  - "curl -L https://raw.githubusercontent.com/arunoda/travis-ci-laika/master/configure.sh | /bin/sh"
-services:
-  - mongodb
-env:
-  - LAIKA_OPTIONS="-t 5000"
+  - curl https://install.meteor.com | /bin/sh
+  - export PATH="$HOME/.meteor:$PATH"
+
+script:
+  - meteor build $HOME/build.tgz
+
+cache:
+  directories:
+    - node_modules
+
+before_script:
+  - meteor npm install
+
+script:
+  - meteor bundle mongoclient.tar.gz
