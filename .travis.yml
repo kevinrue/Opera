@@ -2,11 +2,12 @@ sudo: false
 
 language: node_js
 node_js:
-  - "node"
-  - "6"
+  - "stable"
+  - "0.10"
 
 before_install:
   - curl https://install.meteor.com | /bin/sh
+  - meteor update --release 1.4.3-rc.3
   - export PATH="$HOME/.meteor:$PATH"
 
 services:
@@ -17,8 +18,8 @@ cache:
     - node_modules
 
 before_script:
-  - npm --version
   - meteor npm install
+  - npm --version
   - meteor --version
   - cat /home/travis/build/kevinrue/Opera/.meteor/versions
 
