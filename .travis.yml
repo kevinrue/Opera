@@ -7,8 +7,8 @@ node_js:
 
 before_install:
   - curl https://install.meteor.com | /bin/sh
-  - meteor update --release 1.4.3-rc.3
   - export PATH="$HOME/.meteor:$PATH"
+  - meteor update --release 1.4.3-rc.3
 
 services:
   - mongodb
