@@ -1,1 +1,7 @@
 node_modules/
+
+.Rproj.user
+.Rhistory
+Opera.Rproj
+
+testdata/

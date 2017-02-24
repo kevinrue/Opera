@@ -2,10 +2,15 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
- 
+
+import AccountsUIWrapper from './AccountsUIWrapper.jsx';
+
 import { Experiments } from '../api/experiments.js';
 import ExperimentsDropdown from './ExperimentsDropdown.jsx';
-import AccountsUIWrapper from './AccountsUIWrapper.jsx';
+
+import { RawFastqRecords } from '../api/raw-fastq-records.js';
+
+import RawFastqRecordList from './RawFastqRecords.jsx';
  
 let DataGrid = require('react-datagrid')
 
@@ -95,6 +100,8 @@ class App extends Component {
           </div> : ''
         }
 
+        <RawFastqRecordList />
+
       </div>
     );
   }
@@ -107,6 +114,7 @@ App.propTypes = {
  
 export default createContainer(() => {
   Meteor.subscribe('experiments');
+  Meteor.subscribe('rawFastqRecords');
 
   return {
     experiments: Experiments.find({}).fetch(),
