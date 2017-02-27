@@ -8,7 +8,8 @@ import ExperimentsTable from './ExperimentsTable.jsx';
 import AddExperimentForm from './AddExperimentForm.jsx';
 import RemoveExperimentForm from './RemoveExperimentForm.jsx';
 
-import RawFastqRecordList from './RawFastqRecords.jsx';
+import RawFastqRecordsInfo from './RawFastqRecordsInfo.jsx';
+import AddRawFastqRecords from './AddRawFastqRecords.jsx';
 
 // App component - represents the whole app
 class App extends Component {
@@ -26,15 +27,15 @@ class App extends Component {
 
         { this.props.currentUser ?
           <div>
-            <header>
-              <h1>Admin panel</h1>
-            </header>
+            <header><h1>Admin panel</h1></header>
             <AddExperimentForm />
             <RemoveExperimentForm label="Delete an experiment" searchable />
           </div> : ''
         }
 
-        <RawFastqRecordList />
+        <header><h1>Raw fastq records</h1></header>
+        <RawFastqRecordsInfo />
+        <AddRawFastqRecords />
 
       </div>
     );

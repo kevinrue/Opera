@@ -6,7 +6,7 @@ import Textarea from 'react-textarea-autosize';
 
 import { RawFastqRecords } from '../api/raw-fastq-records.js';
 
-class RawFastqRecordList extends Component {
+class AddRawFastqRecords extends Component {
 
 	constructor (props) {
 		super(props);
@@ -26,13 +26,13 @@ class RawFastqRecordList extends Component {
 			"\n").filter(
 				(textLine) => (textLine.trim() != '')
 		);
-		//console.log("Non empty lines: " + textLines.length);
-		// Input lines cannot have more than 1 TAB symbol
-		// nor spaces
+		console.log("Non empty lines: " + textLines.length);
+		// Input lines cannot have:
+		// more than 1 TAB symbol
+		// TODO: check that none of the new paths exist in the database already
 		console.log("Valid input? " + textLines.every(
 			(textLine) => (
-				textLine.trim().split('\t').length < 3 &&
-				!(textLine.includes(' '))
+				textLine.trim().split(',').length < 3
 			)
 		));
 		//console.log("<" + textLines[0] + ">");
@@ -53,7 +53,7 @@ class RawFastqRecordList extends Component {
 		//let paired = trimmedLines.map(inputLine => inputLine.split('\t').length > 1);
 		//console.log(paired);
 		let insertedRecords = trimmedLines.map(inputLine => {
-			fList = inputLine.split('\t')
+			fList = inputLine.split(',')
 			nFiles = fList.length;
 			//console.log(nfiles);
 			if (nFiles == 1) {
@@ -69,30 +69,20 @@ class RawFastqRecordList extends Component {
 	render () {
 		return(
 			<div>
-				<header><h1>Raw fastq records</h1></header>
-				<p>
-					<strong>Note:</strong> Although misleading, the section below
-					demonstrates how the publication/subscription system implemented by MeteorJS
-					refuses to publish information to unauthenticated users.
-				</p>
-				<header><h2>Overview</h2></header>
-				<p>There are {this.props.rawFastqAllCount} records in the database.</p>
-				<ul>
-					<li>Paired-end records: {this.props.rawFastqPairedCount}.</li>
-					<li>Single-end records: {this.props.rawFastqSingleRecords.length}.</li>
-				</ul>
 				<header><h2>Add records</h2></header>
 				<form className="add-raw-single-end" onSubmit={this.handleSubmit.bind(this)} >
 					<Textarea
 					    minRows={3}
+					    maxRows={10}
 					    style={{
-					    	whiteSpace: "nowrap",
+					    	whiteSpace: "nowrap", // do not soft-wrap lines
+					    	fontFamily: '"Courier New", Courier, monospace',
+					    	maxHeight: 250,
 					    	width: "80%",
 					    	marginLeft:"5%",
 					    	marginRight:"5%",
-					    	fontFamily: '"Courier New", Courier, monospace'
 					    }}
-					    placeholder="Paste TAB-delimited file paths here..."
+					    placeholder="Paste comma (,)-delimited file paths here..."
 					    value = {this.state.inputTextRawFastq}
 					    onChange={this.updateValue.bind(this)}
 					/><br/>
@@ -104,15 +94,11 @@ class RawFastqRecordList extends Component {
 
 }
 
-RawFastqRecordList.propTypes = {
+AddRawFastqRecords.propTypes = {
 	inputTextRawFastq: PropTypes.string,
-	rawFastqPairedRecords: PropTypes.array.isRequired,
-	rawFastqSingleRecords: PropTypes.array.isRequired,
-	rawFastqPairedCount: PropTypes.number.isRequired,
-	rawFastqSingleCount: PropTypes.number.isRequired,
 };
 
-RawFastqRecordList.defaultProps = {
+AddRawFastqRecords.defaultProps = {
 	inputTextRawFastq: '',
 };
 
@@ -123,9 +109,5 @@ export default createContainer(() => {
 
 	return {
 		rawFastqAllCount: RawFastqRecords.find({}).count(),
-	rawFastqPairedRecords: RawFastqRecords.find({paired : true}).fetch(),
-	rawFastqSingleRecords: RawFastqRecords.find({paired : false}).fetch(),
-	rawFastqPairedCount: RawFastqRecords.find({paired : true}).count(),
-	rawFastqSingleCount: RawFastqRecords.find({paired : false}).count()
 	};
-}, RawFastqRecordList);
+}, AddRawFastqRecords);
