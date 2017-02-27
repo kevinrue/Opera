@@ -7,7 +7,7 @@ import AccountsUIWrapper from './AccountsUIWrapper.jsx';
 
 import ExperimentsTable from './ExperimentsTable.jsx';
 
-import AddExperimentFor from './AddExperimentForm.jsx';
+import AddExperimentForm from './AddExperimentForm.jsx';
 import RemoveExperimentForm from './RemoveExperimentForm.jsx';
 
 import { RawFastqRecords } from '../api/raw-fastq-records.js';
@@ -33,7 +33,7 @@ class App extends Component {
             <header>
               <h1>Admin panel</h1>
             </header>
-            <AddExperimentFor />
+            <AddExperimentForm />
             <RemoveExperimentForm label="Delete an experiment" searchable />
           </div> : ''
         }
