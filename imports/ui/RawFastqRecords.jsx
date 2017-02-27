@@ -70,6 +70,11 @@ class RawFastqRecordList extends Component {
 		return(
 			<div>
 				<header><h1>Raw fastq records</h1></header>
+				<p>
+					<strong>Note:</strong> Although misleading, the section below
+					demonstrates how the publication/subscription system implemented by MeteorJS
+					refuses to publish information to unauthenticated users.
+				</p>
 				<header><h2>Overview</h2></header>
 				<p>There are {this.props.rawFastqAllCount} records in the database.</p>
 				<ul>

@@ -7,8 +7,8 @@ import AccountsUIWrapper from './AccountsUIWrapper.jsx';
 
 import ExperimentsTable from './ExperimentsTable.jsx';
 
-import { Experiments } from '../api/experiments.js';
-import ExperimentsDropdown from './ExperimentsDropdown.jsx';
+import AddExperimentFor from './AddExperimentForm.jsx';
+import RemoveExperimentForm from './RemoveExperimentForm.jsx';
 
 import { RawFastqRecords } from '../api/raw-fastq-records.js';
 
@@ -16,18 +16,6 @@ import RawFastqRecordList from './RawFastqRecords.jsx';
 
 // App component - represents the whole app
 class App extends Component {
- 
-  handleSubmit(event) {
-    event.preventDefault();
- 
-    // Find the text field via the React ref
-    const experimentName = ReactDOM.findDOMNode(this.refs.newExperimentName).value.trim();
- 
-    Meteor.call('experiments.insert', experimentName);
- 
-    // Clear form
-    ReactDOM.findDOMNode(this.refs.newExperimentName).value = '';
-  }
  
   render() {
     return (
@@ -45,17 +33,8 @@ class App extends Component {
             <header>
               <h1>Admin panel</h1>
             </header>
-            <header>
-              <h2 className="section-heading">Add an experiment</h2>
-            </header>
-            <form className="new-experiment" onSubmit={this.handleSubmit.bind(this)} >
-              <input
-                type="text"
-                ref="newExperimentName"
-                placeholder="Type to add new experiments"
-              />
-            </form>
-            <ExperimentsDropdown label="Delete an experiment" searchable />
+            <AddExperimentFor />
+            <RemoveExperimentForm label="Delete an experiment" searchable />
           </div> : ''
         }
 
@@ -67,16 +46,12 @@ class App extends Component {
 }
 
 App.propTypes = {
-  experiments: PropTypes.array.isRequired,
   currentUser: PropTypes.object,
 };
  
 export default createContainer(() => {
-  Meteor.subscribe('experiments');
-  Meteor.subscribe('rawFastqRecords');
 
   return {
-    experiments: Experiments.find({}).fetch(),
     currentUser: Meteor.user(),
   };
 }, App);

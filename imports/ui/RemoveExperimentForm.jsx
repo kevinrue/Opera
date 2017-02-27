@@ -6,7 +6,7 @@ import Select from 'react-select';
 
 import { Experiments } from '../api/experiments.js';
 
-class ExperimentsDropdown extends Component {
+class RemoveExperimentForm extends Component {
 
 	constructor(props) {
 		super(props);
@@ -79,13 +79,13 @@ class ExperimentsDropdown extends Component {
 	}
 };
 
-ExperimentsDropdown.propTypes = {
+RemoveExperimentForm.propTypes = {
 	label: React.PropTypes.string,
 	searchable: React.PropTypes.bool,
 	experiments: PropTypes.array.isRequired,
 };
 
-ExperimentsDropdown.defaultProps = {
+RemoveExperimentForm.defaultProps = {
 	label: 'Delete an experiment',
 	searchable: true
 };
@@ -96,4 +96,4 @@ export default createContainer(() => {
   return {
     experiments: Experiments.find({}).fetch()
   };
-}, ExperimentsDropdown);
+}, RemoveExperimentForm);
