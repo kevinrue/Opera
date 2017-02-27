@@ -1,16 +1,12 @@
 import React, { Component, PropTypes } from 'react';
-import ReactDOM from 'react-dom';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import AccountsUIWrapper from './AccountsUIWrapper.jsx';
 
 import ExperimentsTable from './ExperimentsTable.jsx';
-
 import AddExperimentForm from './AddExperimentForm.jsx';
 import RemoveExperimentForm from './RemoveExperimentForm.jsx';
-
-import { RawFastqRecords } from '../api/raw-fastq-records.js';
 
 import RawFastqRecordList from './RawFastqRecords.jsx';
 

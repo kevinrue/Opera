@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
@@ -11,15 +12,15 @@ class AddExperimentForm extends Component {
 	}
 
 	handleSubmit(event) {
-    event.preventDefault();
- 
-    // Find the text field via the React ref
-    const experimentName = ReactDOM.findDOMNode(this.refs.newExperimentName).value.trim();
- 
-    Meteor.call('experiments.insert', experimentName);
- 
-    // Clear form
-    ReactDOM.findDOMNode(this.refs.newExperimentName).value = '';
+	    event.preventDefault();
+	 
+	    // Find the text field via the React ref
+	    const experimentName = ReactDOM.findDOMNode(this.refs.newExperimentName).value.trim();
+	 
+	    Meteor.call('experiments.insert', experimentName);
+	 
+	    // Clear form
+	    ReactDOM.findDOMNode(this.refs.newExperimentName).value = '';
   }
 
 	render () {
