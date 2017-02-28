@@ -3,6 +3,8 @@ import { Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
 
 // route components
 import App from '../../ui/App.jsx';
+import AccountsUIWrapper from '../../ui/AccountsUIWrapper.jsx';
+import ExperimentsTable from '../../ui/ExperimentsTable.jsx';
 // import ListPageContainer from '../../ui/containers/ListPageContainer.js';
 // import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.js';
 // import AuthPageJoin from '../../ui/pages/AuthPageJoin.js';
@@ -17,7 +19,8 @@ const NotExist = () => (
 const Nav = () => (
   <div>
     <Link to='/'>Home</Link>&nbsp;
-    <Link to='/404'>404</Link>
+    <Link to='/experiments'>Experiments</Link>&nbsp;
+    <AccountsUIWrapper style='float: right;'/>
   </div>
 )
 
@@ -30,6 +33,7 @@ export const renderRoutes = () => (
   <Router history={browserHistory}>
   	<Route path='/' component={Container}>
   		<IndexRoute component={App} />
+  		<Route path='experiments' component={ExperimentsTable} />
   		<Route path='404' component={NotFound} />
   		<Route path='*' component={NotFound} />
   	</Route>    

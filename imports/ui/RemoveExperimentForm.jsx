@@ -61,7 +61,6 @@ class RemoveExperimentForm extends Component {
 		        </p>
 		        <form className="delete-experiment" onSubmit={this.handleSubmit.bind(this)} >
 					<Select
-						autofocus
 						options={options}
 						ref='deleteExperiment'
 						simpleValue
