@@ -1,6 +1,10 @@
 import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data'; // 
 
+import { browserHistory } from 'react-router';
+
+import { ButtonToolbar, Button } from 'react-bootstrap';
+
 import { Experiments } from '../api/experiments.js';
 
 let DataGrid = require('react-datagrid')
@@ -33,6 +37,14 @@ class ExperimentsTable extends Component {
 		);
   }
 
+  goToAddExperiment() {;
+    browserHistory.push('/experiments/add');
+  }
+
+  goToRemoveExperiment() {;
+    browserHistory.push('/experiments/remove');
+  }
+
 	render() {
     return (
     	<div>
@@ -52,6 +64,15 @@ class ExperimentsTable extends Component {
           5% margin of either side.
         </p>
         {this.renderExperiments()}
+        { this.props.currentUser ?
+          <div>
+            <header><h1>Admin panel</h1></header>
+            <ButtonToolbar>
+              <Button bsStyle="link" onClick={this.goToAddExperiment.bind(this)}>Add experiment</Button>
+              <Button bsStyle="link" onClick={this.goToRemoveExperiment.bind(this)}>Remove experiment</Button>
+            </ButtonToolbar>
+          </div> : ''
+        }
     	</div>
     );
     }
@@ -71,6 +92,7 @@ export default createContainer(() => {
 	Meteor.subscribe('experiments');
 
   return {
+    currentUser: Meteor.user(),
     experiments: Experiments.find({}).fetch()
   };
 }, ExperimentsTable);

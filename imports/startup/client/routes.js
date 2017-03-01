@@ -5,10 +5,8 @@ import { Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
 import App from '../../ui/App.jsx';
 import AccountsUIWrapper from '../../ui/AccountsUIWrapper.jsx';
 import ExperimentsTable from '../../ui/ExperimentsTable.jsx';
-// import ListPageContainer from '../../ui/containers/ListPageContainer.js';
-// import AuthPageSignIn from '../../ui/pages/AuthPageSignIn.js';
-// import AuthPageJoin from '../../ui/pages/AuthPageJoin.js';
-// import NotFoundPage from '../../ui/pages/NotFoundPage.js';
+import AddExperimentForm from '../../ui/AddExperimentForm.jsx';
+import RemoveExperimentForm from '../../ui/RemoveExperimentForm.jsx';
 
 const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
@@ -31,6 +29,8 @@ export const renderRoutes = () => (
   	<Route path='/' component={Container}>
   		<IndexRoute component={App} />
   		<Route path='/experiments' component={ExperimentsTable} />
+  		<Route path='/experiments/add' component={AddExperimentForm} />
+  		<Route path='/experiments/remove' component={RemoveExperimentForm} />
   	</Route>
   	<Route path='*' component={NotFound} />
   </Router>

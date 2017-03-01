@@ -72,6 +72,7 @@ class RemoveExperimentForm extends Component {
 						onChange={this.updateValue.bind(this)}
 						searchable={this.state.searchable}
 					/>
+					<br/>
 					<Button type="submit" bsStyle="danger">Danger</Button>
 				</form>
 			</div>
@@ -94,7 +95,7 @@ RemoveExperimentForm.defaultProps = {
 // and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
 	Meteor.subscribe('experiments');
-	
+
   return {
     experiments: Experiments.find({}).fetch()
   };
