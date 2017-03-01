@@ -15,3 +15,8 @@
 .new-experiment input:focus {
   background: lightyellow;
 }
+
+.accounts-form {
+  float: right;
+  margin-right:20%;
+}
