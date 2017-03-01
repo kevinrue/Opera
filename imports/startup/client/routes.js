@@ -13,9 +13,6 @@ import ExperimentsTable from '../../ui/ExperimentsTable.jsx';
 const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
 
-const NotExist = () => (
-  <h1>This is the "NotExist" page!</h1>)
-
 const Nav = () => (
   <div className='NavBar'>
     <Link to='/'>Home</Link>&nbsp;
@@ -33,9 +30,8 @@ export const renderRoutes = () => (
   <Router history={browserHistory}>
   	<Route path='/' component={Container}>
   		<IndexRoute component={App} />
-  		<Route path='experiments' component={ExperimentsTable} />
-  		<Route path='404' component={NotFound} />
-  		<Route path='*' component={NotFound} />
+  		<Route path='/experiments' component={ExperimentsTable} />
   	</Route>
+  	<Route path='*' component={NotFound} />
   </Router>
 );
