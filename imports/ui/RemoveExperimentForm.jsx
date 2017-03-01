@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import Select from 'react-select';
+import { Button } from 'react-bootstrap';
 
 import { Experiments } from '../api/experiments.js';
 
@@ -71,7 +72,7 @@ class RemoveExperimentForm extends Component {
 						onChange={this.updateValue.bind(this)}
 						searchable={this.state.searchable}
 					/>
-					<button type="submit" className="btn btn-danger">Delete!</button>
+					<Button type="submit" bsStyle="danger">Danger</Button>
 				</form>
 			</div>
 		);
@@ -92,6 +93,8 @@ RemoveExperimentForm.defaultProps = {
 // The wrapped 'App' component fetches tasks from the Tasks collection
 // and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
+	Meteor.subscribe('experiments');
+	
   return {
     experiments: Experiments.find({}).fetch()
   };

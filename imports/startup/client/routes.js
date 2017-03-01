@@ -36,6 +36,6 @@ export const renderRoutes = () => (
   		<Route path='experiments' component={ExperimentsTable} />
   		<Route path='404' component={NotFound} />
   		<Route path='*' component={NotFound} />
-  	</Route>    
+  	</Route>
   </Router>
 );
