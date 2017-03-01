@@ -2,9 +2,6 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
-import RawFastqRecordsInfo from './RawFastqRecordsInfo.jsx';
-import AddRawFastqRecords from './AddRawFastqRecords.jsx';
-
 // App component - represents the whole app
 class App extends Component {
  
@@ -15,10 +12,6 @@ class App extends Component {
         <p style={{textAlign:'center'}}>Hello {
           this.props.currentUser ? this.props.currentUser.username : "stranger"
         }!</p>
-
-        <header><h1>Raw fastq records</h1></header>
-        <RawFastqRecordsInfo />
-        <AddRawFastqRecords />
 
       </div>
     );

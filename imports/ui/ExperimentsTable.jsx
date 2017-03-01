@@ -37,20 +37,18 @@ class ExperimentsTable extends Component {
 		);
   }
 
-  goToAddExperiment() {;
+  goToAddExperiment() {
     browserHistory.push('/experiments/add');
   }
 
-  goToRemoveExperiment() {;
+  goToRemoveExperiment() {
     browserHistory.push('/experiments/remove');
   }
 
 	render() {
     return (
     	<div>
-	    	<header>
-	          <h1>Experiment List</h1>
-        </header>
+	    	<header><h1>Experiment List</h1></header>
 
         <p>
           This component renders a <code>DataGrid</code> defined in

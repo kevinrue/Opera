@@ -2,6 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
+import { browserHistory } from 'react-router';
+
+import { ButtonToolbar, Button } from 'react-bootstrap';
+
 import { RawFastqRecords } from '../api/raw-fastq-records.js';
 
 class RawFastqRecordsInfo extends Component {
@@ -10,9 +14,14 @@ class RawFastqRecordsInfo extends Component {
 		super(props);
 	}
 
+	goToAddRawFastq() {
+    browserHistory.push('/rawFastq/add');
+  }
+
 	render () {
 		return(
 			<div>
+				<header><h1>Raw FASTQ</h1></header>
 				<header><h2>Overview</h2></header>
 				<p>
 					<strong>Note:</strong> Although misleading, this component
@@ -24,6 +33,14 @@ class RawFastqRecordsInfo extends Component {
 					<li>Paired-end records: {this.props.rawFastqPairedCount}.</li>
 					<li>Single-end records: {this.props.rawFastqSingleCount}.</li>
 				</ul>
+				{ this.props.currentUser ?
+	          <div>
+	            <header><h2>Admin panel</h2></header>
+	            <ButtonToolbar>
+	              <Button bsStyle="link" onClick={this.goToAddRawFastq.bind(this)}>Add raw FASTQ</Button>
+	            </ButtonToolbar>
+	          </div> : ''
+	        }
 			</div>
 		);
 	}
@@ -43,8 +60,10 @@ RawFastqRecordsInfo.defaultProps = {
 // and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
 	Meteor.subscribe('rawFastqRecords');
+	Meteor.subscribe('experiments');
 
 	return {
+		currentUser: Meteor.user(),
 		rawFastqAllCount: RawFastqRecords.find({}).count(),
 		rawFastqPairedCount: RawFastqRecords.find({paired : true}).count(),
 		rawFastqSingleCount: RawFastqRecords.find({paired : false}).count()

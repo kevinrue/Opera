@@ -69,7 +69,8 @@ class AddRawFastqRecords extends Component {
 	render () {
 		return(
 			<div>
-				<header><h2>Add records</h2></header>
+				<header><h1>Raw FASTQ</h1></header>
+				<header><h2>Add raw FASTQ records</h2></header>
 				<form className="add-raw-single-end" onSubmit={this.handleSubmit.bind(this)} >
 					<Textarea
 					    minRows={3}

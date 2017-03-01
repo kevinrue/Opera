@@ -31,9 +31,7 @@ class AddExperimentForm extends Component {
 
 		return (
 			<div>
-				<header>
-	              <h2 className="section-heading">Add an experiment</h2>
-	            </header>
+				<header><h2 className="section-heading">Add an experiment</h2></header>
 	            <form className="new-experiment" onSubmit={this.handleSubmit.bind(this)} >
 	              <input
 	                type="text"

@@ -50,9 +50,7 @@ class RemoveExperimentForm extends Component {
 
 		return (
 			<div className="delete-dropdown-form">
-				<header>
-					<h2 className="section-heading">{this.props.label}</h2>
-				</header>
+				<header><h2 className="section-heading">{this.props.label}</h2></header>
 				<p>
 		          Below is a dropdown menu that lists all existing experiments;
 		          it is accompanied by a button that causes the selected experiment to be deleted.
