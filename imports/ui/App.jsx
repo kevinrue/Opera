@@ -20,8 +20,6 @@ class App extends Component {
           this.props.currentUser ? this.props.currentUser.username : "stranger"
         }!</p>
 
-        <ExperimentsTable />
-
         { this.props.currentUser ?
           <div>
             <header><h1>Admin panel</h1></header>

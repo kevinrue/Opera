@@ -17,7 +17,7 @@ const NotExist = () => (
   <h1>This is the "NotExist" page!</h1>)
 
 const Nav = () => (
-  <div>
+  <div className='NavBar'>
     <Link to='/'>Home</Link>&nbsp;
     <Link to='/experiments'>Experiments</Link>&nbsp;
     <AccountsUIWrapper style='float: right;'/>

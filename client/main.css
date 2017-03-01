@@ -18,5 +18,10 @@
 
 .accounts-form {
   float: right;
-  margin-right:20%;
+  margin-right: 20%;
+}
+
+.NavBar {
+  height: 40px;
+  background: darkblue;
 }
