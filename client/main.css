@@ -16,12 +16,35 @@
   background: lightyellow;
 }
 
-.accounts-form {
-  float: right;
-  margin-right: 20%;
+.NavContainer {
+  background: darkblue;
+}
+
+.NavActive {
+  margin-right:20%;
 }
 
 .NavBar {
+  display: flex;
   height: 40px;
-  background: darkblue;
 }
+
+.NavBar {
+}
+
+.NavBarLeft {
+  flex: 1;
+  justify-content: left;
+}
+
+.NavBarRight {
+  flex: 0 0 auto;
+  justify-content: right;
+}
+
+/*
+.accounts-dialog {
+  justify-content: right;
+  margin-right:30%;
+}
+*/

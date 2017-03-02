@@ -1,5 +1,8 @@
 import React from 'react';
+
 import { Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Button } from 'react-bootstrap';
 
 // route components
 import App from '../../ui/App.jsx';
@@ -17,12 +20,20 @@ const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
 
 const Nav = () => (
-  <div className='NavBar'>
-    <Link to='/'>Home</Link>&nbsp;
-    <Link to='/rawFastq'>Raw FASTQ</Link>&nbsp;
-    <Link to='/experiments'>Experiments</Link>&nbsp;
-    <AccountsUIWrapper style='float: right;'/>
-  </div>
+	<div className='NavContainer'>
+		<div className='NavActive'>
+		  <div className='NavBar'>
+		  	<div className='NavBarLeft'>
+		  		<LinkContainer to='/'><Button>Home</Button></LinkContainer>
+			    <LinkContainer to='/rawFastq'><Button>Raw FASTQ</Button></LinkContainer>
+			    <LinkContainer to='/experiments'><Button>Experiments</Button></LinkContainer>
+		  	</div>
+		  	<div className='NavBarRight'>
+		  		<AccountsUIWrapper style='float: right;'/>
+		  	</div>
+		  </div>
+	  </div>
+	 </div>
 )
 
 const Container = (props) => <div>
