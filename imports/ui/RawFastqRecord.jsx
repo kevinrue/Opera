@@ -21,13 +21,16 @@ class RawFastqRecord extends Component {
 	            <table className='table raw-fastq-record-table'>
 	            	<thead>
 	            		<tr>
-	            			<th>Key</th><th>Value</th>
+	            			<th>Field</th><th>Value</th>
 	            		</tr>
 	            	</thead>
 	            	<tbody>
-	            		<tr><td>Field</td><td>{this.props.record._id}</td></tr>
+	            		<tr><td>Identifier</td><td>{this.props.record._id}</td></tr>
 	            		<tr><td>Paired</td><td>{this.props.record.paired ? 'Yes' : 'No'}</td></tr>
-	            		<tr><td>Filepath</td><td>{this.props.record.filepath}</td></tr>
+	            		{ this.props.record.paired ?
+	            			<tr><td>First<br/>Second</td><td>{this.props.record.first}<br/>{this.props.record.second}</td></tr>:
+	            			<tr><td>Filepath</td><td>{this.props.record.filepath}</td></tr>
+	            		}
 	            	</tbody>
 	            </table>
 	          </div> : <p style={{textAlign:'center'}}>This record does not exist.</p>

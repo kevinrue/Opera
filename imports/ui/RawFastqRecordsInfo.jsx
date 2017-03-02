@@ -40,12 +40,17 @@ class RawFastqRecordsInfo extends Component {
 
 				<header><h2>Sample</h2></header>
 
-					{ this.props.rawFastqSampleSingleRecord ?
-						<p>
-							This <a href={"/rawFastq/" + this.props.rawFastqSampleSingleRecord._id}>link</a> leads
-							to a sample raw FASTQ <em>single-end</em> record.
-						</p> : <p>Loading...</p>
-					}
+					<p>
+						Sample <em>single-end</em> record: { this.props.rawFastqSampleSingleRecord ?
+							<a href={"/rawFastq/" + this.props.rawFastqSampleSingleRecord._id}>single</a> : 'Loading...'
+						}
+					</p>
+
+					<p>
+						Sample <em>paired-end</em> record: { this.props.rawFastqSamplePairedRecord ?
+							<a href={"/rawFastq/" + this.props.rawFastqSamplePairedRecord._id}>paired</a> : 'Loading...'
+						}
+					</p>
 
 				{ this.props.currentUser ?
 	          <div>
@@ -66,7 +71,8 @@ RawFastqRecordsInfo.propTypes = {
 	rawFastqAllCount: PropTypes.number.isRequired,
 	rawFastqPairedCount: PropTypes.number.isRequired,
 	rawFastqSingleCount: PropTypes.number.isRequired,
-	rawFastqSampleSingleRecord: PropTypes.object.isRequired,
+	rawFastqSampleSingleRecord: PropTypes.object,
+	rawFastqSamplePairedRecord: PropTypes.object,
 };
 
 RawFastqRecordsInfo.defaultProps = {
@@ -84,5 +90,6 @@ export default createContainer(() => {
 		rawFastqPairedCount: RawFastqRecords.find({paired : true}).count(),
 		rawFastqSingleCount: RawFastqRecords.find({paired : false}).count(),
 		rawFastqSampleSingleRecord: RawFastqRecords.findOne({paired : false}),
+		rawFastqSamplePairedRecord: RawFastqRecords.findOne({paired : true}),
 	};
 }, RawFastqRecordsInfo);
