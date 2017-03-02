@@ -32,3 +32,7 @@
 .accounts-dialog {
   background: lightblue;
 }
+
+.nav.navbar-nav#navbar-signin {
+  margin-right: 150px;
+}

@@ -22,6 +22,12 @@ const Nav = () => (
 	<nav className="navbar navbar-inverse">
 		<div className="container-fluid">
 			<div className="navbar-header">
+				<Button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar" aria-expanded="false">
+	        <span className="sr-only">Toggle navigation</span>
+	        <span className="icon-bar"></span>
+	        <span className="icon-bar"></span>
+	        <span className="icon-bar"></span>
+	      </Button>
 	      <a className="navbar-brand" href="/">
 	        Opera
 	      </a>
@@ -31,8 +37,10 @@ const Nav = () => (
 		      <li><Link to='/'>Home</Link></li>
 			    <li><Link to='/rawFastq'>Raw FASTQ</Link></li>
 			    <li><Link to='/experiments'>Experiments</Link></li>
-	      	<li><AccountsUIWrapper /></li>
 	    	</ul>
+	    	<ul className="nav navbar-nav navbar-right" id="navbar-signin">
+		    	<li><AccountsUIWrapper /></li>
+		    </ul>
 	    </div>
 		</div>
 	</nav>
