@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
-import { LinkContainer } from 'react-router-bootstrap';
 import { Button } from 'react-bootstrap';
 
 // route components
@@ -20,20 +19,26 @@ const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
 
 const Nav = () => (
-	<div className='NavContainer'>
-		<div className='NavActive'>
-		  <div className='NavBar'>
-		  	<div className='NavBarLeft'>
-		  		<LinkContainer to='/'><Button>Home</Button></LinkContainer>
-			    <LinkContainer to='/rawFastq'><Button>Raw FASTQ</Button></LinkContainer>
-			    <LinkContainer to='/experiments'><Button>Experiments</Button></LinkContainer>
-		  	</div>
-		  	<div className='NavBarRight'>
-		  		<AccountsUIWrapper style='float: right;'/>
-		  	</div>
-		  </div>
-	  </div>
-	 </div>
+	<nav className="navbar navbar-default">
+		<div className="container-fluid">
+			<div className="navbar-header">
+	      <a className="navbar-brand" href="/">
+	        Opera
+	      </a>
+	    </div>
+	    <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul className="nav navbar-nav">
+		      <li><Link to='/'>Home</Link></li>
+			    <li><Link to='/rawFastq'>Raw FASTQ</Link></li>
+			    <li><Link to='/experiments'>Experiments</Link></li>
+	      	<li><AccountsUIWrapper /></li>
+	    	</ul>
+	    </div>
+		</div>
+	</nav>
+
+
+	
 )
 
 const Container = (props) => <div>

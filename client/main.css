@@ -16,35 +16,15 @@
   background: lightyellow;
 }
 
-.NavContainer {
+.navbar {
   background: darkblue;
 }
 
-.NavActive {
-  margin-right:20%;
+.nav.navbar-nav li a {
+    color: white;
 }
 
-.NavBar {
-  display: flex;
-  height: 40px;
+.nav.navbar-nav li a:focus,
+.nav.navbar-nav li a:hover {
+    color: yellow;
 }
-
-.NavBar {
-}
-
-.NavBarLeft {
-  flex: 1;
-  justify-content: left;
-}
-
-.NavBarRight {
-  flex: 0 0 auto;
-  justify-content: right;
-}
-
-/*
-.accounts-dialog {
-  justify-content: right;
-  margin-right:30%;
-}
-*/
