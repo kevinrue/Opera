@@ -19,7 +19,7 @@ const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
 
 const Nav = () => (
-	<nav className="navbar navbar-default">
+	<nav className="navbar navbar-inverse">
 		<div className="container-fluid">
 			<div className="navbar-header">
 	      <a className="navbar-brand" href="/">
