@@ -28,3 +28,7 @@
 .nav.navbar-nav li a:hover {
     color: yellow;
 }
+
+.accounts-dialog {
+  background: lightblue;
+}

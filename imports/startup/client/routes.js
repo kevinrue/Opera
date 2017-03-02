@@ -26,7 +26,7 @@ const Nav = () => (
 	        Opera
 	      </a>
 	    </div>
-	    <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	    <div className="collapse navbar-collapse" id="bs-navbar">
 	      <ul className="nav navbar-nav">
 		      <li><Link to='/'>Home</Link></li>
 			    <li><Link to='/rawFastq'>Raw FASTQ</Link></li>
