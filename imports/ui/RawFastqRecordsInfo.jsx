@@ -44,7 +44,7 @@ class RawFastqRecordsInfo extends Component {
 						<p>
 							This <a href={"/rawFastq/" + this.props.rawFastqSampleSingleRecord._id}>link</a> leads
 							to a sample raw FASTQ <em>single-end</em> record.
-						</p> : <p>'Loading...</p>
+						</p> : <p>Loading...</p>
 					}
 
 				{ this.props.currentUser ?
