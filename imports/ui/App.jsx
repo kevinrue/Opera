@@ -9,9 +9,10 @@ class App extends Component {
     return (
       <div className="container">
 
-        <p style={{textAlign:'center'}}>Hello {
+        <p style={{textAlign:'center'}}>Welcome {
           this.props.currentUser ? this.props.currentUser.username : "stranger"
-        }!</p>
+        }!
+        </p>
 
       </div>
     );

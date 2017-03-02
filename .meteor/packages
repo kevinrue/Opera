@@ -24,3 +24,4 @@ accounts-password@1.3.4
 practicalmeteor:mocha
 dispatch:mocha-phantomjs
 accounts-ui
+less

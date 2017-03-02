@@ -14,6 +14,7 @@ import RemoveExperimentForm from '../../ui/RemoveExperimentForm.jsx';
 
 import RawFastqRecordsInfo from '../../ui/RawFastqRecordsInfo.jsx';
 import AddRawFastqRecords from '../../ui/AddRawFastqRecords.jsx';
+import RawFastqRecord from '../../ui/RawFastqRecord.jsx';
 
 const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
@@ -28,9 +29,7 @@ const Nav = () => (
 	        <span className="icon-bar"></span>
 	        <span className="icon-bar"></span>
 	      </Button>
-	      <a className="navbar-brand" href="/">
-	        Opera
-	      </a>
+	      <a className="navbar-brand" href="/">Opera</a>
 	    </div>
 	    <div className="collapse navbar-collapse" id="bs-navbar">
 	      <ul className="nav navbar-nav">
@@ -63,6 +62,7 @@ export const renderRoutes = () => (
   		<Route path='/experiments/remove' component={RemoveExperimentForm} />
   		<Route path='/rawFastq' component={RawFastqRecordsInfo} />
   		<Route path='/rawFastq/add' component={AddRawFastqRecords} />
+  		<Route path='/rawFastq/:_id' component={RawFastqRecord} />
   	</Route>
   	<Route path='*' component={NotFound} />
   </Router>
