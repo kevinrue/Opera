@@ -12,15 +12,15 @@ class AddExperimentForm extends Component {
 	}
 
 	handleSubmit(event) {
-	    event.preventDefault();
-	 
-	    // Find the text field via the React ref
-	    const experimentName = ReactDOM.findDOMNode(this.refs.newExperimentName).value.trim();
-	 
-	    Meteor.call('experiments.insert', experimentName);
-	 
-	    // Clear form
-	    ReactDOM.findDOMNode(this.refs.newExperimentName).value = '';
+    event.preventDefault();
+ 
+    // Find the text field via the React ref
+    const experimentName = ReactDOM.findDOMNode(this.refs.newExperimentName).value.trim();
+ 
+    Meteor.call('experiments.insert', experimentName);
+ 
+    // Clear form
+    ReactDOM.findDOMNode(this.refs.newExperimentName).value = '';
   }
 
 	render () {
@@ -31,14 +31,16 @@ class AddExperimentForm extends Component {
 
 		return (
 			<div>
-				<header><h2 className="section-heading">Add an experiment</h2></header>
-	            <form className="new-experiment" onSubmit={this.handleSubmit.bind(this)} >
-	              <input
-	                type="text"
-	                ref="newExperimentName"
-	                placeholder="Type to add new experiments"
-	              />
-	            </form>
+				<header><h1>Experiments</h1></header>
+				<p>There are currently {this.props.experiments.length} experiments in the database.</p>
+				<header><h2>Add an experiment</h2></header>
+          <form className="new-experiment" onSubmit={this.handleSubmit.bind(this)} >
+            <input
+              type="text"
+              ref="newExperimentName"
+              placeholder="Type to add new experiments"
+            />
+          </form>
 			</div>
 		);
 	}
@@ -54,6 +56,8 @@ AddExperimentForm.defaultProps = {
 // The wrapped 'App' component fetches tasks from the Tasks collection
 // and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
+	Meteor.subscribe('experiments');
+	
   return {
     experiments: Experiments.find({}).fetch()
   };

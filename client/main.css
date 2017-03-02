@@ -26,7 +26,7 @@
 
 .nav.navbar-nav li a:focus,
 .nav.navbar-nav li a:hover {
-    color: yellow;
+  color: yellow;
 }
 
 .accounts-dialog {

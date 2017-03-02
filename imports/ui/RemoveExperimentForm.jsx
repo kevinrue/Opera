@@ -50,15 +50,17 @@ class RemoveExperimentForm extends Component {
 
 		return (
 			<div className="delete-dropdown-form">
-				<header><h2 className="section-heading">{this.props.label}</h2></header>
+				<header><h1>Experiments</h1></header>
+				<p>There are currently {this.props.experiments.length} experiments in the database.</p>
+				<header><h2>{this.props.label}</h2></header>
 				<p>
-		          Below is a dropdown menu that lists all existing experiments;
-		          it is accompanied by a button that causes the selected experiment to be deleted.
-		          The dropdown widget is searchable: users may type in the widget,
-		          and the list of options will be dynamically restricted to present
-		          only experiments with a name that matches the typed text.
-		        </p>
-		        <form className="delete-experiment" onSubmit={this.handleSubmit.bind(this)} >
+          Below is a dropdown menu that lists all existing experiments;
+          it is accompanied by a button that causes the selected experiment to be deleted.
+          The dropdown widget is searchable: users may type in the widget,
+          and the list of options will be dynamically restricted to present
+          only experiments with a name that matches the typed text.
+        </p>
+        <form className="delete-experiment" onSubmit={this.handleSubmit.bind(this)} >
 					<Select
 						options={options}
 						ref='deleteExperiment'
