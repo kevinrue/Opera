@@ -8,6 +8,8 @@ import { ButtonToolbar, Button } from 'react-bootstrap';
 
 import { RawFastqRecords } from '../api/raw-fastq-records.js';
 
+import Loading from './loading.jsx'
+
 class RawFastqRecordsInfo extends Component {
 
 	constructor (props) {
@@ -18,48 +20,71 @@ class RawFastqRecordsInfo extends Component {
     browserHistory.push('/rawFastq/add');
   }
 
-	render () {
-		return(
-			<div>
-				<header><h1>Raw FASTQ</h1></header>
-
-				<header><h2>Overview</h2></header>
-
-				<p>
-					<strong>Note:</strong> Although misleading, this component
-					demonstrates how the publication/subscription system implemented by MeteorJS
-					refuses to publish information to unauthenticated users.
-				</p>
-
+  renderOverview(){
+  	return(
+  		<div>
 				<p>There are {this.props.rawFastqAllCount} records in the database.</p>
 
 				<ul>
 					<li>Paired-end records: {this.props.rawFastqPairedCount}.</li>
 					<li>Single-end records: {this.props.rawFastqSingleCount}.</li>
 				</ul>
+			</div>
+  	);
+  }
+
+  renderSampleLinks() {
+  	return(
+  		<div>
+  			<p>
+					Sample <em>single-end</em> record: { this.props.rawFastqSampleSingleRecord ?
+						<a href={"/rawFastq/" + this.props.rawFastqSampleSingleRecord._id}>single</a> : 'Loading...'
+					}
+				</p>
+
+				<p>
+					Sample <em>paired-end</em> record: { this.props.rawFastqSamplePairedRecord ?
+						<a href={"/rawFastq/" + this.props.rawFastqSamplePairedRecord._id}>paired</a> : 'Loading...'
+					}
+				</p>
+  		</div>
+  	);
+  }
+
+  renderAdminPanel() {
+  	return(
+  		<div>
+	      <header><h2>Admin panel</h2></header>
+	      <ButtonToolbar>
+	        <Button bsStyle="link" onClick={this.goToAddRawFastq.bind(this)}>Add raw FASTQ</Button>
+	      </ButtonToolbar>
+	    </div>
+    );
+  }
+
+  renderPage() {
+  	return(
+  		<div>
+  			<header><h2>Overview</h2></header>
+
+				{ this.props.loading ? <Loading /> : this.renderOverview() }
 
 				<header><h2>Sample</h2></header>
 
-					<p>
-						Sample <em>single-end</em> record: { this.props.rawFastqSampleSingleRecord ?
-							<a href={"/rawFastq/" + this.props.rawFastqSampleSingleRecord._id}>single</a> : 'Loading...'
-						}
-					</p>
+				{ this.props.loading ? <Loading /> : this.renderSampleLinks() }
 
-					<p>
-						Sample <em>paired-end</em> record: { this.props.rawFastqSamplePairedRecord ?
-							<a href={"/rawFastq/" + this.props.rawFastqSamplePairedRecord._id}>paired</a> : 'Loading...'
-						}
-					</p>
+				{ this.props.currentUser ? this.renderAdminPanel() : '' }
 
-				{ this.props.currentUser ?
-	          <div>
-	            <header><h2>Admin panel</h2></header>
-	            <ButtonToolbar>
-	              <Button bsStyle="link" onClick={this.goToAddRawFastq.bind(this)}>Add raw FASTQ</Button>
-	            </ButtonToolbar>
-	          </div> : ''
-	        }
+			</div>
+  	);
+  }
+
+	render() {
+		return(
+			<div>
+				<header><h1>Raw FASTQ</h1></header>
+
+				{ this.renderPage() }
 
 			</div>
 		);
@@ -68,9 +93,9 @@ class RawFastqRecordsInfo extends Component {
 }
 
 RawFastqRecordsInfo.propTypes = {
-	rawFastqAllCount: PropTypes.number.isRequired,
-	rawFastqPairedCount: PropTypes.number.isRequired,
-	rawFastqSingleCount: PropTypes.number.isRequired,
+	rawFastqAllCount: PropTypes.number,
+	rawFastqPairedCount: PropTypes.number,
+	rawFastqSingleCount: PropTypes.number,
 	rawFastqSampleSingleRecord: PropTypes.object,
 	rawFastqSamplePairedRecord: PropTypes.object,
 };
@@ -81,11 +106,12 @@ RawFastqRecordsInfo.defaultProps = {
 // The wrapped 'App' component fetches tasks from the Tasks collection
 // and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
-	Meteor.subscribe('rawFastqRecords');
-	Meteor.subscribe('experiments');
+	const subscription = Meteor.subscribe('rawFastqRecords');
+	const loading = !subscription.ready();
 
 	return {
 		currentUser: Meteor.user(),
+		loading: loading,
 		rawFastqAllCount: RawFastqRecords.find({}).count(),
 		rawFastqPairedCount: RawFastqRecords.find({paired : true}).count(),
 		rawFastqSingleCount: RawFastqRecords.find({paired : false}).count(),
