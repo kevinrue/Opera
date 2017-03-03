@@ -34,7 +34,6 @@ const Nav = () => (
 	    </div>
 	    <div className="collapse navbar-collapse" id="bs-navbar">
 	      <ul className="nav navbar-nav">
-		      <li><Link to='/'>Home</Link></li>
 			    <li><Link to='/rawFastq'>Raw FASTQ</Link></li>
 			    <li><Link to='/experiments'>Experiments</Link></li>
 	    	</ul>
