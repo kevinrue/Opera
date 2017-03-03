@@ -70,10 +70,20 @@ class RawFastqRecordsInfo extends Component {
     ]
   }
 
+  recordLinkFormat(cell, row) {
+    const link = <a href={"/rawFastq/" + cell}>{cell}</a>;
+    console.log(cell);
+    console.log(link);
+    return link;
+	}
+
   renderRecordTable() {
   	return(
-  		<BootstrapTable data={this.props.rawFastqAllIdentifiers} striped={true} hover={true} pagination={true}>
-	      <TableHeaderColumn dataField="_id" isKey={true} dataAlign="center">ID</TableHeaderColumn>
+  		<BootstrapTable data={this.props.rawFastqAll} striped={true} hover={true} pagination={true}>
+	      <TableHeaderColumn dataField="_id" dataFormat={ this.recordLinkFormat } isKey={true} dataAlign="center">ID</TableHeaderColumn>
+	      <TableHeaderColumn dataField="paired" dataAlign="center"
+	      	filter={ { type: 'SelectFilter', options: {true, false} } }>
+	      	Paired</TableHeaderColumn>
 		  </BootstrapTable>
 		 );
   }
@@ -137,6 +147,6 @@ export default createContainer(() => {
 		rawFastqSingleCount: RawFastqRecords.find({paired : false}).count(),
 		rawFastqSampleSingleRecord: RawFastqRecords.findOne({paired : false}),
 		rawFastqSamplePairedRecord: RawFastqRecords.findOne({paired : true}),
-		rawFastqAllIdentifiers: RawFastqRecords.find({paired: true}, {_id: 1}).fetch(),
+		rawFastqAll: RawFastqRecords.find({}, {_id: 1, paired: 1}).fetch(),
 	};
 }, RawFastqRecordsInfo);
