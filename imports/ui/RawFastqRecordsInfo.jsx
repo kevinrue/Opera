@@ -9,6 +9,7 @@ import { ButtonToolbar, Button } from 'react-bootstrap';
 import { RawFastqRecords } from '../api/raw-fastq-records.js';
 
 import Loading from './loading.jsx'
+let DataGrid = require('react-datagrid')
 
 class RawFastqRecordsInfo extends Component {
 
@@ -62,6 +63,32 @@ class RawFastqRecordsInfo extends Component {
     );
   }
 
+  getDataGridColumns() {
+  	return [
+      { name: '_id' },
+    ]
+  }
+
+  renderRecordTable() {
+  	console.log(this.props.rawFastqAllIdentifiers[0]);
+
+  	return(
+  		<DataGrid
+		    idProperty='id'
+		    dataSource={this.props.rawFastqAllIdentifiers}
+		    columns={this.getDataGridColumns()}
+		    style={{
+		      height: 200,
+		       width:'90%',
+		       marginLeft:'5%',
+		       marginRight:'5%'
+		     }}
+		     withColumnMenu={false}
+
+		  />
+		 );
+  }
+
   renderPage() {
   	return(
   		<div>
@@ -72,6 +99,10 @@ class RawFastqRecordsInfo extends Component {
 				<header><h2>Sample</h2></header>
 
 				{ this.props.loading ? <Loading /> : this.renderSampleLinks() }
+
+				<header><h2>Table of raw FASTQ records</h2></header>
+
+				{ this.props.loading ? <Loading /> : this.renderRecordTable() }
 
 				{ this.props.currentUser ? this.renderAdminPanel() : '' }
 
@@ -117,5 +148,6 @@ export default createContainer(() => {
 		rawFastqSingleCount: RawFastqRecords.find({paired : false}).count(),
 		rawFastqSampleSingleRecord: RawFastqRecords.findOne({paired : false}),
 		rawFastqSamplePairedRecord: RawFastqRecords.findOne({paired : true}),
+		rawFastqAllIdentifiers: RawFastqRecords.find({paired: true}, {_id: 1}).fetch(),
 	};
 }, RawFastqRecordsInfo);
