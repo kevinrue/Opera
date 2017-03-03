@@ -15,6 +15,7 @@ import RemoveExperimentForm from '../../ui/RemoveExperimentForm.jsx';
 import RawFastqRecordsInfo from '../../ui/RawFastqRecordsInfo.jsx';
 import AddRawFastqRecords from '../../ui/AddRawFastqRecords.jsx';
 import RawFastqRecord from '../../ui/RawFastqRecord.jsx';
+// import RawFastqSingleProfile from '../../ui/RawFastqSingleProfile.jsx';
 
 const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
@@ -29,7 +30,7 @@ const Nav = () => (
 	        <span className="icon-bar"></span>
 	        <span className="icon-bar"></span>
 	      </Button>
-	      <a className="navbar-brand" href="/">Opera</a>
+	      <a className="navbar-brand" href="/"><code>SB</code></a>
 	    </div>
 	    <div className="collapse navbar-collapse" id="bs-navbar">
 	      <ul className="nav navbar-nav">
@@ -43,9 +44,6 @@ const Nav = () => (
 	    </div>
 		</div>
 	</nav>
-
-
-	
 )
 
 const Container = (props) => <div>
