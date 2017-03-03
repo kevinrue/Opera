@@ -7,7 +7,7 @@ import { ButtonToolbar, Button } from 'react-bootstrap';
 
 import { Experiments } from '../api/experiments.js';
 
-let DataGrid = require('react-datagrid')
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 class ExperimentsTable extends Component {
 
@@ -21,19 +21,14 @@ class ExperimentsTable extends Component {
 
 	renderExperiments() {
 		return (
-		  <DataGrid
-		    idProperty='id'
-		    dataSource={this.props.experiments}
-		    columns={this.getDataGridColumns()}
-		    style={{
-		      height: 200,
-		       width:'90%',
-		       marginLeft:'5%',
-		       marginRight:'5%'
-		     }}
-		     withColumnMenu={false}
-
-		  />
+      <BootstrapTable data={this.props.experiments} striped={true} hover={true}>
+        <TableHeaderColumn dataField="_id" isKey={true} dataAlign="center">ID</TableHeaderColumn>
+        <TableHeaderColumn dataField="name" dataAlign="center">Name</TableHeaderColumn>
+        <TableHeaderColumn dataField="Nsamples" dataAlign="center"
+          filter={ { type: 'NumberFilter', delay: 1000, numberComparators: [ '=', '>', '<=' ]  } }>
+          Number of samples
+        </TableHeaderColumn>
+      </BootstrapTable>
 		);
   }
 

@@ -9,7 +9,8 @@ import { ButtonToolbar, Button } from 'react-bootstrap';
 import { RawFastqRecords } from '../api/raw-fastq-records.js';
 
 import Loading from './loading.jsx'
-let DataGrid = require('react-datagrid')
+
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 class RawFastqRecordsInfo extends Component {
 
@@ -70,22 +71,10 @@ class RawFastqRecordsInfo extends Component {
   }
 
   renderRecordTable() {
-  	console.log(this.props.rawFastqAllIdentifiers[0]);
-
   	return(
-  		<DataGrid
-		    idProperty='id'
-		    dataSource={this.props.rawFastqAllIdentifiers}
-		    columns={this.getDataGridColumns()}
-		    style={{
-		      height: 200,
-		       width:'90%',
-		       marginLeft:'5%',
-		       marginRight:'5%'
-		     }}
-		     withColumnMenu={false}
-
-		  />
+  		<BootstrapTable data={this.props.rawFastqAllIdentifiers} striped={true} hover={true}>
+	      <TableHeaderColumn dataField="_id" isKey={true} dataAlign="center">ID</TableHeaderColumn>
+		  </BootstrapTable>
 		 );
   }
 

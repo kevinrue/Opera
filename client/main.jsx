@@ -5,7 +5,6 @@ import { render } from 'react-dom';
 import '../imports/startup/client/accounts-config.js';
 import { renderRoutes } from '../imports/startup/client/routes.js';
 
-import 'react-datagrid/index.css';
 import 'react-select/dist/react-select.css';
  
 Meteor.startup(() => {
