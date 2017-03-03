@@ -47,7 +47,9 @@ const Nav = () => (
 
 const Container = (props) => <div>
   <Nav />
+  <div id='page'>
   {props.children}
+  </div>
 </div>
 
 export const renderRoutes = () => (

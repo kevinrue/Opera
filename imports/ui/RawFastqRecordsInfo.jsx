@@ -53,17 +53,6 @@ class RawFastqRecordsInfo extends Component {
   	);
   }
 
-  renderAdminPanel() {
-  	return(
-  		<div>
-	      <header><h2>Admin panel</h2></header>
-	      <ButtonToolbar>
-	        <Button bsStyle="link" onClick={this.goToAddRawFastq.bind(this)}>Add raw FASTQ</Button>
-	      </ButtonToolbar>
-	    </div>
-    );
-  }
-
   getDataGridColumns() {
   	return [
       { name: '_id' },
@@ -78,17 +67,20 @@ class RawFastqRecordsInfo extends Component {
   renderRecordTable() {
   	return(
   		<BootstrapTable data={this.props.rawFastqAll} striped={true} hover={true} pagination={true}>
-	      <TableHeaderColumn dataField="_id" dataFormat={ this.recordLinkFormat } isKey={true} dataAlign="center">ID</TableHeaderColumn>
-	      <TableHeaderColumn dataField="paired" dataAlign="center"
+	      <TableHeaderColumn dataField="_id" dataFormat={ this.recordLinkFormat } isKey={true} dataAlign="center" width="20%"
+	      	>ID</TableHeaderColumn>
+	      <TableHeaderColumn dataField="paired" dataAlign="center" width="80%"
 	      	filter={ { type: 'SelectFilter', options: {true, false} } }>
 	      	Paired</TableHeaderColumn>
 		  </BootstrapTable>
 		 );
   }
 
-  renderPage() {
+  renderMainPanel() {
   	return(
-  		<div>
+  		<div className='main-panel'>
+  			<header><h1>Raw FASTQ</h1></header>
+  			
   			<header><h2>Overview</h2></header>
 
 				{ this.props.loading ? <Loading /> : this.renderOverview() }
@@ -97,18 +89,30 @@ class RawFastqRecordsInfo extends Component {
 
 				{ this.props.loading ? <Loading /> : this.renderRecordTable() }
 
-				{ this.props.currentUser ? this.renderAdminPanel() : '' }
-
 			</div>
   	);
+  }
+
+  renderAdminPanel() {
+  	return(
+  		<div className='admin-panel'>
+	      <header><h2>Admin panel</h2></header>
+	      <ButtonToolbar>
+	        <Button bsStyle="link" onClick={this.goToAddRawFastq.bind(this)}>Add raw FASTQ</Button>
+	      </ButtonToolbar>
+	    </div>
+    );
   }
 
 	render() {
 		return(
 			<div>
-				<header><h1>Raw FASTQ</h1></header>
 
-				{ this.renderPage() }
+				{ this.renderMainPanel() }
+
+				{ this.props.currentUser ? this.renderAdminPanel() : '' }
+
+				<div id="clearingdiv"></div>
 
 			</div>
 		);

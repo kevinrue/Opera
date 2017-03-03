@@ -24,7 +24,7 @@ class RawFastqRecordSingle extends Component {
 		});
 	}
 
-	handleSubmit (){
+	handleSubmit (event){
 		event.preventDefault();
 	}
 

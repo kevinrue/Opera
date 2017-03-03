@@ -21,10 +21,9 @@ class ExperimentsTable extends Component {
 
 	renderExperiments() {
 		return (
-      <BootstrapTable data={this.props.experiments} striped={true} hover={true}>
-        <TableHeaderColumn dataField="_id" isKey={true} dataAlign="center">ID</TableHeaderColumn>
-        <TableHeaderColumn dataField="name" dataAlign="center">Name</TableHeaderColumn>
-        <TableHeaderColumn dataField="Nsamples" dataAlign="center"
+      <BootstrapTable data={this.props.experiments} striped={true} hover={true} keyField='_id'>
+        <TableHeaderColumn dataField="name" dataAlign="center" width="20%">Name</TableHeaderColumn>
+        <TableHeaderColumn dataField="Nsamples" dataAlign="center" width="80%"
           filter={ { type: 'NumberFilter', delay: 1000, numberComparators: [ '=', '>', '<=' ]  } }>
           Number of samples
         </TableHeaderColumn>
@@ -40,10 +39,10 @@ class ExperimentsTable extends Component {
     browserHistory.push('/experiments/remove');
   }
 
-	render() {
-    return (
-    	<div>
-	    	<header><h1>Experiment List</h1></header>
+  renderMainPanel() {
+    return(
+      <div className='main-panel'>
+        <header><h1>Experiment List</h1></header>
 
         <p>
           This component renders a <code>DataGrid</code> defined in
@@ -57,15 +56,30 @@ class ExperimentsTable extends Component {
           5% margin of either side.
         </p>
         {this.renderExperiments()}
-        { this.props.currentUser ?
-          <div>
-            <header><h1>Admin panel</h1></header>
-            <ButtonToolbar>
-              <Button bsStyle="link" onClick={this.goToAddExperiment.bind(this)}>Add experiment</Button>
-              <Button bsStyle="link" onClick={this.goToRemoveExperiment.bind(this)}>Remove experiment</Button>
-            </ButtonToolbar>
-          </div> : ''
-        }
+      </div>
+    );
+  }
+
+  renderAdminPanel() {
+    return(
+      <div className='admin-panel'>
+        <h3>Admin panel</h3>
+          <ButtonToolbar>
+            <Button bsStyle="link" onClick={this.goToAddExperiment.bind(this)}>Add experiment</Button>
+            <Button bsStyle="link" onClick={this.goToRemoveExperiment.bind(this)}>Remove experiment</Button>
+          </ButtonToolbar>
+      </div>
+    );
+  }
+
+	render() {
+    return (
+    	<div>
+        { this.renderMainPanel() }
+
+        { this.props.currentUser ? this.renderAdminPanel() : '' }
+
+        <div id="clearingdiv"></div>
     	</div>
     );
     }
