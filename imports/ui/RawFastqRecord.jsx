@@ -4,6 +4,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import { RawFastqRecords } from '../api/raw-fastq-records.js';
 
+import RawFastqProfileSingle from './RawFastqProfileSingle.jsx';
+import RawFastqProfilePaired from './RawFastqProfilePaired.jsx';
+
 import Loading from './loading.jsx'
 
 class RawFastqRecord extends Component {
@@ -34,13 +37,21 @@ class RawFastqRecord extends Component {
 		)
 	}
 
+	renderForm() {
+		return(
+			this.props.record.paired ?
+				<RawFastqProfilePaired record={this.props.record} /> :
+				<RawFastqProfileSingle record={this.props.record} />
+		);
+	}
+
 	render () {
 		return(
 			<div>
 				<header><h1>Raw FASTQ</h1></header>
 				<header><h2>Single record</h2></header>
 
-				{ this.props.loading ? <Loading /> : this.renderRecord() }
+				{ this.props.loading ? <Loading /> : this.renderForm() }				
 
 			</div>
 		);

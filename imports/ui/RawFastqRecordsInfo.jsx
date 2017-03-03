@@ -72,8 +72,6 @@ class RawFastqRecordsInfo extends Component {
 
   recordLinkFormat(cell, row) {
     const link = <a href={"/rawFastq/" + cell}>{cell}</a>;
-    console.log(cell);
-    console.log(link);
     return link;
 	}
 
@@ -95,11 +93,7 @@ class RawFastqRecordsInfo extends Component {
 
 				{ this.props.loading ? <Loading /> : this.renderOverview() }
 
-				<header><h2>Sample</h2></header>
-
-				{ this.props.loading ? <Loading /> : this.renderSampleLinks() }
-
-				<header><h2>Table of raw FASTQ records</h2></header>
+				<header><h2>Complete list</h2></header>
 
 				{ this.props.loading ? <Loading /> : this.renderRecordTable() }
 
