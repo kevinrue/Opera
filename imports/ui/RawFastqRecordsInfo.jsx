@@ -72,7 +72,7 @@ class RawFastqRecordsInfo extends Component {
 
   renderRecordTable() {
   	return(
-  		<BootstrapTable data={this.props.rawFastqAllIdentifiers} striped={true} hover={true}>
+  		<BootstrapTable data={this.props.rawFastqAllIdentifiers} striped={true} hover={true} pagination={true}>
 	      <TableHeaderColumn dataField="_id" isKey={true} dataAlign="center">ID</TableHeaderColumn>
 		  </BootstrapTable>
 		 );
