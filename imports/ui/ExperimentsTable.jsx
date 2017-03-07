@@ -11,14 +11,6 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 class ExperimentsTable extends Component {
 
-	getDataGridColumns() {
-    return [
-      { name: '_id', width: '5%' },
-      { name: 'name', width: '85%' }, // Note: the first letter of the 'name' field is automatically capitalised
-      { name: 'Nsamples', title: 'Samples', width: '10%' }
-    ]
-  }
-
 	renderExperiments() {
 		return (
       <BootstrapTable data={this.props.experiments} striped={true} hover={true} keyField='_id'>
@@ -53,7 +45,7 @@ class ExperimentsTable extends Component {
       <div className='admin-panel'>
         <h3>Admin panel</h3>
           <ButtonToolbar>
-            <Button bsStyle="link" onClick={this.goToAddExperiment.bind(this)}>Add experiment</Button>
+            <Button bsStyle="link" onClick={this.goToAddExperiment.bind(this)}>Add experiment</Button><br/>
             <Button bsStyle="link" onClick={this.goToRemoveExperiment.bind(this)}>Remove experiment</Button>
           </ButtonToolbar>
       </div>

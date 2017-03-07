@@ -35,30 +35,6 @@ class RawFastqRecordsInfo extends Component {
   	);
   }
 
-  renderSampleLinks() {
-  	return(
-  		<div>
-  			<p>
-					Sample <em>single-end</em> record: { this.props.rawFastqSampleSingleRecord ?
-						<a href={"/rawFastq/" + this.props.rawFastqSampleSingleRecord._id}>single</a> : 'Loading...'
-					}
-				</p>
-
-				<p>
-					Sample <em>paired-end</em> record: { this.props.rawFastqSamplePairedRecord ?
-						<a href={"/rawFastq/" + this.props.rawFastqSamplePairedRecord._id}>paired</a> : 'Loading...'
-					}
-				</p>
-  		</div>
-  	);
-  }
-
-  getDataGridColumns() {
-  	return [
-      { name: '_id' },
-    ]
-  }
-
   recordLinkFormat(cell, row) {
     const link = <a href={"/rawFastq/" + cell}>{cell}</a>;
     return link;
@@ -67,8 +43,8 @@ class RawFastqRecordsInfo extends Component {
   renderRecordTable() {
   	return(
   		<BootstrapTable data={this.props.rawFastqAll} striped={true} hover={true} pagination={true}>
-	      <TableHeaderColumn dataField="_id" dataFormat={ this.recordLinkFormat } isKey={true} dataAlign="center" width="20%"
-	      	>ID</TableHeaderColumn>
+	      <TableHeaderColumn dataField="_id" dataFormat={ this.recordLinkFormat } isKey={true} dataAlign="center" width="20%">
+	      ID</TableHeaderColumn>
 	      <TableHeaderColumn dataField="paired" dataAlign="center" width="80%"
 	      	filter={ { type: 'SelectFilter', options: {true, false} } }>
 	      	Paired</TableHeaderColumn>
@@ -96,7 +72,7 @@ class RawFastqRecordsInfo extends Component {
   renderAdminPanel() {
   	return(
   		<div className='admin-panel'>
-	      <header><h2>Admin panel</h2></header>
+  			<h3>Admin panel</h3>
 	      <ButtonToolbar>
 	        <Button bsStyle="link" onClick={this.goToAddRawFastq.bind(this)}>Add raw FASTQ</Button>
 	      </ButtonToolbar>

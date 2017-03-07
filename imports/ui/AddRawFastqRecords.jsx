@@ -71,7 +71,7 @@ class AddRawFastqRecords extends Component {
 			<div>
 				<header><h1>Raw FASTQ</h1></header>
 				<header><h2>Add raw FASTQ records</h2></header>
-				<form className="add-raw-single-end" onSubmit={this.handleSubmit.bind(this)} >
+				<form onSubmit={this.handleSubmit.bind(this)} >
 					<Textarea
 					    minRows={3}
 					    maxRows={10}
@@ -87,7 +87,7 @@ class AddRawFastqRecords extends Component {
 					    value = {this.state.inputTextRawFastq}
 					    onChange={this.updateValue.bind(this)}
 					/><br/>
-					<button type="submit" className="btn">Add</button>
+					<button type="submit" className="btn btn-danger">Add</button>
 				</form>
 			</div>
 		);
