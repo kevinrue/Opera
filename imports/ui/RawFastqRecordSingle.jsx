@@ -32,8 +32,8 @@ class RawFastqRecordSingle extends Component {
 		// console.log(this.props);
 
 		let filepathClass = classNames({
-			'filepath-input': true,
-      'text-edited': this.state.filepath !== this.props.record.filepath
+			'input-file-path': true,
+      'input-edited': this.state.filepath !== this.props.record.filepath
     });
 
 		return(

@@ -13,9 +13,9 @@ import AddExperimentForm from '../../ui/AddExperimentForm.jsx';
 import RemoveExperimentForm from '../../ui/RemoveExperimentForm.jsx';
 
 import RawFastqRecordsInfo from '../../ui/RawFastqRecordsInfo.jsx';
+import AddRawFastqRecord from '../../ui/AddRawFastqRecord.jsx';
 import AddRawFastqRecords from '../../ui/AddRawFastqRecords.jsx';
 import RawFastqRecord from '../../ui/RawFastqRecord.jsx';
-// import RawFastqSingleProfile from '../../ui/RawFastqSingleProfile.jsx';
 
 const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
@@ -60,7 +60,8 @@ export const renderRoutes = () => (
   		<Route path='/experiments/add' component={AddExperimentForm} />
   		<Route path='/experiments/remove' component={RemoveExperimentForm} />
   		<Route path='/rawFastq' component={RawFastqRecordsInfo} />
-  		<Route path='/rawFastq/add' component={AddRawFastqRecords} />
+  		<Route path='/rawFastq/addOne' component={AddRawFastqRecord} />
+  		<Route path='/rawFastq/addBatch' component={AddRawFastqRecords} />
   		<Route path='/rawFastq/:_id' component={RawFastqRecord} />
   	</Route>
   	<Route path='*' component={NotFound} />

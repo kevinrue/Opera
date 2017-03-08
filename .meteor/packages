@@ -25,3 +25,5 @@ practicalmeteor:mocha
 dispatch:mocha-phantomjs
 accounts-ui
 less
+momentjs:moment
+fortawesome:fontawesome

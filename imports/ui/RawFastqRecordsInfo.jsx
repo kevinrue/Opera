@@ -18,8 +18,12 @@ class RawFastqRecordsInfo extends Component {
 		super(props);
 	}
 
-	goToAddRawFastq() {
-    browserHistory.push('/rawFastq/add');
+  goToAddRawFastqOne() {
+    browserHistory.push('/rawFastq/addOne');
+  }
+
+	goToAddRawFastqBatch() {
+    browserHistory.push('/rawFastq/addBatch');
   }
 
   renderOverview(){
@@ -73,9 +77,8 @@ class RawFastqRecordsInfo extends Component {
   	return(
   		<div className='admin-panel'>
   			<h3>Admin panel</h3>
-	      <ButtonToolbar>
-	        <Button bsStyle="link" onClick={this.goToAddRawFastq.bind(this)}>Add raw FASTQ</Button>
-	      </ButtonToolbar>
+	      	<Button bsStyle="link" onClick={this.goToAddRawFastqOne.bind(this)}>Add single</Button><br/>
+	        <Button bsStyle="link" onClick={this.goToAddRawFastqBatch.bind(this)}>Add batch</Button>
 	    </div>
     );
   }

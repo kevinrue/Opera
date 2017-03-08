@@ -30,6 +30,7 @@ class AddRawFastqRecords extends Component {
 		// Input lines cannot have:
 		// more than 1 TAB symbol
 		// TODO: check that none of the new paths exist in the database already
+		// TODO: check that all file names end in 'fastq.gz': str.endsWith(searchString[, position])
 		console.log("Valid input? " + textLines.every(
 			(textLine) => (
 				textLine.trim().split(',').length < 3
@@ -48,8 +49,6 @@ class AddRawFastqRecords extends Component {
 			"\n").filter(
 				(textLine) => (textLine.trim() != '')
 		);
-		// TODO: check that all file names end in 'fastq.gz'
-		// str.endsWith(searchString[, position])
 		//let paired = trimmedLines.map(inputLine => inputLine.split('\t').length > 1);
 		//console.log(paired);
 		let insertedRecords = trimmedLines.map(inputLine => {
@@ -103,12 +102,8 @@ AddRawFastqRecords.defaultProps = {
 	inputTextRawFastq: '',
 };
 
-// The wrapped 'App' component fetches tasks from the Tasks collection
-// and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
-	Meteor.subscribe('rawFastqRecords');
 
 	return {
-		rawFastqAllCount: RawFastqRecords.find({}).count(),
 	};
 }, AddRawFastqRecords);
