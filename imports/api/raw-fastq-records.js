@@ -64,10 +64,11 @@ Meteor.methods({
       Meteor.call('rawFastqs.countRecordsSingleWithPath', filePath) +
       Meteor.call('rawFastqs.countRecordsPairedWithPath', filePath)
     );
- 
+
+    // TODO: needs another layer or $or to handle single-end
     // return(
     //   RawFastqRecords.find({
-    //     paired: false,
+    //     paired: true,
     //     $or: [
     //       {first: filePath},
     //       {second: filePath}
@@ -76,8 +77,11 @@ Meteor.methods({
     // );
   },
 
-  'rawFastqs.insertSingleEnd'(filePath) {
+  'rawFastqs.insertSingleEnd'(filePath, readLength, sequencer, dateRun) {
     check(filePath, String);
+    check(readLength, Number);
+    check(sequencer, String);
+    check(dateRun, String);
     // TODO: check that filePath exists on the system
  
     // Make sure the user is logged in before inserting a task
@@ -88,7 +92,36 @@ Meteor.methods({
     RawFastqRecords.insert({
       paired: false,
       filepath: filePath,
+      readLength: readLength,
+      sequencer: sequencer,
+      dateRun: dateRun,
     });
+  },
+
+  'rawFastqs.updateSingleEnd'({recordId, filepath, readLength, sequencer, dateRun}) {
+    // console.log('typeof: ' + typeof(recordId));
+    check(recordId, String);
+    check(filepath, String);
+    check(readLength, Number);
+    check(sequencer, String);
+    check(dateRun, String);
+    // TODO: check that file path exist on the system
+ 
+    // Make sure the user is logged in before inserting a task
+    if (! this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    RawFastqRecords.update(
+      recordId, {
+        $set: {
+          filepath: filepath,
+          readLength: readLength,
+          sequencer: sequencer,
+          dateRun: dateRun,
+        },
+      }
+    );
   },
 
   'rawFastqs.insertPairedEnd'(first, second, readLength, sequencer, dateRun) {
@@ -114,9 +147,38 @@ Meteor.methods({
     });
   },
 
+  'rawFastqs.updatePairedEnd'({recordId, first, second, readLength, sequencer, dateRun}) {
+    // console.log('typeof: ' + typeof(recordId));
+    check(recordId, String);
+    check(first, String);
+    check(second, String);
+    check(readLength, Number);
+    check(sequencer, String);
+    check(dateRun, String);
+    // TODO: check that both file paths exist on the system
+ 
+    // Make sure the user is logged in before inserting a task
+    if (! this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    RawFastqRecords.update(
+      recordId, {
+        $set: {
+          first: first,
+          second: second,
+          readLength: readLength,
+          sequencer: sequencer,
+          dateRun: dateRun,
+        },
+      }
+    );
+  },
+
   'rawFastqs.remove'(rawFastqId) {
     check(rawFastqId, String);
  
     RawFastqRecords.remove(rawFastqId);
   },
+
 });

@@ -1,10 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
+import { browserHistory } from 'react-router';
 
 import { Button } from 'react-bootstrap';
 import Select from 'react-select';
-
+import ReactTooltip from 'react-tooltip';
 import DatePicker from 'react-datepicker';
 import 'moment/locale/en-gb';
 
@@ -19,6 +20,10 @@ class RawFastqRecordPaired extends Component {
 
 	constructor (props) {
 		super(props);
+
+		// console.log('propsId: ' + props.record._id);
+		// console.log('this-propsId: ' + this.props.record._id);
+		// console.log('type-propsId: ' + typeof(this.props.record._id));
 
 		let startDate = (props.record.dateRun ? moment(props.record.dateRun, "YYYYMMDD") : null);
 
@@ -53,7 +58,7 @@ class RawFastqRecordPaired extends Component {
 		// - not empty
 		// - no space
 		return(
-			value !== '' && (!value.includes(' ')) && value !== this.state.second
+			value !== '' && value !== this.state.second
 		);
 	}
 
@@ -67,7 +72,7 @@ class RawFastqRecordPaired extends Component {
 			if (err){
 				alert(err);
 			} else {
-				console.log('res: ' + res);
+				// console.log('res: ' + res);
 				this.setState({
 						firstCountInDatabase: res
 				})
@@ -140,6 +145,7 @@ class RawFastqRecordPaired extends Component {
 		});
 	}
 
+	// TODO: duplicated with RawFastqRecordSingle
 	isReadLengthValid(value) {
 		// Current check:
 		// - not empty
@@ -167,12 +173,14 @@ class RawFastqRecordPaired extends Component {
 		}
 	}
 
+	// TODO: duplicated with RawFastqRecordSingle
 	isReadLengthValid (newValue) {
 		return (newValue != undefined);
 	}
 
 	updateSequencer (newValue) {
-		// console.log('new sequencer: ' + String(newValue));
+		console.log('new sequencer: ' + String(newValue));
+		console.log('initial sequencer: ' + String(this.props.record.sequencer));
 		let isInitial = (newValue === this.props.record.sequencer);
 		// console.log('initial: ' + this.props.record.sequencer);
 		// console.log('isInitial: ' + isInitial);
@@ -183,6 +191,7 @@ class RawFastqRecordPaired extends Component {
 		});
 	}
 
+	// TODO: duplicated with RawFastqRecordSingle
 	isDateRunValid (value) {
 		// Current check:
 		// - exactly 6 digits (that should cover us for a few millenia)
@@ -217,9 +226,10 @@ class RawFastqRecordPaired extends Component {
 		});
 	}
 
-	formGlyphicon (isInitial, isValid, inDatabase = 0) { // can use function for database-independent input
+	// TODO: duplicated with RawFastqRecordSingle
+	formGlyphicon (id, isInitial, isValid, inDatabase = 0) { // can use function for database-independent input
 		// console.log('inDB: ' + inDatabase);
-		let classCheck = (
+		let glyphiconCheck = (
 			isInitial ? '' : (
 				!isValid ? 'glyphicon-remove' : ( // invalid 
 					inDatabase === -1 ? 'glyphicon-hourglass' : ( // waiting for server
@@ -228,27 +238,77 @@ class RawFastqRecordPaired extends Component {
 				)
 			)
 		);
-		let newClass = classNames('glyphicon', classCheck);
-		// console.log('newClass: ' + newClass);
+		let glyphiconClass = classNames('glyphicon', glyphiconCheck);
+		let tooltipText = (
+			isInitial ? '' : (
+				!isValid ? 'Invalid!' : ( // invalid 
+					inDatabase === -1 ? 'Checking database...' : ( // waiting for server
+						inDatabase === 0 ? 'All good!' : 'Matches an existing record in database'
+					)
+				)
+			)
+		);
+		let tooltipType = (
+			isInitial ? 'dark' : (
+				!isValid ? 'error' : ( // invalid 
+					inDatabase === -1 ? 'info' : ( // waiting for server
+						inDatabase === 0 ? 'success' : 'warning'
+					)
+				)
+			)
+		);
+		// console.log('tooltipText: ' + tooltipText);
+		// console.log('tooltipType: ' + tooltipText);
 		return(
-			<span className={newClass} aria-hidden="true"></span>
+			<div>
+				<ReactTooltip id={id} type={tooltipType} effect="solid" place="left">
+				  <span>{tooltipText}</span>
+				</ReactTooltip>
+				<span className={glyphiconClass} aria-hidden="true" data-tip data-for={id}></span>
+			</div>
 		);
 	}
 
 	handleSubmit (event) {
 		event.preventDefault();
 		if (this.isFormValid()){
-			console.log('rawFastqRecordPairedSubmit !');
-			Meteor.call(
-				'rawFastqs.insertPairedEnd',
-				this.state.first,
-				this.state.second,
-				parseInt(this.state.readLength),
-				this.state.sequencer,
-				this.state.dateRun.format("YYYYMMDD")
-			);
-
-			this.resetForm();
+			
+			if (this.props.record._id === undefined){
+				console.log('submit new paired FASTQ record !');
+				Meteor.call(
+					'rawFastqs.insertPairedEnd',
+					this.state.first,
+					this.state.second,
+					parseInt(this.state.readLength),
+					this.state.sequencer,
+					this.state.dateRun.format("YYYYMMDD"),
+					(err, res) => {
+						if (err){
+							alert(err);
+						} else {
+							alert('New record added successfully!');
+							this.resetForm();
+						}
+					}
+				);
+			} else {
+				console.log('update paired FASTQ record !');
+				Meteor.call('rawFastqs.updatePairedEnd', {
+				  recordId: this.props.record._id,
+				  first: this.state.first,
+				  second: this.state.second,
+				  readLength: parseInt(this.state.readLength),
+				  sequencer: this.state.sequencer,
+				  dateRun: this.state.dateRun.format("YYYYMMDD"),
+				}, (err, res) => {
+				  if (err) {
+				    alert(err);
+				  } else {
+				    alert('Record updated successfully!');
+				    browserHistory.push('/rawFastq');
+				  }
+				});
+			}
 
 		}
 	}
@@ -270,6 +330,16 @@ class RawFastqRecordPaired extends Component {
 		);
 	}
 
+	isFormComplete () {
+		return(
+			this.state.first !== '' &&
+			this.state.second !== '' &&
+			this.state.readLength !== '' &&
+			this.state.sequencer !== undefined &&
+			this.state.dateRun !== null
+		)
+	}
+
 	isFormValid (){
 		// console.log('firstValid: ' + this.state.firstValid);
 		// console.log('secondValid: ' + this.state.secondValid);
@@ -288,23 +358,34 @@ class RawFastqRecordPaired extends Component {
 	renderSubmitButton () {
 		// console.log('initial: ' + this.isFormInitial());
 		// console.log('pending: ' + this.isFormPending());
+		// console.log('isFormComplete: ' + this.isFormComplete());
 		// console.log('valid: ' + this.isFormValid());
 		let buttonColour = (
 			this.isFormInitial() ? 'primary' : (
 				this.isFormPending() ? 'warning' : (
-					this.isFormValid() ? 'success' : 'danger'
+					!this.isFormComplete() ? 'warning' : (
+						this.isFormValid() ? 'success' : 'danger'
+					)
 				)
 			)
 		);
-		let disableButton = (this.isFormInitial() || this.isFormPending());
+		// console.log('buttonColour: ' + buttonColour);
+		let disableButton = (
+			this.isFormInitial() ||
+			this.isFormPending() ||
+			!this.isFormComplete() ||
+			!this.isFormValid()
+		);
 		let buttonText = (
 			this.isFormInitial() ? 'Submit' : (
 				this.isFormPending() ? 'Please wait...' : (
-					this.isFormValid() ? 'Submit!' : 'Error!'
+					!this.isFormComplete() ? 'Incomplete' : (
+						this.isFormValid() ? 'Submit!' : 'Error!'
+					)
 				)
 			)
 		);
-		let buttonStyle = classNames(buttonColour, disableButton);
+		let buttonStyle = classNames(buttonColour);
 		return(
 			<Button type="submit" bsStyle={buttonColour} disabled={disableButton}>{buttonText}</Button>
     );
@@ -362,7 +443,7 @@ class RawFastqRecordPaired extends Component {
 		          value={this.state.first}
 		          onChange={this.updateFirst.bind(this)}/>
 		        </td>
-		        <td>{this.formGlyphicon(this.state.firstInitial, this.state.firstValid, this.state.firstCountInDatabase)}</td>
+		        <td>{this.formGlyphicon('first-tip', this.state.firstInitial, this.state.firstValid, this.state.firstCountInDatabase)}</td>
       		</tr>
       		<tr>
       			<td>
@@ -379,7 +460,7 @@ class RawFastqRecordPaired extends Component {
 			          onChange={this.updateSecond.bind(this)}
 			        />
 		        </td>
-		        <td>{this.formGlyphicon(this.state.secondInitial, this.state.secondValid, this.state.secondCountInDatabase)}</td>
+		        <td>{this.formGlyphicon('second-tip', this.state.secondInitial, this.state.secondValid, this.state.secondCountInDatabase)}</td>
       		</tr>
       		<tr>
       			<td>
@@ -396,7 +477,7 @@ class RawFastqRecordPaired extends Component {
 			          onChange={this.updateReadLength.bind(this)}
 			        />
 		        </td>
-		        <td>{this.formGlyphicon(this.state.readLengthInitial, this.state.readLengthValid)}</td>
+		        <td>{this.formGlyphicon('read-length-tip', this.state.readLengthInitial, this.state.readLengthValid)}</td>
       		</tr>
       		<tr>
       			<td>
@@ -414,7 +495,7 @@ class RawFastqRecordPaired extends Component {
 								searchable={this.state.searchable}
 							/> }
 		        </td>
-		        <td>{this.formGlyphicon(this.state.sequencerInitial, this.state.sequencerValid)}</td>
+		        <td>{this.formGlyphicon('sequencer-tip', this.state.sequencerInitial, this.state.sequencerValid)}</td>
       		</tr>
       		<tr>
       			<td>
@@ -427,7 +508,7 @@ class RawFastqRecordPaired extends Component {
 								locale="en-gb"
 								placeholderText="Date of sequencing run" />
 						 </td>
-						 <td>{this.formGlyphicon(this.state.dateRunInitial, this.state.dateRunValid)}</td>
+						 <td>{this.formGlyphicon('date-run-tip', this.state.dateRunInitial, this.state.dateRunValid)}</td>
       		</tr>
       	</tbody>
       </table>
@@ -438,19 +519,18 @@ class RawFastqRecordPaired extends Component {
 
 }
 
-// TODO: Button should say 'create/update/nothing/error' according to the case
-
 RawFastqRecordPaired.propTypes = {
-	record: PropTypes.object.isRequired,
+	record: PropTypes.object,
 	sequencers: PropTypes.array,
 };
 
 RawFastqRecordPaired.defaultProps = {
 	record: {
+		_id: undefined,
 		first: '',
 		second: '',
 		readLength: '',
-		sequencer: null,
+		sequencer: undefined,
 		dateRun: null,
 	}
 };

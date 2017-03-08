@@ -4,7 +4,8 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import { RadioGroup, Radio } from 'react-radio-group';
 
-import AddRawFastqRecordPaired from './AddRawFastqRecordPaired.jsx';
+import RawFastqRecordPaired from './RawFastqRecordPaired.jsx';
+import RawFastqRecordSingle from './RawFastqRecordSingle.jsx';
 
 class AddRawFastqRecord extends Component {
 
@@ -41,7 +42,7 @@ class AddRawFastqRecord extends Component {
 
 				{ this.renderPairedRadio() }
 
-				{ this.state.paired ? <AddRawFastqRecordPaired record={Object()} /> : '' }
+				{ this.state.paired ? <RawFastqRecordPaired /> : <RawFastqRecordSingle /> }
 				
 			</div>
 		);
