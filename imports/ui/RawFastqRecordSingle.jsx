@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
+import { browserHistory } from 'react-router';
 
 import { Button } from 'react-bootstrap';
 import Select from 'react-select';
