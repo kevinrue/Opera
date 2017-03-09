@@ -29,7 +29,7 @@ before_script:
   - meteor npm install
   - npm --version
   - meteor --version
-  - cat /home/travis/build/kevinrue/Seqbook/.meteor/versions
+#  - cat /home/travis/build/kevinrue/Seqbook/.meteor/versions
 
 script:
   - meteor build $HOME/opera.tar.gz
