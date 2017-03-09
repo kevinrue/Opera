@@ -1,5 +1,6 @@
-# Opera
-Coordinate high-throughput data from raw to processed files.
+# SeqBook
+
+Social sequencing - Coordinate high-throughput experiments from raw files to processed data.
 
 | Platform | Status | Notes |
 | :------: | :----: | :---  |
