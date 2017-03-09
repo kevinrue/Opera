@@ -467,7 +467,12 @@ class RawFastqRecordPaired extends Component {
 		          value={this.state.first}
 		          onChange={this.updateFirst.bind(this)}/>
 		        </td>
-		        <td>{this.formGlyphicon('first-tip', this.state.firstInitial, this.state.firstValid, this.state.firstCountInDatabase)}</td>
+		        <td>{this.formGlyphicon(
+		        	'first-tip',
+		        	this.state.firstInitial,
+		        	this.state.firstValid,
+		        	this.state.firstCountInDatabase
+		        )}</td>
       		</tr>
       		<tr>
       			<td>
@@ -484,7 +489,12 @@ class RawFastqRecordPaired extends Component {
 			          onChange={this.updateSecond.bind(this)}
 			        />
 		        </td>
-		        <td>{this.formGlyphicon('second-tip', this.state.secondInitial, this.state.secondValid, this.state.secondCountInDatabase)}</td>
+		        <td>{this.formGlyphicon(
+		        	'second-tip',
+		        	this.state.secondInitial,
+		        	this.state.secondValid,
+		        	this.state.secondCountInDatabase
+		        )}</td>
       		</tr>
       		<tr>
       			<td>
@@ -502,7 +512,11 @@ class RawFastqRecordPaired extends Component {
 			        />&nbsp;
 			        {this.renderReadLengthsButtonGroup()}
 		        </td>
-		        <td>{this.formGlyphicon('read-length-tip', this.state.readLengthInitial, this.state.readLengthValid)}</td>
+		        <td>{this.formGlyphicon(
+		        	'read-length-tip',
+		        	this.state.readLengthInitial,
+		        	this.state.readLengthValid
+		        )}</td>
       		</tr>
       		<tr>
       			<td>
@@ -520,7 +534,10 @@ class RawFastqRecordPaired extends Component {
 								searchable={this.state.searchable}
 							/> }
 		        </td>
-		        <td>{this.formGlyphicon('sequencer-tip', this.state.sequencerInitial, this.state.sequencerValid)}</td>
+		        <td>{this.formGlyphicon(
+		        	'sequencer-tip',
+		        	this.state.sequencerInitial,
+		        	this.state.sequencerValid)}</td>
       		</tr>
       		<tr>
       			<td>
@@ -533,7 +550,11 @@ class RawFastqRecordPaired extends Component {
 								locale="en-gb"
 								placeholderText="Date of sequencing run" />
 						 </td>
-						 <td>{this.formGlyphicon('date-run-tip', this.state.dateRunInitial, this.state.dateRunValid)}</td>
+						 <td>{this.formGlyphicon(
+						 	'date-run-tip',
+						 	this.state.dateRunInitial,
+						 	this.state.dateRunValid
+						 )}</td>
       		</tr>
       	</tbody>
       </table>

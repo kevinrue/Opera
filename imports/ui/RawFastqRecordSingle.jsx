@@ -383,7 +383,12 @@ class RawFastqRecordSingle extends Component {
 		          value={this.state.filepath}
 		          onChange={this.updateFilepath.bind(this)}/>
 		        </td>
-		        <td>{this.formGlyphicon('filepath-tip', this.state.filepathInitial, this.state.filepathValid, this.state.filepathCountInDatabase)}</td>
+		        <td>{this.formGlyphicon(
+		        	'filepath-tip',
+		        	this.state.filepathInitial,
+		        	this.state.filepathValid,
+		        	this.state.filepathCountInDatabase
+		        	)}</td>
       		</tr>
       		<tr>
       			<td>
@@ -401,7 +406,11 @@ class RawFastqRecordSingle extends Component {
 			        />&nbsp;
 			        {this.renderReadLengthsButtonGroup()}
 		        </td>
-		        <td>{this.formGlyphicon('read-length-tip', this.state.readLengthInitial, this.state.readLengthValid)}</td>
+		        <td>{this.formGlyphicon(
+		        	'read-length-tip',
+		        	this.state.readLengthInitial,
+		        	this.state.readLengthValid
+		        )}</td>
       		</tr>
       		<tr>
       			<td>
@@ -419,7 +428,11 @@ class RawFastqRecordSingle extends Component {
 								searchable={this.state.searchable}
 							/> }
 		        </td>
-		        <td>{this.formGlyphicon('sequencer-tip', this.state.sequencerInitial, this.state.sequencerValid)}</td>
+		        <td>{this.formGlyphicon(
+		        	'sequencer-tip',
+		        	this.state.sequencerInitial,
+		        	this.state.sequencerValid
+		        )}</td>
       		</tr>
       		<tr>
       			<td>
@@ -432,7 +445,11 @@ class RawFastqRecordSingle extends Component {
 								locale="en-gb"
 								placeholderText="Date of sequencing run" />
 						 </td>
-						 <td>{this.formGlyphicon('date-run-tip', this.state.dateRunInitial, this.state.dateRunValid)}</td>
+						 <td>{this.formGlyphicon(
+						 	'date-run-tip',
+						 	this.state.dateRunInitial,
+						 	this.state.dateRunValid
+						 )}</td>
       		</tr>
       	</tbody>
       </table>
