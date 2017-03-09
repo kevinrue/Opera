@@ -203,8 +203,8 @@ class RawFastqRecordPaired extends Component {
 	}
 
 	updateSequencer (newValue) {
-		console.log('new sequencer: ' + String(newValue));
-		console.log('initial sequencer: ' + String(this.props.record.sequencer));
+		// console.log('new sequencer: ' + String(newValue));
+		// console.log('initial sequencer: ' + String(this.props.record.sequencer));
 		let isInitial = (newValue === this.props.record.sequencer);
 		// console.log('initial: ' + this.props.record.sequencer);
 		// console.log('isInitial: ' + isInitial);
@@ -546,6 +546,7 @@ class RawFastqRecordPaired extends Component {
       			<td>
       				<DatePicker
       					selected={this.state.dateRun}
+      					dateFormat="DD/MM/YYYY"
 								onChange={this.updateDateRun.bind(this)}
 								locale="en-gb"
 								placeholderText="Date of sequencing run" />
