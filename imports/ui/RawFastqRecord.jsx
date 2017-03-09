@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
-import { RawFastqRecords } from '../api/raw-fastq-records.js';
+import { RawFastqRecords } from '../api/raw-fastq-records/raw-fastq-records.js';
 
 import RawFastqRecordSingle from './RawFastqRecordSingle.jsx';
 import RawFastqRecordPaired from './RawFastqRecordPaired.jsx';

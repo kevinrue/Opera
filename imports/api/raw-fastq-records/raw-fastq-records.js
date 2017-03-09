@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-import SeqbookLog from './seqbook-log.js'
+import SeqbookLog from '../seqbook-log/seqbook-log.js'
  
 export const RawFastqRecords = new Mongo.Collection('rawFastqRecords');
 
@@ -117,13 +117,12 @@ Meteor.methods({
     );
   },
 
-  'rawFastqs.updateSingleEnd'({recordId, filepath, readLength, sequencer, dateRun}) {
-    // console.log('typeof: ' + typeof(recordId));
+  'rawFastqs.updateRecord'(recordId, newValues) {
+    // console.log('rawFastqs.updateSingleEnd !');
+    // console.log('typeof: ' + recordId);
+    // console.log('newValues: ' + newValues);
     check(recordId, String);
-    check(filepath, String);
-    check(readLength, Number);
-    check(sequencer, String);
-    check(dateRun, String);
+    check(newValues, Object);
     // TODO: check that file path exist on the system
  
     // Make sure the user is logged in before inserting a task
@@ -133,13 +132,22 @@ Meteor.methods({
 
     // TODO: only update (and record) necessary fields
     RawFastqRecords.update(
-      recordId, {
-        $set: {
-          filepath: filepath,
-          readLength: readLength,
-          sequencer: sequencer,
-          dateRun: dateRun,
-        },
+      recordId,
+      {
+        $set: newValues,
+      },
+      (err, res) => {
+        // console.log('insertPairedEnd connection: ' + this.connection);
+        if (!err){
+          Meteor.call(
+            'seqbookLog.insert',
+            this.userId,
+            'u', // 'create'
+            recordId,
+            'rawFastqs',
+            newValues: newValues,
+          );
+        }
       }
     );
   },

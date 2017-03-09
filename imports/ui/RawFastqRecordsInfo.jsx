@@ -6,7 +6,7 @@ import { browserHistory } from 'react-router';
 
 import { ButtonToolbar, Button } from 'react-bootstrap';
 
-import { RawFastqRecords } from '../api/raw-fastq-records.js';
+import { RawFastqRecords } from '../api/raw-fastq-records/raw-fastq-records.js';
 
 import Loading from './loading.jsx'
 

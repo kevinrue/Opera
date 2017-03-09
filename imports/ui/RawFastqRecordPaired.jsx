@@ -9,7 +9,7 @@ import ReactTooltip from 'react-tooltip';
 import DatePicker from 'react-datepicker';
 import 'moment/locale/en-gb';
 
-import { RawFastqRecords } from '../api/raw-fastq-records.js';
+import { RawFastqRecords } from '../api/raw-fastq-records/raw-fastq-records.js';
 import { Sequencers } from '../api/sequencers.js';
 
 import Loading from './loading.jsx'
@@ -49,6 +49,24 @@ class RawFastqRecordPaired extends Component {
 			dateRun: startDate,
 			dateRunInitial: true,
 			dateRunValid: this.isDateRunValid(props.record.dateRun),
+
+			changedInputs: {},
+		}
+	}
+
+	// TODO: duplicated with RawFastqRecordSingle
+	updateChangedInputs (inputName, isInitial, newValue = undefined) {
+		let changedInputs = this.state.changedInputs;
+		if (isInitial) {
+			delete changedInputs[inputName];
+			this.setState({
+				changedInputs: changedInputs,
+			});
+		} else {
+			changedInputs[inputName] = newValue;
+			this.setState({
+				changedInputs: changedInputs,
+			});
 		}
 	}
 
@@ -83,6 +101,7 @@ class RawFastqRecordPaired extends Component {
 	updateFirst (event) {
 		let newValue = event.target.value;
 		let isInitial = (newValue === this.props.record.first)
+		this.updateChangedInputs('first', isInitial, newValue);
 		let isValid = this.isFirstFastqPathValid(newValue);
 		// If the new value is not valid, don't bother with further checks
 		if (isValid){
@@ -131,6 +150,7 @@ class RawFastqRecordPaired extends Component {
 	updateSecond (event) {
 		let newValue = event.target.value;
 		let isInitial = (newValue === this.props.record.second)
+		this.updateChangedInputs('second', isInitial, newValue);
 		let isValid = this.isSecondFastqPathValid(newValue);
 		// If the new value is not valid, don't bother with further checks
 		if (isValid){
@@ -168,6 +188,7 @@ class RawFastqRecordPaired extends Component {
 		// console.log('current: ' + typeof(newValue));
 		// console.log('current: ' + String(newValue));
 		let isInitial = (newValue === String(this.props.record.readLength));
+		this.updateChangedInputs('readLength', isInitial, newValue);
 		// console.log('isInitial: ' + isInitial);
 		let isValid = this.isReadLengthValid(newValue);
 		// if (newValue > 0 || newValue === ''){
@@ -206,6 +227,7 @@ class RawFastqRecordPaired extends Component {
 		// console.log('new sequencer: ' + String(newValue));
 		// console.log('initial sequencer: ' + String(this.props.record.sequencer));
 		let isInitial = (newValue === this.props.record.sequencer);
+		this.updateChangedInputs('sequencer', isInitial, newValue);
 		// console.log('initial: ' + this.props.record.sequencer);
 		// console.log('isInitial: ' + isInitial);
 		this.setState({
@@ -241,6 +263,7 @@ class RawFastqRecordPaired extends Component {
 			isInitial = (newValue === this.props.record.dateRun);
 			isValid = this.isDateRunValid(newValue);
 		}
+		this.updateChangedInputs('dateRun', isInitial, newValue);
 		// console.log('isInitial: ' + isInitial);
 		// console.log('isValid: ' + isValid);
 		this.setState({
@@ -294,13 +317,17 @@ class RawFastqRecordPaired extends Component {
 	}
 
 	isFormInitial () {
+		// console.log('#attributes: ' + Object.keys(this.state.changedInputs).length);
 		return(
-			this.state.firstInitial &&
-			this.state.secondInitial &&
-			this.state.readLengthInitial &&
-			this.state.sequencerInitial &&
-			this.state.dateRunInitial
+			Object.keys(this.state.changedInputs).length === 0
 		);
+		// return(
+		// 	this.state.firstInitial &&
+		// 	this.state.secondInitial &&
+		// 	this.state.readLengthInitial &&
+		// 	this.state.sequencerInitial &&
+		// 	this.state.dateRunInitial
+		// );
 	}
 
 	isFormPending () {
@@ -376,7 +403,7 @@ class RawFastqRecordPaired extends Component {
 		if (this.isFormValid()){
 			
 			if (this.props.record._id === undefined){
-				console.log('submit new paired FASTQ record !');
+				// console.log('submit new paired FASTQ record !');
 				Meteor.call(
 					'rawFastqs.insertPairedEnd',
 					this.state.first,
@@ -394,15 +421,12 @@ class RawFastqRecordPaired extends Component {
 					}
 				);
 			} else {
-				console.log('update paired FASTQ record !');
-				Meteor.call('rawFastqs.updatePairedEnd', {
-				  recordId: this.props.record._id,
-				  first: this.state.first,
-				  second: this.state.second,
-				  readLength: parseInt(this.state.readLength),
-				  sequencer: this.state.sequencer,
-				  dateRun: this.state.dateRun.format("YYYYMMDD"),
-				}, (err, res) => {
+				// console.log('update paired FASTQ record !');
+				Meteor.call(
+					'rawFastqs.updateRecord',
+					this.props.record._id,
+					this.state.changedInputs,
+					(err, res) => {
 				  if (err) {
 				    alert(err);
 				  } else {

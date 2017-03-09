@@ -1,4 +1,5 @@
 import React from 'react';
+import { render } from 'react-dom';
 
 import { Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
 import { Button } from 'react-bootstrap';
@@ -52,7 +53,7 @@ const Container = (props) => <div>
   </div>
 </div>
 
-export const renderRoutes = () => (
+const renderRoutes = () => (
   <Router history={browserHistory}>
   	<Route path='/' component={Container}>
   		<IndexRoute component={App} />
@@ -67,3 +68,8 @@ export const renderRoutes = () => (
   	<Route path='*' component={NotFound} />
   </Router>
 );
+
+Meteor.startup(() => {
+	// console.log('Client started up')
+	render(renderRoutes(), document.getElementById('render-target'));
+});

@@ -4,7 +4,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import Textarea from 'react-textarea-autosize';
 
-import { RawFastqRecords } from '../api/raw-fastq-records.js';
+import { RawFastqRecords } from '../api/raw-fastq-records/raw-fastq-records.js';
 
 class AddRawFastqRecords extends Component {
 

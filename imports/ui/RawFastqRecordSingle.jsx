@@ -9,7 +9,7 @@ import ReactTooltip from 'react-tooltip';
 import DatePicker from 'react-datepicker';
 import 'moment/locale/en-gb';
 
-import { RawFastqRecords } from '../api/raw-fastq-records.js';
+import { RawFastqRecords } from '../api/raw-fastq-records/raw-fastq-records.js';
 import { Sequencers } from '../api/sequencers.js';
 
 import Loading from './loading.jsx'
@@ -40,6 +40,24 @@ class RawFastqRecordSingle extends Component {
 			dateRun: startDate,
 			dateRunInitial: true,
 			dateRunValid: this.isDateRunValid(props.record.dateRun),
+
+			changedInputs: {},
+		}
+	}
+
+	// TODO: duplicated with RawFastqRecordPaired
+	updateChangedInputs (inputName, isInitial, newValue = undefined) {
+		let changedInputs = this.state.changedInputs;
+		if (isInitial) {
+			delete changedInputs[inputName];
+			this.setState({
+				changedInputs: changedInputs,
+			});
+		} else {
+			changedInputs[inputName] = newValue;
+			this.setState({
+				changedInputs: changedInputs,
+			});
 		}
 	}
 
@@ -74,6 +92,7 @@ class RawFastqRecordSingle extends Component {
 	updateFilepath (event) {
 		let newValue = event.target.value;
 		let isInitial = (newValue === this.props.record.filepath)
+		this.updateChangedInputs('filepath', isInitial, newValue);
 		let isValid = this.isFilePathValid(newValue);
 		// If the new value is not valid, don't bother with further checks
 		if (isValid){
@@ -100,6 +119,7 @@ class RawFastqRecordSingle extends Component {
 		// console.log('current: ' + typeof(newValue));
 		// console.log('current: ' + String(newValue));
 		let isInitial = (newValue === String(this.props.record.readLength));
+		this.updateChangedInputs('readLength', isInitial, newValue);
 		// console.log('isInitial: ' + isInitial);
 		let isValid = this.isReadLengthValid(newValue);
 		// if (newValue > 0 || newValue === ''){
@@ -139,6 +159,7 @@ class RawFastqRecordSingle extends Component {
 	updateSequencer (newValue) {
 		// console.log('new sequencer: ' + String(newValue));
 		let isInitial = (newValue === this.props.record.sequencer);
+		this.updateChangedInputs('sequencer', isInitial, newValue);
 		// console.log('initial: ' + this.props.record.sequencer);
 		// console.log('isInitial: ' + isInitial);
 		this.setState({
@@ -175,6 +196,7 @@ class RawFastqRecordSingle extends Component {
 			isInitial = (newValue === this.props.record.dateRun);
 			isValid = this.isDateRunValid(newValue);
 		}
+		this.updateChangedInputs('dateRun', isInitial, newValue);
 		// console.log('isInitial: ' + isInitial);
 		// console.log('isValid: ' + isValid);
 		this.setState({
@@ -232,7 +254,7 @@ class RawFastqRecordSingle extends Component {
 		if (this.isFormValid()){
 
 			if (this.props.record._id === undefined){
-				// console.log('submit new paired FASTQ record !');
+				// console.log('submit new single FASTQ record !');
 				Meteor.call(
 					'rawFastqs.insertSingleEnd',
 					this.state.filepath,
@@ -249,14 +271,13 @@ class RawFastqRecordSingle extends Component {
 					}
 				);
 			} else {
-				// console.log('update paired FASTQ record !');
-				Meteor.call('rawFastqs.updateSingleEnd', {
-				  recordId: this.props.record._id,
-				  filepath: this.state.filepath,
-				  readLength: parseInt(this.state.readLength),
-				  sequencer: this.state.sequencer,
-				  dateRun: this.state.dateRun.format("YYYYMMDD"),
-				}, (err, res) => {
+				// console.log('update single FASTQ record!');
+				// console.log('updateFields: ' + this.state.changedInputs);
+				Meteor.call(
+					'rawFastqs.updateRecord',
+					this.props.record._id,
+					this.state.changedInputs,
+					(err, res) => {
 				  if (err) {
 				    alert(err);
 				  } else {
@@ -271,11 +292,14 @@ class RawFastqRecordSingle extends Component {
 
 	isFormInitial () {
 		return(
-			this.state.filepathInitial &&
-			this.state.readLengthInitial &&
-			this.state.sequencerInitial &&
-			this.state.dateRunInitial
+			Object.keys(this.state.changedInputs).length === 0
 		);
+		// return(
+		// 	this.state.filepathInitial &&
+		// 	this.state.readLengthInitial &&
+		// 	this.state.sequencerInitial &&
+		// 	this.state.dateRunInitial
+		// );
 	}
 
 	isFormPending () {
