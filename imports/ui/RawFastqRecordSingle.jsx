@@ -89,35 +89,49 @@ class RawFastqRecordSingle extends Component {
 		});
 	}
 
-	isReadLengthValid(value) {
-		// Current check:
-		// - not empty
-		// - greater than 0
-		// console.log('new length: ' + String(value));
-		// console.log('new length: ' + typeof(value));
-		return(
-			value !== '' && value > 0
-		);
-	}
-
-	updateReadLength (event) {
-		// TODO: offer shortcuts (buttons) for common values ()
-		let newValue = event.target.value;
-		// console.log('initial: ' + typeof(this.props.record.readLength));
-		let isInitial = (parseInt(newValue) === this.props.record.readLength);
-		// console.log('isInitial: ' + isInitial);
-		let isValid = this.isReadLengthValid(newValue);
-		if (newValue > 0 || newValue === ''){
-			this.setState({
-				readLength: newValue,
-				readLengthInitial: isInitial,
-				readLengthValid: this.isReadLengthValid(newValue),
-			});
-		}
-	}
-
+	// TODO: duplicated with RawFastqRecordPaired
 	isReadLengthValid (newValue) {
 		return (newValue != undefined);
+	}
+
+	updateReadLengthState (newValue) {
+		// console.log('initial: ' + typeof(this.props.record.readLength));
+		// console.log('initial: ' + String(this.props.record.readLength));
+		// console.log('current: ' + typeof(newValue));
+		// console.log('current: ' + String(newValue));
+		let isInitial = (newValue === String(this.props.record.readLength));
+		// console.log('isInitial: ' + isInitial);
+		let isValid = this.isReadLengthValid(newValue);
+		// if (newValue > 0 || newValue === ''){
+		this.setState({
+			readLength: newValue,
+			readLengthInitial: isInitial,
+			readLengthValid: this.isReadLengthValid(newValue),
+			});
+		// }
+	}
+
+	updateReadLengthFromInput (event) {
+		// TODO: offer shortcuts (buttons) for common values ()
+		let newValue = event.target.value;
+		this.updateReadLengthState(newValue);
+	}
+
+	updateReadLengthFromButton (event) {
+		// TODO: offer shortcuts (buttons) for common values ()
+		let newValue = event.target.attributes.getNamedItem('data-key').value;
+		this.updateReadLengthState(newValue);
+	}
+
+	renderReadLengthsButtonGroup () {
+		return(
+			<ButtonGroup onClick={this.updateReadLengthFromButton.bind(this)}>
+	      <Button bsStyle="primary" data-key='50'>50</Button>
+	      <Button bsStyle="primary" data-key='75'>75</Button>
+	      <Button bsStyle="primary" data-key='100'>100</Button>
+	      <Button bsStyle="primary" data-key='150'>150</Button>
+      </ButtonGroup>
+		);
 	}
 
 	updateSequencer (newValue) {
@@ -383,8 +397,9 @@ class RawFastqRecordSingle extends Component {
 			          ref="inputReadLength"
 			          placeholder="Read length"
 			          value={this.state.readLength}
-			          onChange={this.updateReadLength.bind(this)}
-			        />
+			          onChange={this.updateReadLengthFromInput.bind(this)}
+			        />&nbsp;
+			        {this.renderReadLengthsButtonGroup()}
 		        </td>
 		        <td>{this.formGlyphicon('read-length-tip', this.state.readLengthInitial, this.state.readLengthValid)}</td>
       		</tr>

@@ -157,25 +157,49 @@ class RawFastqRecordPaired extends Component {
 		);
 	}
 
-	updateReadLength (event) {
-		// TODO: offer shortcuts (buttons) for common values ()
-		let newValue = event.target.value;
-		// console.log('initial: ' + typeof(this.props.record.readLength));
-		let isInitial = (parseInt(newValue) === this.props.record.readLength);
-		// console.log('isInitial: ' + isInitial);
-		let isValid = this.isReadLengthValid(newValue);
-		if (newValue > 0 || newValue === ''){
-			this.setState({
-				readLength: newValue,
-				readLengthInitial: isInitial,
-				readLengthValid: this.isReadLengthValid(newValue),
-			});
-		}
-	}
-
 	// TODO: duplicated with RawFastqRecordSingle
 	isReadLengthValid (newValue) {
 		return (newValue != undefined);
+	}
+
+	updateReadLengthState (newValue) {
+		// console.log('initial: ' + typeof(this.props.record.readLength));
+		// console.log('initial: ' + String(this.props.record.readLength));
+		// console.log('current: ' + typeof(newValue));
+		// console.log('current: ' + String(newValue));
+		let isInitial = (newValue === String(this.props.record.readLength));
+		// console.log('isInitial: ' + isInitial);
+		let isValid = this.isReadLengthValid(newValue);
+		// if (newValue > 0 || newValue === ''){
+		this.setState({
+			readLength: newValue,
+			readLengthInitial: isInitial,
+			readLengthValid: this.isReadLengthValid(newValue),
+			});
+		// }
+	}
+
+	updateReadLengthFromInput (event) {
+		// TODO: offer shortcuts (buttons) for common values ()
+		let newValue = event.target.value;
+		this.updateReadLengthState(newValue);
+	}
+
+	updateReadLengthFromButton (event) {
+		// TODO: offer shortcuts (buttons) for common values ()
+		let newValue = event.target.attributes.getNamedItem('data-key').value;
+		this.updateReadLengthState(newValue);
+	}
+
+	renderReadLengthsButtonGroup () {
+		return(
+			<ButtonGroup onClick={this.updateReadLengthFromButton.bind(this)}>
+	      <Button bsStyle="primary" data-key='50'>50</Button>
+	      <Button bsStyle="primary" data-key='75'>75</Button>
+	      <Button bsStyle="primary" data-key='100'>100</Button>
+	      <Button bsStyle="primary" data-key='150'>150</Button>
+      </ButtonGroup>
+		);
 	}
 
 	updateSequencer (newValue) {
@@ -269,50 +293,6 @@ class RawFastqRecordPaired extends Component {
 		);
 	}
 
-	handleSubmit (event) {
-		event.preventDefault();
-		if (this.isFormValid()){
-			
-			if (this.props.record._id === undefined){
-				console.log('submit new paired FASTQ record !');
-				Meteor.call(
-					'rawFastqs.insertPairedEnd',
-					this.state.first,
-					this.state.second,
-					parseInt(this.state.readLength),
-					this.state.sequencer,
-					this.state.dateRun.format("YYYYMMDD"),
-					(err, res) => {
-						if (err){
-							alert(err);
-						} else {
-							alert('New record added successfully!');
-							this.resetForm();
-						}
-					}
-				);
-			} else {
-				console.log('update paired FASTQ record !');
-				Meteor.call('rawFastqs.updatePairedEnd', {
-				  recordId: this.props.record._id,
-				  first: this.state.first,
-				  second: this.state.second,
-				  readLength: parseInt(this.state.readLength),
-				  sequencer: this.state.sequencer,
-				  dateRun: this.state.dateRun.format("YYYYMMDD"),
-				}, (err, res) => {
-				  if (err) {
-				    alert(err);
-				  } else {
-				    alert('Record updated successfully!');
-				    browserHistory.push('/rawFastq');
-				  }
-				});
-			}
-
-		}
-	}
-
 	isFormInitial () {
 		return(
 			this.state.firstInitial &&
@@ -389,6 +369,50 @@ class RawFastqRecordPaired extends Component {
 		return(
 			<Button type="submit" bsStyle={buttonColour} disabled={disableButton}>{buttonText}</Button>
     );
+	}
+
+	handleSubmit (event) {
+		event.preventDefault();
+		if (this.isFormValid()){
+			
+			if (this.props.record._id === undefined){
+				console.log('submit new paired FASTQ record !');
+				Meteor.call(
+					'rawFastqs.insertPairedEnd',
+					this.state.first,
+					this.state.second,
+					parseInt(this.state.readLength),
+					this.state.sequencer,
+					this.state.dateRun.format("YYYYMMDD"),
+					(err, res) => {
+						if (err){
+							alert(err);
+						} else {
+							alert('New record added successfully!');
+							this.resetForm();
+						}
+					}
+				);
+			} else {
+				console.log('update paired FASTQ record !');
+				Meteor.call('rawFastqs.updatePairedEnd', {
+				  recordId: this.props.record._id,
+				  first: this.state.first,
+				  second: this.state.second,
+				  readLength: parseInt(this.state.readLength),
+				  sequencer: this.state.sequencer,
+				  dateRun: this.state.dateRun.format("YYYYMMDD"),
+				}, (err, res) => {
+				  if (err) {
+				    alert(err);
+				  } else {
+				    alert('Record updated successfully!');
+				    browserHistory.push('/rawFastq');
+				  }
+				});
+			}
+
+		}
 	}
 
 	resetForm () {
@@ -474,8 +498,9 @@ class RawFastqRecordPaired extends Component {
 			          ref="inputReadLength"
 			          placeholder="Read length"
 			          value={this.state.readLength}
-			          onChange={this.updateReadLength.bind(this)}
-			        />
+			          onChange={this.updateReadLengthFromInput.bind(this)}
+			        />&nbsp;
+			        {this.renderReadLengthsButtonGroup()}
 		        </td>
 		        <td>{this.formGlyphicon('read-length-tip', this.state.readLengthInitial, this.state.readLengthValid)}</td>
       		</tr>
