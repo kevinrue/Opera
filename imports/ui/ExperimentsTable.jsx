@@ -62,7 +62,7 @@ class ExperimentsTable extends Component {
         <div id="clearingdiv"></div>
     	</div>
     );
-    }
+  }
 	
 }
 
