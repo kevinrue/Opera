@@ -1,4 +1,4 @@
-# SeqBook
+# Seqbook
 
 Social sequencing - Coordinate high-throughput experiments from raw files to processed data.
 
