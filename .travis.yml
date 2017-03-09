@@ -26,10 +26,11 @@ cache:
     - node_modules
 
 before_script:
+  - pwd
   - meteor npm install
   - npm --version
   - meteor --version
-#  - cat /home/travis/build/kevinrue/Seqbook/.meteor/versions
+#  - cat ./.meteor/versions
 
 script:
   - meteor build $HOME/opera.tar.gz
