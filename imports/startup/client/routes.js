@@ -18,6 +18,8 @@ import AddRawFastqRecord from '../../ui/AddRawFastqRecord.jsx';
 import AddRawFastqRecords from '../../ui/AddRawFastqRecords.jsx';
 import RawFastqRecord from '../../ui/RawFastqRecord.jsx';
 
+import SequencersTable from '../../ui/SequencersTable.jsx';
+
 const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
 
@@ -37,6 +39,7 @@ const Nav = () => (
 	      <ul className="nav navbar-nav">
 			    <li><Link to='/rawFastq'>Raw FASTQ</Link></li>
 			    <li><Link to='/experiments'>Experiments</Link></li>
+			    <li><Link to='/sequencers'>Sequencers</Link></li>
 	    	</ul>
 	    	<ul className="nav navbar-nav navbar-right" id="navbar-signin">
 		    	<li><AccountsUIWrapper /></li>
@@ -64,6 +67,7 @@ const renderRoutes = () => (
   		<Route path='/rawFastq/addOne' component={AddRawFastqRecord} />
   		<Route path='/rawFastq/addBatch' component={AddRawFastqRecords} />
   		<Route path='/rawFastq/:_id' component={RawFastqRecord} />
+  		<Route path='/sequencers' component={SequencersTable} />
   	</Route>
   	<Route path='*' component={NotFound} />
   </Router>
