@@ -3,7 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 import { browserHistory } from 'react-router';
 
-import { Button } from 'react-bootstrap';
+import { Button, DropdownButton, MenuItem } from 'react-bootstrap';
 import Select from 'react-select';
 import ReactTooltip from 'react-tooltip';
 import DatePicker from 'react-datepicker';
@@ -98,8 +98,7 @@ class RawFastqRecordPaired extends Component {
 		});
 	}
 
-	updateFirst (event) {
-		let newValue = event.target.value;
+	updateFirst (newValue) {
 		let isInitial = (newValue === this.props.record.first)
 		this.updateChangedInputs('first', isInitial, newValue);
 		let isValid = this.isFirstFastqPathValid(newValue);
@@ -115,6 +114,31 @@ class RawFastqRecordPaired extends Component {
 			firstInitial: isInitial,
 			firstValid: isValid,
 		});
+	}
+
+	// method receives event and passes String
+	handleChangeFirst (event) {
+		let newValue = event.target.value;
+		this.updateFirst(newValue);
+	}
+
+	// suffixesString must only contain a single '+' character to split it in two
+	autocompleteFilepaths (suffixesString) {
+		let suffixesList = suffixesString.split('+');
+		// console.log('suffixesList: ' + suffixesList);
+		let newFirst = this.state.first + suffixesList[0];
+		let newSecond = this.state.first + suffixesList[1];
+		// console.log('newFirst: ' + newFirst);
+		this.updateFirst(newFirst);
+		this.updateSecond(newSecond);
+	}
+
+	// suffixesString must only contain a single '/' character to split it in two
+	autofillSecond (suffixesString) {
+		let suffixesList = suffixesString.split('/');
+		// console.log('suffixesList: ' + suffixesList);
+		let newSecond = this.state.first.replace(suffixesList[0], suffixesList[1]);
+		this.updateSecond(newSecond);
 	}
 
 	isSecondFastqPathValid (value) {
@@ -147,8 +171,7 @@ class RawFastqRecordPaired extends Component {
 		);
 	}
 
-	updateSecond (event) {
-		let newValue = event.target.value;
+	updateSecond (newValue) {
 		let isInitial = (newValue === this.props.record.second)
 		this.updateChangedInputs('second', isInitial, newValue);
 		let isValid = this.isSecondFastqPathValid(newValue);
@@ -165,8 +188,14 @@ class RawFastqRecordPaired extends Component {
 		});
 	}
 
+	// method receives event and passes String
+	handleChangeSecond (event) {
+		let newValue = event.target.value;
+		this.updateSecond(newValue);
+	}
+
 	// TODO: duplicated with RawFastqRecordSingle
-	isReadLengthValid(value) {
+	isReadLengthValid (value) {
 		// Current check:
 		// - not empty
 		// - greater than 0
@@ -179,7 +208,11 @@ class RawFastqRecordPaired extends Component {
 
 	// TODO: duplicated with RawFastqRecordSingle
 	isReadLengthValid (newValue) {
-		return (newValue != undefined);
+		// console.log('newValue: ' + String(newValue));
+		return (
+			newValue != undefined &&
+			newValue != ''
+		);
 	}
 
 	updateReadLengthState (newValue) {
@@ -200,30 +233,19 @@ class RawFastqRecordPaired extends Component {
 		// }
 	}
 
-	updateReadLengthFromInput (event) {
+	handleReadLengthChangeInput (event) {
 		// TODO: offer shortcuts (buttons) for common values ()
 		let newValue = event.target.value;
 		this.updateReadLengthState(newValue);
 	}
 
-	updateReadLengthFromButton (event) {
+	handleReadLengthChangeButton (event) {
 		// TODO: offer shortcuts (buttons) for common values ()
 		let newValue = event.target.attributes.getNamedItem('data-key').value;
 		this.updateReadLengthState(newValue);
 	}
 
-	renderReadLengthsButtonGroup () {
-		return(
-			<ButtonGroup onClick={this.updateReadLengthFromButton.bind(this)}>
-	      <Button bsStyle="primary" data-key='50'>50</Button>
-	      <Button bsStyle="primary" data-key='75'>75</Button>
-	      <Button bsStyle="primary" data-key='100'>100</Button>
-	      <Button bsStyle="primary" data-key='150'>150</Button>
-      </ButtonGroup>
-		);
-	}
-
-	updateSequencer (newValue) {
+	handleChangeSequencer (newValue) {
 		// console.log('new sequencer: ' + String(newValue));
 		// console.log('initial sequencer: ' + String(this.props.record.sequencer));
 		let isInitial = (newValue === this.props.record.sequencer);
@@ -248,7 +270,7 @@ class RawFastqRecordPaired extends Component {
 		);
 	}
 
-	updateDateRun (date) {
+	handleChangeDateRun (date) {
 		// Note: date is passed as moment() object, with its own methods
 		// console.log('locale: ' + moment.locale());
 		// console.log('Date: ' + date.format('LL'));
@@ -362,6 +384,176 @@ class RawFastqRecordPaired extends Component {
 		);
 	}
 
+	renderFirstInput () {
+		return(
+			<tr>
+  			<td>
+  				<label htmlFor="firstPath">First mate</label>
+  			</td>
+  			<td>
+  				<input
+						className='input-file-path'
+						id="firstPath"
+	          type="text"
+	          ref="inputFirstPath"
+	          placeholder="Path to first FASTQ file"
+	          value={this.state.first}
+	          onChange={this.handleChangeFirst.bind(this)}
+          />
+        </td>
+        <td>{this.formGlyphicon(
+        	'first-tip',
+        	this.state.firstInitial,
+        	this.state.firstValid,
+        	this.state.firstCountInDatabase
+        )}</td>
+  		</tr>
+  	);
+	}
+
+	// Note: eventKeys rules:
+	// '+' separated suffixes for autocomplete ('append')
+	// '/' separated suffixes for autofill ('substitute by')
+	// Those two characters should never be present in the FASTQ pairing suffix
+	renderFilepathDropdown () {
+		return(
+			<DropdownButton bsStyle='primary' title='Quick-fill' id='filepathDropdown' style={{'marginLeft':'1%'}}>
+				<MenuItem header>Apply</MenuItem>
+	      <MenuItem
+	      	eventKey="_1.fastq.gz+_2.fastq.gz"
+	      	onSelect={this.autocompleteFilepaths.bind(this)}>
+	      	_1/_2.fastq.gz
+	      </MenuItem>
+	      <MenuItem divider />
+	      <MenuItem header>Replace</MenuItem>
+	      <MenuItem
+	      	eventKey="_1.fastq.gz/_2.fastq.gz"
+	      	onSelect={this.autofillSecond.bind(this)}>
+	      	_1/_2.fastq.gz
+	      </MenuItem>
+	    </DropdownButton>
+		);
+	}
+
+	renderSecondInput () {
+		let displayDropdown = (this.state.first && !this.state.second);
+
+		return(
+			<tr>
+  			<td>
+  				<label htmlFor="secondPath">Second mate</label>
+  			</td>
+  			<td>
+  				<input
+						className={displayDropdown ? 'input-second-path-short' : 'input-file-path'}
+						id="secondPath"
+	          type="text"
+	          ref="inputSecondpath"
+	          placeholder="Path to second FASTQ file"
+	          value={this.state.second}
+	          onChange={this.handleChangeSecond.bind(this)}
+	        />
+          {
+          	displayDropdown ? this.renderFilepathDropdown() : ''
+          }
+        </td>
+        <td>{this.formGlyphicon(
+        	'second-tip',
+        	this.state.secondInitial,
+        	this.state.secondValid,
+        	this.state.secondCountInDatabase
+        )}</td>
+  		</tr>
+		);
+	}
+
+	renderReadLengthInput () {
+		return(
+			<tr>
+  			<td>
+  				<label htmlFor="readLength">Read length</label>
+  			</td>
+  			<td>
+  				<input
+						id="readLength"
+	          type="number"
+	          min='1'
+	          ref="inputReadLength"
+	          placeholder="Read length"
+	          value={this.state.readLength}
+	          onChange={this.handleReadLengthChangeInput.bind(this)}
+	        />&nbsp;
+	        {this.renderReadLengthsButtonGroup()}
+        </td>
+        <td>{this.formGlyphicon(
+        	'read-length-tip',
+        	this.state.readLengthInitial,
+        	this.state.readLengthValid
+        )}</td>
+  		</tr>
+		);
+	}
+
+	renderReadLengthsButtonGroup () {
+		return(
+			<ButtonGroup onClick={this.handleReadLengthChangeButton.bind(this)}>
+	      <Button bsStyle="primary" data-key='50'>50</Button>
+	      <Button bsStyle="primary" data-key='75'>75</Button>
+	      <Button bsStyle="primary" data-key='100'>100</Button>
+	      <Button bsStyle="primary" data-key='150'>150</Button>
+      </ButtonGroup>
+		);
+	}
+
+	renderSequencerInput () {
+		return(
+			<tr>
+  			<td>
+  				<label htmlFor="sequencer">Sequencer</label>
+  			</td>
+  			<td>
+  				{ this.props.loading ? <Loading /> : <Select
+						options={this.props.sequencers}
+						ref='selectSequencer'
+						simpleValue
+						clearable={false}
+						name="selected-sequencer"
+						value={this.state.sequencer}
+						onChange={this.handleChangeSequencer.bind(this)}
+						searchable={this.state.searchable}
+					/> }
+        </td>
+        <td>{this.formGlyphicon(
+        	'sequencer-tip',
+        	this.state.sequencerInitial,
+        	this.state.sequencerValid)}</td>
+  		</tr>
+		);
+	}
+
+	renderDateRunInput () {
+		return(
+			<tr>
+  			<td>
+  				<label htmlFor="sequencer">Date run</label>
+  			</td>
+  			<td>
+  				<DatePicker
+  					selected={this.state.dateRun}
+  					dateFormat="DD/MM/YYYY"
+						onChange={this.handleChangeDateRun.bind(this)}
+						locale="en-gb"
+						placeholderText="Date of sequencing run" />
+				 </td>
+				 <td>{this.formGlyphicon(
+				 	'date-run-tip',
+				 	this.state.dateRunInitial,
+				 	this.state.dateRunValid
+				 )}</td>
+  		</tr>
+		);
+	}
+
 	renderSubmitButton () {
 		// console.log('initial: ' + this.isFormInitial());
 		// console.log('pending: ' + this.isFormPending());
@@ -455,13 +647,15 @@ class RawFastqRecordPaired extends Component {
 			readLengthInitial: true,
 			readLengthValid: false,
 
-			sequencer: null,
+			sequencer: undefined,
 			sequencerInitial: true,
 			sequencerValid: false,
 
 			dateRun: null,
 			dateRunInitial: true,
 			dateRunValid: false,
+
+			changedInputs: {},
 		})
 	}
 
@@ -477,110 +671,11 @@ class RawFastqRecordPaired extends Component {
       		</tr>
       	</thead>
       	<tbody>
-      		<tr>
-      			<td>
-      				<label htmlFor="firstPath">First mate</label>
-      			</td>
-      			<td>
-      				<input
-							className='input-file-path'
-							id="firstPath"
-		          type="text"
-		          ref="inputFirstPath"
-		          placeholder="Path to first FASTQ file"
-		          value={this.state.first}
-		          onChange={this.updateFirst.bind(this)}/>
-		        </td>
-		        <td>{this.formGlyphicon(
-		        	'first-tip',
-		        	this.state.firstInitial,
-		        	this.state.firstValid,
-		        	this.state.firstCountInDatabase
-		        )}</td>
-      		</tr>
-      		<tr>
-      			<td>
-      				<label htmlFor="secondPath">Second mate</label>
-      			</td>
-      			<td>
-      				<input
-								className='input-file-path'
-								id="secondPath"
-			          type="text"
-			          ref="inputSecondpath"
-			          placeholder="Path to second FASTQ file"
-			          value={this.state.second}
-			          onChange={this.updateSecond.bind(this)}
-			        />
-		        </td>
-		        <td>{this.formGlyphicon(
-		        	'second-tip',
-		        	this.state.secondInitial,
-		        	this.state.secondValid,
-		        	this.state.secondCountInDatabase
-		        )}</td>
-      		</tr>
-      		<tr>
-      			<td>
-      				<label htmlFor="readLength">Read length</label>
-      			</td>
-      			<td>
-      				<input
-								id="readLength"
-			          type="number"
-			          min='1'
-			          ref="inputReadLength"
-			          placeholder="Read length"
-			          value={this.state.readLength}
-			          onChange={this.updateReadLengthFromInput.bind(this)}
-			        />&nbsp;
-			        {this.renderReadLengthsButtonGroup()}
-		        </td>
-		        <td>{this.formGlyphicon(
-		        	'read-length-tip',
-		        	this.state.readLengthInitial,
-		        	this.state.readLengthValid
-		        )}</td>
-      		</tr>
-      		<tr>
-      			<td>
-      				<label htmlFor="sequencer">Sequencer</label>
-      			</td>
-      			<td>
-      				{ this.props.loading ? <Loading /> : <Select
-								options={this.props.sequencers}
-								ref='selectSequencer'
-								simpleValue
-								clearable={false}
-								name="selected-sequencer"
-								value={this.state.sequencer}
-								onChange={this.updateSequencer.bind(this)}
-								searchable={this.state.searchable}
-							/> }
-		        </td>
-		        <td>{this.formGlyphicon(
-		        	'sequencer-tip',
-		        	this.state.sequencerInitial,
-		        	this.state.sequencerValid)}</td>
-      		</tr>
-      		<tr>
-      			<td>
-      				<label htmlFor="sequencer">Date run</label>
-      			</td>
-      			<td>
-      				<DatePicker
-      					selected={this.state.dateRun}
-      					dateFormat="DD/MM/YYYY"
-								onChange={this.updateDateRun.bind(this)}
-								locale="en-gb"
-								placeholderText="Date of sequencing run" />
-						 </td>
-						 <td>{this.formGlyphicon(
-						 	'date-run-tip',
-						 	this.state.dateRunInitial,
-						 	this.state.dateRunValid
-						 )}</td>
-      		</tr>
+      		{this.renderFirstInput()}
+      		{this.renderSecondInput()}
+      		{this.renderReadLengthInput()}
+      		{this.renderSequencerInput()}
+      		{this.renderDateRunInput()}
       	</tbody>
       </table>
       {this.renderSubmitButton()}
