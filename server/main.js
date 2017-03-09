@@ -6,4 +6,5 @@ Meteor.startup(() => {
   import '../imports/api/experiments.js';
   import '../imports/api/raw-fastq-records.js';
   import '../imports/api/sequencers.js';
+  import '../imports/api/seqbook-log.js';
 });

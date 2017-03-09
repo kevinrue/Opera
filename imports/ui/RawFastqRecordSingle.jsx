@@ -44,7 +44,6 @@ class RawFastqRecordSingle extends Component {
 	}
 
 	isFilePathValid (value) {
-		// TODO: check that path does not exist in database yet
 		// Current check:
 		// - not empty
 		// - no space
@@ -61,6 +60,7 @@ class RawFastqRecordSingle extends Component {
 		// console.log('updateFirstInDatabase');
 		Meteor.call('rawFastqs.countRecordsWithPath', value, (err, res) => {
 			if (err){
+				// TODO: possibly update this.state to specific values
 				alert(err);
 			} else {
 				// console.log('res: ' + res);
@@ -111,18 +111,19 @@ class RawFastqRecordSingle extends Component {
 		// }
 	}
 
+	// TODO: duplicated with RawFastqRecordPaired
 	updateReadLengthFromInput (event) {
-		// TODO: offer shortcuts (buttons) for common values ()
 		let newValue = event.target.value;
 		this.updateReadLengthState(newValue);
 	}
 
+	// TODO: duplicated with RawFastqRecordPaired
 	updateReadLengthFromButton (event) {
-		// TODO: offer shortcuts (buttons) for common values ()
 		let newValue = event.target.attributes.getNamedItem('data-key').value;
 		this.updateReadLengthState(newValue);
 	}
 
+	// TODO: duplicated with RawFastqRecordPaired
 	renderReadLengthsButtonGroup () {
 		return(
 			<ButtonGroup onClick={this.updateReadLengthFromButton.bind(this)}>
@@ -134,6 +135,7 @@ class RawFastqRecordSingle extends Component {
 		);
 	}
 
+	// TODO: duplicated with RawFastqRecordPaired
 	updateSequencer (newValue) {
 		// console.log('new sequencer: ' + String(newValue));
 		let isInitial = (newValue === this.props.record.sequencer);
@@ -146,6 +148,7 @@ class RawFastqRecordSingle extends Component {
 		});
 	}
 
+	// TODO: duplicated with RawFastqRecordPaired
 	isDateRunValid (value) {
 		// Current check:
 		// - exactly 6 digits (that should cover us for a few millenia)
@@ -156,6 +159,7 @@ class RawFastqRecordSingle extends Component {
 		);
 	}
 
+	// TODO: duplicated with RawFastqRecordPaired
 	updateDateRun (date) {
 		// Note: date is passed as moment() object, with its own methods
 		// console.log('locale: ' + moment.locale());
@@ -180,7 +184,7 @@ class RawFastqRecordSingle extends Component {
 		});
 	}
 
-	// TODO: duplicated with RawFastqRecordSingle
+	// TODO: duplicated with RawFastqRecordPaired
 	formGlyphicon (id, isInitial, isValid, inDatabase = 0) { // can use function for database-independent input
 		// console.log('inDB: ' + inDatabase);
 		let glyphiconCheck = (
@@ -302,10 +306,10 @@ class RawFastqRecordSingle extends Component {
 	}
 
 	renderSubmitButton () {
-		console.log('initial: ' + this.isFormInitial());
-		console.log('pending: ' + this.isFormPending());
-		console.log('complete: ' + this.isFormComplete());
-		console.log('valid: ' + this.isFormValid());
+		// console.log('initial: ' + this.isFormInitial());
+		// console.log('pending: ' + this.isFormPending());
+		// console.log('complete: ' + this.isFormComplete());
+		// console.log('valid: ' + this.isFormValid());
 		let buttonColour = (
 			this.isFormInitial() ? 'primary' : (
 				this.isFormPending() ? 'warning' : (

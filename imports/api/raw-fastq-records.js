@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
+
+import SeqbookLog from './seqbook-log.js'
  
 export const RawFastqRecords = new Mongo.Collection('rawFastqRecords');
 
@@ -65,7 +67,7 @@ Meteor.methods({
       Meteor.call('rawFastqs.countRecordsPairedWithPath', filePath)
     );
 
-    // TODO: needs another layer or $or to handle single-end
+    // TODO: consider performance gain using $or query
     // return(
     //   RawFastqRecords.find({
     //     paired: true,
@@ -88,14 +90,31 @@ Meteor.methods({
     if (! this.userId) {
       throw new Meteor.Error('not-authorized');
     }
- 
-    RawFastqRecords.insert({
+
+    let newValues = {
       paired: false,
       filepath: filePath,
       readLength: readLength,
       sequencer: sequencer,
       dateRun: dateRun,
-    });
+    };
+ 
+    RawFastqRecords.insert(
+      newValues,
+      (err, res) => {
+        // console.log('insertPairedEnd connection: ' + this.connection);
+        if (!err){
+          Meteor.call(
+            'seqbookLog.insert',
+            this.userId,
+            'c', // 'create'
+            res,
+            'rawFastqs',
+            newValues: newValues,
+          );
+        }
+      }
+    );
   },
 
   'rawFastqs.updateSingleEnd'({recordId, filepath, readLength, sequencer, dateRun}) {
@@ -112,6 +131,7 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
+    // TODO: only update (and record) necessary fields
     RawFastqRecords.update(
       recordId, {
         $set: {
@@ -136,15 +156,32 @@ Meteor.methods({
     if (! this.userId) {
       throw new Meteor.Error('not-authorized');
     }
- 
-    RawFastqRecords.insert({
+
+    let newValues = {
       paired: true,
       first: first,
       second: second,
       readLength: readLength,
       sequencer: sequencer,
       dateRun: dateRun,
-    });
+    };
+
+    RawFastqRecords.insert(
+      newValues,
+      (err, res) => {
+        // console.log('insertPairedEnd connection: ' + this.connection);
+        if (!err){
+          Meteor.call(
+            'seqbookLog.insert',
+            this.userId,
+            'c', // 'create'
+            res,
+            'rawFastqs',
+            newValues: newValues,
+          );
+        }
+      }
+    );
   },
 
   'rawFastqs.updatePairedEnd'({recordId, first, second, readLength, sequencer, dateRun}) {
@@ -162,6 +199,7 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
 
+    // TODO: only update (and record) necessary fields
     RawFastqRecords.update(
       recordId, {
         $set: {
