@@ -212,8 +212,8 @@ class RawFastqRecordSingle extends Component {
 		let glyphiconCheck = (
 			isInitial ? '' : (
 				!isValid ? 'glyphicon-remove' : ( // invalid 
-					inDatabase === -1 ? 'glyphicon-hourglass' : ( // waiting for server
-						inDatabase === 0 ? 'glyphicon-ok' : 'glyphicon-warning-sign'
+					countInDatabase === -1 ? 'glyphicon-hourglass' : ( // waiting for server
+						countInDatabase === 0 ? 'glyphicon-ok' : 'glyphicon-warning-sign'
 					)
 				)
 			)
@@ -222,8 +222,8 @@ class RawFastqRecordSingle extends Component {
 		let tooltipText = (
 			isInitial ? '' : (
 				!isValid ? 'Invalid!' : ( // invalid 
-					inDatabase === -1 ? 'Checking database...' : ( // waiting for server
-						inDatabase === 0 ? 'All good!' : 'Matches an existing record in database'
+					countInDatabase === -1 ? 'Checking database...' : ( // waiting for server
+						countInDatabase === 0 ? 'All good!' : 'Matches an existing record in database'
 					)
 				)
 			)
@@ -231,8 +231,8 @@ class RawFastqRecordSingle extends Component {
 		let tooltipType = (
 			isInitial ? 'dark' : (
 				!isValid ? 'error' : ( // invalid 
-					inDatabase === -1 ? 'info' : ( // waiting for server
-						inDatabase === 0 ? 'success' : 'warning'
+					countInDatabase === -1 ? 'info' : ( // waiting for server
+						countInDatabase === 0 ? 'success' : 'warning'
 					)
 				)
 			)
@@ -385,100 +385,128 @@ class RawFastqRecordSingle extends Component {
 		})
 	}
 
+	renderFilepathInput () {
+		return(
+			<tr>
+  			<td>
+  				<label htmlFor="filepath">File path</label>
+  			</td>
+  			<td>
+  				<input
+					className='input-file-path'
+					id="filepath"
+          type="text"
+          ref="inputFilePath"
+          placeholder="Path to FASTQ file"
+          value={this.state.filepath}
+          onChange={this.updateFilepath.bind(this)}/>
+        </td>
+        <td>{this.formGlyphicon(
+        	'filepath-tip',
+        	this.state.filepathInitial,
+        	this.state.filepathValid,
+        	this.state.filepathCountInDatabase
+        	)}</td>
+  		</tr>
+  	);
+	}
+
+	renderReadLengthInput () {
+		return(
+			<tr>
+  			<td>
+  				<label htmlFor="readLength">Read length</label>
+  			</td>
+  			<td>
+  				<input
+						id="readLength"
+	          type="number"
+	          min='1'
+	          ref="inputReadLength"
+	          placeholder="Read length"
+	          value={this.state.readLength}
+	          onChange={this.updateReadLengthFromInput.bind(this)}
+	        />&nbsp;
+	        {this.renderReadLengthsButtonGroup()}
+        </td>
+        <td>{this.formGlyphicon(
+        	'read-length-tip',
+        	this.state.readLengthInitial,
+        	this.state.readLengthValid
+        )}</td>
+  		</tr>
+		);
+	}
+
+	renderSequencerInput () {
+		let options = this.props.sequencers.map((sequencer) => (
+			{label: sequencer.name, value: sequencer._id}
+		));
+
+		return(
+			<tr>
+  			<td>
+  				<label htmlFor="sequencer">Sequencer</label>
+  			</td>
+  			<td>
+  				{ this.props.loading ? <Loading /> : <Select
+						options={options}
+						ref='selectSequencer'
+						simpleValue
+						clearable={false}
+						name="selected-sequencer"
+						value={this.state.sequencer}
+						onChange={this.updateSequencer.bind(this)}
+						searchable={this.state.searchable}
+					/> }
+        </td>
+        <td>{this.formGlyphicon(
+        	'sequencer-tip',
+        	this.state.sequencerInitial,
+        	this.state.sequencerValid
+        )}</td>
+  		</tr>
+		);
+	}
+
+	renderDateRunInput () {
+		return(
+			<tr>
+  			<td>
+  				<label htmlFor="sequencer">Date run</label>
+  			</td>
+  			<td>
+  				<DatePicker
+  					selected={this.state.dateRun}
+						onChange={this.updateDateRun.bind(this)}
+						locale="en-gb"
+						placeholderText="Date of sequencing run" />
+				 </td>
+				 <td>{this.formGlyphicon(
+				 	'date-run-tip',
+				 	this.state.dateRunInitial,
+				 	this.state.dateRunValid
+				 )}</td>
+  		</tr>
+		);
+	}
+
 	render () {
 		return(
 			<form className="rawFastq-single" onSubmit={this.handleSubmit.bind(this)} >
 				<table className='table raw-fastq-record-table'>
       	<thead>
       		<tr>
-      			<th className='profile-field-col'>Field</th>
-      			<th className='profile-field-value'>Value</th>
-      			<th className='profile-field-check'>Check</th>
+      			<th className='fastq-table-field'>Field</th>
+      			<th className='fastq-table-value'>Value</th>
+      			<th className='fastq-table-check'>Check</th>
       		</tr>
       	</thead>
       	<tbody>
-      		<tr>
-      			<td>
-      				<label htmlFor="filepath">File path</label>
-      			</td>
-      			<td>
-      				<input
-							className='input-file-path'
-							id="filepath"
-		          type="text"
-		          ref="inputFilePath"
-		          placeholder="Path to FASTQ file"
-		          value={this.state.filepath}
-		          onChange={this.updateFilepath.bind(this)}/>
-		        </td>
-		        <td>{this.formGlyphicon(
-		        	'filepath-tip',
-		        	this.state.filepathInitial,
-		        	this.state.filepathValid,
-		        	this.state.filepathCountInDatabase
-		        	)}</td>
-      		</tr>
-      		<tr>
-      			<td>
-      				<label htmlFor="readLength">Read length</label>
-      			</td>
-      			<td>
-      				<input
-								id="readLength"
-			          type="number"
-			          min='1'
-			          ref="inputReadLength"
-			          placeholder="Read length"
-			          value={this.state.readLength}
-			          onChange={this.updateReadLengthFromInput.bind(this)}
-			        />&nbsp;
-			        {this.renderReadLengthsButtonGroup()}
-		        </td>
-		        <td>{this.formGlyphicon(
-		        	'read-length-tip',
-		        	this.state.readLengthInitial,
-		        	this.state.readLengthValid
-		        )}</td>
-      		</tr>
-      		<tr>
-      			<td>
-      				<label htmlFor="sequencer">Sequencer</label>
-      			</td>
-      			<td>
-      				{ this.props.loading ? <Loading /> : <Select
-								options={this.props.sequencers}
-								ref='selectSequencer'
-								simpleValue
-								clearable={false}
-								name="selected-sequencer"
-								value={this.state.sequencer}
-								onChange={this.updateSequencer.bind(this)}
-								searchable={this.state.searchable}
-							/> }
-		        </td>
-		        <td>{this.formGlyphicon(
-		        	'sequencer-tip',
-		        	this.state.sequencerInitial,
-		        	this.state.sequencerValid
-		        )}</td>
-      		</tr>
-      		<tr>
-      			<td>
-      				<label htmlFor="sequencer">Date run</label>
-      			</td>
-      			<td>
-      				<DatePicker
-      					selected={this.state.dateRun}
-								onChange={this.updateDateRun.bind(this)}
-								locale="en-gb"
-								placeholderText="Date of sequencing run" />
-						 </td>
-						 <td>{this.formGlyphicon(
-						 	'date-run-tip',
-						 	this.state.dateRunInitial,
-						 	this.state.dateRunValid
-						 )}</td>
-      		</tr>
+      		{this.renderFilepathInput()}
+      		{this.renderReadLengthInput()}
+      		{this.renderSequencerInput()}
+      		{this.renderDateRunInput()}
       	</tbody>
       </table>
       {this.renderSubmitButton()}

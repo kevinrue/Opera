@@ -296,13 +296,13 @@ class RawFastqRecordPaired extends Component {
 	}
 
 	// TODO: duplicated with RawFastqRecordSingle
-	formGlyphicon (id, isInitial, isValid, inDatabase = 0) { // can use function for database-independent input
+	formGlyphicon (id, isInitial, isValid, countInDatabase = 0) { // can use function for database-independent input
 		// console.log('inDB: ' + inDatabase);
 		let glyphiconCheck = (
 			isInitial ? '' : (
 				!isValid ? 'glyphicon-remove' : ( // invalid 
-					inDatabase === -1 ? 'glyphicon-hourglass' : ( // waiting for server
-						inDatabase === 0 ? 'glyphicon-ok' : 'glyphicon-warning-sign'
+					countInDatabase === -1 ? 'glyphicon-hourglass' : ( // waiting for server
+						countInDatabase === 0 ? 'glyphicon-ok' : 'glyphicon-warning-sign'
 					)
 				)
 			)
@@ -311,8 +311,8 @@ class RawFastqRecordPaired extends Component {
 		let tooltipText = (
 			isInitial ? '' : (
 				!isValid ? 'Invalid!' : ( // invalid 
-					inDatabase === -1 ? 'Checking database...' : ( // waiting for server
-						inDatabase === 0 ? 'All good!' : 'Matches an existing record in database'
+					countInDatabase === -1 ? 'Checking database...' : ( // waiting for server
+						countInDatabase === 0 ? 'All good!' : 'Matches an existing record in database'
 					)
 				)
 			)
@@ -320,8 +320,8 @@ class RawFastqRecordPaired extends Component {
 		let tooltipType = (
 			isInitial ? 'dark' : (
 				!isValid ? 'error' : ( // invalid 
-					inDatabase === -1 ? 'info' : ( // waiting for server
-						inDatabase === 0 ? 'success' : 'warning'
+					countInDatabase === -1 ? 'info' : ( // waiting for server
+						countInDatabase === 0 ? 'success' : 'warning'
 					)
 				)
 			)
@@ -506,6 +506,10 @@ class RawFastqRecordPaired extends Component {
 	}
 
 	renderSequencerInput () {
+		let options = this.props.sequencers.map((sequencer) => (
+			{label: sequencer.name, value: sequencer._id}
+		));
+
 		return(
 			<tr>
   			<td>
@@ -513,7 +517,7 @@ class RawFastqRecordPaired extends Component {
   			</td>
   			<td>
   				{ this.props.loading ? <Loading /> : <Select
-						options={this.props.sequencers}
+						options={options}
 						ref='selectSequencer'
 						simpleValue
 						clearable={false}
@@ -665,9 +669,9 @@ class RawFastqRecordPaired extends Component {
 				<table className='table raw-fastq-record-table'>
       	<thead>
       		<tr>
-      			<th className='profile-field-col'>Field</th>
-      			<th className='profile-field-value'>Value</th>
-      			<th className='profile-field-check'>Check</th>
+      			<th className='fastq-table-field'>Field</th>
+      			<th className='fastq-table-value'>Value</th>
+      			<th className='fastq-table-check'>Check</th>
       		</tr>
       	</thead>
       	<tbody>

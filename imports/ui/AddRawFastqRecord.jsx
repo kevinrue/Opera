@@ -34,19 +34,38 @@ class AddRawFastqRecord extends Component {
 		);
   }
 
-	render () {
-		return(
-			<div>
-				<header><h1>Raw FASTQ</h1></header>
+  renderMainPanel() {
+    return(
+      <div className='main-panel'>
+        <header><h1>Raw FASTQ</h1></header>
 				<header><h2>Add a single raw FASTQ record</h2></header>
 
 				{ this.renderPairedRadio() }
 
 				{ this.state.paired ? <RawFastqRecordPaired /> : <RawFastqRecordSingle /> }
-				
-			</div>
-		);
-	}
+      </div>
+    );
+  }
+
+  renderAdminPanel() {
+    return(
+      <div className='admin-panel'>
+        
+      </div>
+    );
+  }
+
+	render() {
+    return (
+    	<div>
+        { this.renderMainPanel() }
+
+        { this.props.currentUser ? this.renderAdminPanel() : '' }
+
+        <div id="clearingdiv"></div>
+    	</div>
+    );
+  }
 
 }
 
