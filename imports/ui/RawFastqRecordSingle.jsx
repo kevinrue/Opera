@@ -94,11 +94,6 @@ class RawFastqRecordSingle extends Component {
 		let isInitial = (newValue === this.props.record.filepath)
 		this.updateChangedInputs('filepath', isInitial, newValue);
 		let isValid = this.isFilePathValid(newValue);
-		// If the new value is not valid, don't bother with further checks
-		if (isValid){
-			// Set as invalid if present in database
-			this.countFilepathInDatabase(newValue);
-		}
 		// console.log('new first: ' + newValue);
 		// console.log('is valid: ' + isValid);
 		this.setState({
@@ -106,6 +101,16 @@ class RawFastqRecordSingle extends Component {
 			filepathInitial: isInitial,
 			filepathValid: isValid,
 		});
+		// If the new value is not valid, don't bother the database with further checks
+		if (isValid){
+			if (isInitial) {
+				this.setState({
+					filepathCountInDatabase: null,
+				});
+			} else {
+				this.countFilepathInDatabase(newValue);
+			}
+		}
 	}
 
 	// TODO: duplicated with RawFastqRecordPaired
@@ -207,7 +212,7 @@ class RawFastqRecordSingle extends Component {
 	}
 
 	// TODO: duplicated with RawFastqRecordPaired
-	formGlyphicon (id, isInitial, isValid, inDatabase = 0) { // can use function for database-independent input
+	formGlyphicon (id, isInitial, isValid, countInDatabase = 0) { // can use function for database-independent input
 		// console.log('inDB: ' + inDatabase);
 		let glyphiconCheck = (
 			isInitial ? '' : (
@@ -329,16 +334,25 @@ class RawFastqRecordSingle extends Component {
 		);
 	}
 
+	isInDatabase () {
+		return(
+			this.state.filepathCountInDatabase > 0
+		);
+	}
+
 	renderSubmitButton () {
-		// console.log('initial: ' + this.isFormInitial());
-		// console.log('pending: ' + this.isFormPending());
-		// console.log('complete: ' + this.isFormComplete());
-		// console.log('valid: ' + this.isFormValid());
+		console.log('initial: ' + this.isFormInitial());
+		console.log('pending: ' + this.isFormPending());
+		console.log('complete: ' + this.isFormComplete());
+		console.log('valid: ' + this.isFormValid());
+		console.log('isInDatabase: ' + this.isInDatabase());
 		let buttonColour = (
 			this.isFormInitial() ? 'primary' : (
 				this.isFormPending() ? 'warning' : (
 					!this.isFormComplete() ? 'warning' : (
-						this.isFormValid() ? 'success' : 'danger'
+						!this.isFormValid() ? 'danger' : (
+							this.isInDatabase() ? 'danger' : 'success'
+						)
 					)
 				)
 			)
@@ -347,13 +361,16 @@ class RawFastqRecordSingle extends Component {
 			this.isFormInitial() ||
 			this.isFormPending() ||
 			!this.isFormComplete() ||
-			!this.isFormValid()
+			!this.isFormValid() ||
+			this.isInDatabase()
 		);
 		let buttonText = (
 			this.isFormInitial() ? 'Submit' : (
 				this.isFormPending() ? 'Please wait...' : (
 					!this.isFormComplete() ? 'Incomplete' : (
-						this.isFormValid() ? 'Submit!' : 'Error!'
+						!this.isFormValid() ? 'Error!' : (
+							this.isInDatabase() ? 'Error!' : 'Submit!'
+						)
 					)
 				)
 			)

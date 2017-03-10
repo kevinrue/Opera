@@ -86,7 +86,7 @@ class RawFastqRecordPaired extends Component {
 			firstCountInDatabase: -1 // value during processing
 		})
 		// console.log('updateFirstInDatabase');
-		Meteor.call('rawFastqs.countRecordsPairedWithPath', value, (err, res) => {
+		Meteor.call('rawFastqs.countRecordsWithPath', value, (err, res) => {
 			if (err){
 				alert(err);
 			} else {
@@ -102,11 +102,6 @@ class RawFastqRecordPaired extends Component {
 		let isInitial = (newValue === this.props.record.first)
 		this.updateChangedInputs('first', isInitial, newValue);
 		let isValid = this.isFirstFastqPathValid(newValue);
-		// If the new value is not valid, don't bother with further checks
-		if (isValid){
-			// Set as invalid if present in database
-			this.updateFirstInDatabase(newValue);
-		}
 		// console.log('new first: ' + newValue);
 		// console.log('is valid: ' + isValid);
 		this.setState({
@@ -114,6 +109,15 @@ class RawFastqRecordPaired extends Component {
 			firstInitial: isInitial,
 			firstValid: isValid,
 		});
+		if (isValid){
+			if (isInitial) {
+				this.setState({
+					filepathCountInDatabase: null,
+				});
+			} else {
+				this.updateFirstInDatabase(newValue);
+			}
+		}
 	}
 
 	// method receives event and passes String
@@ -156,7 +160,7 @@ class RawFastqRecordPaired extends Component {
 		this.setState({
 			secondCountInDatabase: -1 // value during processing
 		})
-		let count = Meteor.call('rawFastqs.countRecordsPairedWithPath', value, (err, res) => {
+		let count = Meteor.call('rawFastqs.countRecordsWithPath', value, (err, res) => {
 			if (err){
 				alert(err);
 			} else {
@@ -175,10 +179,6 @@ class RawFastqRecordPaired extends Component {
 		let isInitial = (newValue === this.props.record.second)
 		this.updateChangedInputs('second', isInitial, newValue);
 		let isValid = this.isSecondFastqPathValid(newValue);
-		// If the new value is not valid, don't bother with further checks
-		if (isValid){
-			this.updateSecondInDatabase(newValue);
-		}
 		// console.log('new second: ' + newValue);
 		// console.log('is valid: ' + isValid);
 		this.setState({
@@ -186,6 +186,15 @@ class RawFastqRecordPaired extends Component {
 			secondInitial: isInitial,
 			secondValid: isValid,
 		});
+		if (isValid){
+			if (isInitial) {
+				this.setState({
+					filepathCountInDatabase: null,
+				});
+			} else {
+				this.updateSecondInDatabase(newValue);
+			}
+		}
 	}
 
 	// method receives event and passes String
