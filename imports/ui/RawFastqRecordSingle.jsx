@@ -21,7 +21,7 @@ class RawFastqRecordSingle extends Component {
 	constructor (props) {
 		super(props);
 
-		let startDate = (props.record.dateRun ? moment(props.record.dateRun, "YYYYMMDD") : null);
+		let startDate = (props.record.dateRun ? moment(props.record.dateRun) : null);
 
 		this.state = {
 			filepath: props.record.filepath, // value of field
@@ -37,12 +37,21 @@ class RawFastqRecordSingle extends Component {
 			sequencerInitial: true,
 			sequencerValid: props.record.sequencer !== null,
 
-			dateRun: startDate,
+			dateRun: startDate, // moment
+			dateRunDate: props.record.dateRun,
 			dateRunInitial: true,
-			dateRunValid: this.isDateRunValid(props.record.dateRun),
+			dateRunValid: this.isDateRunValid(startDate),
 
 			changedInputs: {},
 		}
+	}
+
+	// TODO: duplicate of RawFastqRecordSingle
+	// Minimal Date() from moment
+	momentToDate (moment) {
+		return(
+			new Date(moment.year(), moment.month(), moment.date())
+		);
 	}
 
 	// TODO: duplicated with RawFastqRecordPaired
@@ -175,37 +184,44 @@ class RawFastqRecordSingle extends Component {
 	}
 
 	// TODO: duplicated with RawFastqRecordPaired
-	isDateRunValid (value) {
+	isDateRunValid (moment) {
 		// Current check:
 		// - exactly 6 digits (that should cover us for a few millenia)
 		// console.log('value: ' + value);
 		// console.log('typeof: ' + typeof(value));
 		return(
-			value != null && /^\d{8}$/.test(value)
+			moment != null && /^\d{8}$/.test(moment.format('YYYYMMDD'))
 		);
 	}
 
 	// TODO: duplicated with RawFastqRecordPaired
-	updateDateRun (date) {
+	handleChangeDateRun (moment) {
 		// Note: date is passed as moment() object, with its own methods
-		// console.log('locale: ' + moment.locale());
-		// console.log('Date: ' + date.format('LL'));
-		let newValue;
+		// console.log(String(moment));
 		let isInitial;
-		if (date === null){
-			newValue = date;
-			isInitial = (newValue === this.props.record.dateRun);
+		let isValid;
+		let momentDate = null;
+		// when addinn a new record
+		if (moment === null){
+			isInitial = (moment === this.props.record.dateRun); // DatePicker sends null if empty
 			isValid = false;
 		} else {
-			newValue = date.format("YYYYMMDD"); // check the formatted date for validity
-			isInitial = (newValue === this.props.record.dateRun);
-			isValid = this.isDateRunValid(newValue);
+			// console.log(this.props.record.dateRun);
+			isInitial = (this.props.record.dateRun === null) ? false : (
+				moment.date() === this.props.record.dateRun.getDate() &&
+				moment.month() === this.props.record.dateRun.getMonth() &&
+				moment.year() === this.props.record.dateRun.getFullYear()
+			);
+			// console.log('isInitial: ' + isInitial);
+			isValid = this.isDateRunValid(moment);
+			momentDate = this.momentToDate(moment);
 		}
-		this.updateChangedInputs('dateRun', isInitial, newValue);
+		this.updateChangedInputs('dateRun', isInitial, momentDate);
 		// console.log('isInitial: ' + isInitial);
 		// console.log('isValid: ' + isValid);
 		this.setState({
-			dateRun: date, // save the moment() in the state
+			dateRun: moment, // save the moment() in the state
+			dateRunDate: momentDate,
 			dateRunInitial: isInitial,
 			dateRunValid: isValid,
 		});
@@ -265,7 +281,7 @@ class RawFastqRecordSingle extends Component {
 					this.state.filepath,
 					parseInt(this.state.readLength),
 					this.state.sequencer,
-					this.state.dateRun.format("YYYYMMDD"),
+					this.state.dateRunDate,
 					(err, res) => {
 						if (err){
 							alert(err);
@@ -318,7 +334,7 @@ class RawFastqRecordSingle extends Component {
 			this.state.filepath !== '' &&
 			this.state.readLength !== '' &&
 			this.state.sequencer !== undefined &&
-			this.state.dateRun !== null
+			this.state.dateRunDate !== null
 		)
 	}
 
@@ -341,11 +357,11 @@ class RawFastqRecordSingle extends Component {
 	}
 
 	renderSubmitButton () {
-		console.log('initial: ' + this.isFormInitial());
-		console.log('pending: ' + this.isFormPending());
-		console.log('complete: ' + this.isFormComplete());
-		console.log('valid: ' + this.isFormValid());
-		console.log('isInDatabase: ' + this.isInDatabase());
+		// console.log('initial: ' + this.isFormInitial());
+		// console.log('pending: ' + this.isFormPending());
+		// console.log('complete: ' + this.isFormComplete());
+		// console.log('valid: ' + this.isFormValid());
+		// console.log('isInDatabase: ' + this.isInDatabase());
 		let buttonColour = (
 			this.isFormInitial() ? 'primary' : (
 				this.isFormPending() ? 'warning' : (
@@ -397,8 +413,11 @@ class RawFastqRecordSingle extends Component {
 			sequencerValid: false,
 
 			dateRun: null,
+			dateRunDate: null,
 			dateRunInitial: true,
 			dateRunValid: false,
+
+			changedInputs: {},
 		})
 	}
 
@@ -495,7 +514,7 @@ class RawFastqRecordSingle extends Component {
   			<td>
   				<DatePicker
   					selected={this.state.dateRun}
-						onChange={this.updateDateRun.bind(this)}
+						onChange={this.handleChangeDateRun.bind(this)}
 						locale="en-gb"
 						placeholderText="Date of sequencing run"
 						maxDate={moment()}

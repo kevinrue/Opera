@@ -5,12 +5,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { browserHistory } from 'react-router';
 
 import { ButtonToolbar, Button } from 'react-bootstrap';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import 'moment/locale/en-gb';
 
 import { RawFastqRecords } from '../api/raw-fastq-records/raw-fastq-records.js';
+import { Sequencers } from '../api/sequencers.js';
 
 import Loading from './loading.jsx'
-
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 class RawFastqRecordsInfo extends Component {
 
@@ -39,19 +40,60 @@ class RawFastqRecordsInfo extends Component {
   	);
   }
 
-  recordLinkFormat(cell, row) {
+  recordLinkFormatter(cell, row) {
     const link = <a href={"/rawFastq/" + cell}>{cell}</a>;
     return link;
 	}
 
+	dateFormatter (cell, row) {
+	  return(
+	  	moment(cell).format('YYYY-MM-DD')
+	  );
+	}
+
+	sequencerFormatter (cell, row, collection) {
+		// console.log('cell: ' + cell);
+		// console.log('collection: ' + collection);
+	  return(
+	  	collection[cell] 
+	  );
+	}
+
   renderRecordTable() {
+  	let sequencersEnum = _.object(_.map(this.props.sequencers, _.values));
+  	// console.log(sequencersEnum);
+
   	return(
   		<BootstrapTable data={this.props.rawFastqAll} striped={true} hover={true} pagination={true}>
-	      <TableHeaderColumn dataField="_id" dataFormat={ this.recordLinkFormat } isKey={true} dataAlign="center" width="20%">
-	      ID</TableHeaderColumn>
-	      <TableHeaderColumn dataField="paired" dataAlign="center" width="80%"
+	      <TableHeaderColumn
+	      	dataField="_id" dataFormat={ this.recordLinkFormatter } isKey={true} dataAlign="center" width="10%">
+	      	ID
+	      </TableHeaderColumn>
+	      <TableHeaderColumn
+	      	dataField="paired" dataAlign="center" width="15%" dataSort={true}
 	      	filter={ { type: 'SelectFilter', options: {true, false} } }>
-	      	Paired</TableHeaderColumn>
+	      	Paired
+	      </TableHeaderColumn>
+	      <TableHeaderColumn
+	      	dataField="readLength" dataAlign="center" width="15%" dataSort={true}
+	      	filter={ { 
+            type: 'NumberFilter', 
+            delay: 1000, 
+            numberComparators: [ '=', '>=', '<='] 
+          } }>
+	      	Read length
+	      </TableHeaderColumn>
+	      <TableHeaderColumn
+	      	dataField="sequencerId" dataAlign="center" width="20%" dataSort={true}
+	      	dataFormat={ this.sequencerFormatter } formatExtraData={ sequencersEnum }
+	      	filter={ { type: 'SelectFilter', options: sequencersEnum } }>
+	      	Sequencer
+	      </TableHeaderColumn>
+	      <TableHeaderColumn
+	      	dataField="dateRun" dataAlign="center" width="40%" dataSort={true} dataFormat={ this.dateFormatter }
+	      	filter={ { type: 'DateFilter' } }>
+	      	Date run
+	      </TableHeaderColumn>
 		  </BootstrapTable>
 		 );
   }
@@ -105,6 +147,7 @@ RawFastqRecordsInfo.propTypes = {
 	rawFastqSingleCount: PropTypes.number,
 	rawFastqSampleSingleRecord: PropTypes.object,
 	rawFastqSamplePairedRecord: PropTypes.object,
+	sequencersDistinctNames: PropTypes.array,
 };
 
 RawFastqRecordsInfo.defaultProps = {
@@ -113,17 +156,19 @@ RawFastqRecordsInfo.defaultProps = {
 // The wrapped 'App' component fetches tasks from the Tasks collection
 // and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
-	const subscription = Meteor.subscribe('rawFastqRecords');
-	const loading = !subscription.ready();
+	const subscription1 = Meteor.subscribe('rawFastqRecords');
+	const subscription2 = Meteor.subscribe('sequencers');
+	const loading = (!subscription1.ready() || !subscription2.ready());
 
 	return {
 		currentUser: Meteor.user(),
 		loading: loading,
-		rawFastqAllCount: RawFastqRecords.find({}).count(),
+		rawFastqAllCount: RawFastqRecords.find().count(),
 		rawFastqPairedCount: RawFastqRecords.find({paired : true}).count(),
 		rawFastqSingleCount: RawFastqRecords.find({paired : false}).count(),
 		rawFastqSampleSingleRecord: RawFastqRecords.findOne({paired : false}),
 		rawFastqSamplePairedRecord: RawFastqRecords.findOne({paired : true}),
 		rawFastqAll: RawFastqRecords.find({}, {_id: 1, paired: 1}).fetch(),
+		sequencers: Sequencers.find().fetch(),
 	};
 }, RawFastqRecordsInfo);

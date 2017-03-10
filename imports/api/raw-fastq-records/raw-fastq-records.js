@@ -83,7 +83,7 @@ Meteor.methods({
     check(filePath, String);
     check(readLength, Number);
     check(sequencer, String);
-    check(dateRun, String);
+    check(dateRun, Date);
     // TODO: check that filePath exists on the system
  
     // Make sure the user is logged in before inserting a task
@@ -157,7 +157,7 @@ Meteor.methods({
     check(second, String);
     check(readLength, Number);
     check(sequencer, String);
-    check(dateRun, String);
+    check(dateRun, Date);
     // TODO: check that both file paths exist on the system
  
     // Make sure the user is logged in before inserting a task
@@ -188,35 +188,6 @@ Meteor.methods({
             newValues: newValues,
           );
         }
-      }
-    );
-  },
-
-  'rawFastqs.updatePairedEnd'({recordId, first, second, readLength, sequencer, dateRun}) {
-    // console.log('typeof: ' + typeof(recordId));
-    check(recordId, String);
-    check(first, String);
-    check(second, String);
-    check(readLength, Number);
-    check(sequencer, String);
-    check(dateRun, String);
-    // TODO: check that both file paths exist on the system
- 
-    // Make sure the user is logged in before inserting a task
-    if (! this.userId) {
-      throw new Meteor.Error('not-authorized');
-    }
-
-    // TODO: only update (and record) necessary fields
-    RawFastqRecords.update(
-      recordId, {
-        $set: {
-          first: first,
-          second: second,
-          readLength: readLength,
-          sequencerId: sequencer,
-          dateRun: dateRun,
-        },
       }
     );
   },

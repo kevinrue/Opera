@@ -25,7 +25,11 @@ class RawFastqRecordPaired extends Component {
 		// console.log('this-propsId: ' + this.props.record._id);
 		// console.log('type-propsId: ' + typeof(this.props.record._id));
 
-		let startDate = (props.record.dateRun ? moment(props.record.dateRun, "YYYYMMDD") : null);
+		// Database stores dateRun in native Date() format, where Jan=0
+		let startDate = (props.record.dateRun ? moment(props.record.dateRun) : null);
+
+		// console.log(props.record.dateRun);
+		// console.log(startDate);
 
 		this.state = {
 			first: props.record.first, // value of field
@@ -46,12 +50,22 @@ class RawFastqRecordPaired extends Component {
 			sequencerInitial: true,
 			sequencerValid: props.record.sequencer !== null,
 
-			dateRun: startDate,
+			dateRun: startDate, // moment
+			dateRunDate: props.record.dateRun,
 			dateRunInitial: true,
-			dateRunValid: this.isDateRunValid(props.record.dateRun),
+			dateRunValid: this.isDateRunValid(startDate),
 
 			changedInputs: {},
 		}
+	}
+
+	// TODO: duplicate of RawFastqRecordSingle
+	// Minimal Date() from moment
+	momentToDate (moment) {
+		return(
+			// momentJS stores
+			new Date(moment.year(), moment.month(), moment.date())
+		);
 	}
 
 	// TODO: duplicated with RawFastqRecordSingle
@@ -269,36 +283,44 @@ class RawFastqRecordPaired extends Component {
 	}
 
 	// TODO: duplicated with RawFastqRecordSingle
-	isDateRunValid (value) {
+	isDateRunValid (moment) {
 		// Current check:
 		// - exactly 6 digits (that should cover us for a few millenia)
 		// console.log('value: ' + value);
 		// console.log('typeof: ' + typeof(value));
 		return(
-			value != null && /^\d{8}$/.test(value)
+			moment != null && /^\d{8}$/.test(moment.format('YYYYMMDD'))
 		);
 	}
 
-	handleChangeDateRun (date) {
+	// TODO: duplicated with RawFastqRecordPaired
+	handleChangeDateRun (moment) {
 		// Note: date is passed as moment() object, with its own methods
-		// console.log('locale: ' + moment.locale());
-		// console.log('Date: ' + date.format('LL'));
-		let newValue;
+		// console.log(String(moment));
 		let isInitial;
-		if (date === null){
-			newValue = date;
-			isInitial = (newValue === this.props.record.dateRun);
+		let isValid;
+		let momentDate = null;
+		// when addinn a new record
+		if (moment === null){
+			isInitial = (moment === this.props.record.dateRun); // DatePicker sends null if empty
 			isValid = false;
 		} else {
-			newValue = date.format("YYYYMMDD"); // check the formatted date for validity
-			isInitial = (newValue === this.props.record.dateRun);
-			isValid = this.isDateRunValid(newValue);
+			// console.log(this.props.record.dateRun);
+			isInitial = (this.props.record.dateRun === null) ? false : (
+				moment.date() === this.props.record.dateRun.getDate() &&
+				moment.month() === this.props.record.dateRun.getMonth() &&
+				moment.year() === this.props.record.dateRun.getFullYear()
+			);
+			// console.log('isInitial: ' + isInitial);
+			isValid = this.isDateRunValid(moment);
+			momentDate = this.momentToDate(moment);
 		}
-		this.updateChangedInputs('dateRun', isInitial, newValue);
+		this.updateChangedInputs('dateRun', isInitial, momentDate);
 		// console.log('isInitial: ' + isInitial);
 		// console.log('isValid: ' + isValid);
 		this.setState({
-			dateRun: date, // save the moment() in the state
+			dateRun: moment, // save the moment() in the state
+			dateRunDate: momentDate,
 			dateRunInitial: isInitial,
 			dateRunValid: isValid,
 		});
@@ -374,7 +396,7 @@ class RawFastqRecordPaired extends Component {
 			this.state.second !== '' &&
 			this.state.readLength !== '' &&
 			this.state.sequencer !== undefined &&
-			this.state.dateRun !== null
+			this.state.dateRunDate !== null
 		)
 	}
 
@@ -619,7 +641,7 @@ class RawFastqRecordPaired extends Component {
 					this.state.second,
 					parseInt(this.state.readLength),
 					this.state.sequencer,
-					this.state.dateRun.format("YYYYMMDD"),
+					this.state.dateRunDate,
 					(err, res) => {
 						if (err){
 							alert(err);
@@ -669,6 +691,7 @@ class RawFastqRecordPaired extends Component {
 			sequencerValid: false,
 
 			dateRun: null,
+			dateRunDate: null,
 			dateRunInitial: true,
 			dateRunValid: false,
 
