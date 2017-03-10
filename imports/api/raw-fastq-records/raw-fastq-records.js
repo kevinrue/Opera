@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-import SeqbookLog from '../seqbook-log/seqbook-log.js'
+import DatabaseLog from '../database-log/database-log.js'
  
 export const RawFastqRecords = new Mongo.Collection('rawFastqRecords');
 
@@ -105,10 +105,10 @@ Meteor.methods({
         // console.log('insertPairedEnd connection: ' + this.connection);
         if (!err){
           Meteor.call(
-            'seqbookLog.insert',
+            'databaseLog.insert',
             this.userId,
             'c', // 'create'
-            res,
+            Array(res),
             'rawFastqs',
             newValues: newValues,
           );
@@ -140,10 +140,10 @@ Meteor.methods({
         // console.log('insertPairedEnd connection: ' + this.connection);
         if (!err){
           Meteor.call(
-            'seqbookLog.insert',
+            'databaseLog.insert',
             this.userId,
             'u', // 'create'
-            recordId,
+            Array(recordId),
             'rawFastqs',
             newValues: newValues,
           );
@@ -180,10 +180,10 @@ Meteor.methods({
         // console.log('insertPairedEnd connection: ' + this.connection);
         if (!err){
           Meteor.call(
-            'seqbookLog.insert',
+            'databaseLog.insert',
             this.userId,
             'c', // 'create'
-            res,
+            Array(res),
             'rawFastqs',
             newValues: newValues,
           );
