@@ -556,13 +556,17 @@ class RawFastqRecordPaired extends Component {
   					dateFormat="DD/MM/YYYY"
 						onChange={this.handleChangeDateRun.bind(this)}
 						locale="en-gb"
-						placeholderText="Date of sequencing run" />
-				 </td>
-				 <td>{this.formGlyphicon(
-				 	'date-run-tip',
-				 	this.state.dateRunInitial,
-				 	this.state.dateRunValid
-				 )}</td>
+						placeholderText="Date of sequencing run"
+						maxDate={moment()}
+					/>
+					</td>
+					<td>{
+						this.formGlyphicon(
+							'date-run-tip',
+							this.state.dateRunInitial,
+							this.state.dateRunValid
+						)}
+					</td>
   		</tr>
 		);
 	}

@@ -497,13 +497,17 @@ class RawFastqRecordSingle extends Component {
   					selected={this.state.dateRun}
 						onChange={this.updateDateRun.bind(this)}
 						locale="en-gb"
-						placeholderText="Date of sequencing run" />
-				 </td>
-				 <td>{this.formGlyphicon(
-				 	'date-run-tip',
-				 	this.state.dateRunInitial,
-				 	this.state.dateRunValid
-				 )}</td>
+						placeholderText="Date of sequencing run"
+						maxDate={moment()}
+					/>
+				</td>
+				<td>
+					{this.formGlyphicon(
+						'date-run-tip',
+						this.state.dateRunInitial,
+						this.state.dateRunValid
+					)}
+				</td>
   		</tr>
 		);
 	}
