@@ -42,7 +42,7 @@ class RawFastqRecordPaired extends Component {
 			readLengthInitial: true,
 			readLengthValid: this.isReadLengthValid(props.record.readLength),
 
-			sequencer: props.record.sequencer,
+			sequencer: props.record.sequencerId,
 			sequencerInitial: true,
 			sequencerValid: props.record.sequencer !== null,
 

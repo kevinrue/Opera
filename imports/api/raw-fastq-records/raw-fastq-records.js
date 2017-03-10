@@ -95,7 +95,7 @@ Meteor.methods({
       paired: false,
       filepath: filePath,
       readLength: readLength,
-      sequencer: sequencer,
+      sequencerId: sequencer,
       dateRun: dateRun,
     };
  
@@ -170,7 +170,7 @@ Meteor.methods({
       first: first,
       second: second,
       readLength: readLength,
-      sequencer: sequencer,
+      sequencerId: sequencer,
       dateRun: dateRun,
     };
 
@@ -214,7 +214,7 @@ Meteor.methods({
           first: first,
           second: second,
           readLength: readLength,
-          sequencer: sequencer,
+          sequencerId: sequencer,
           dateRun: dateRun,
         },
       }
