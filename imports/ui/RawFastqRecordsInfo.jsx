@@ -60,7 +60,8 @@ class RawFastqRecordsInfo extends Component {
 	}
 
   renderRecordTable() {
-  	let sequencersEnum = _.object(_.map(this.props.sequencers, _.values));
+  	// console.log(this.props.sequencers);
+  	let sequencersEnum = _.object(_.map(this.props.sequencers, (sequencer) => {return([sequencer._id, sequencer.name])}));
   	// console.log(sequencersEnum);
 
   	return(

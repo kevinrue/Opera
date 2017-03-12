@@ -46,15 +46,15 @@ class RawFastqRecordSingle extends Component {
 		}
 	}
 
-	// TODO: duplicate of RawFastqRecordSingle
-	// Minimal Date() from moment
+	// TODO: Generic function duplicate of RawFastqRecordSingle
+	// Day-precision Date() from moment
 	momentToDate (moment) {
 		return(
 			new Date(moment.year(), moment.month(), moment.date())
 		);
 	}
 
-	// TODO: duplicated with RawFastqRecordPaired
+	// TODO: Generic function duplicate of RawFastqRecordPaired
 	updateChangedInputs (inputName, isInitial, newValue = undefined) {
 		let changedInputs = this.state.changedInputs;
 		if (isInitial) {
@@ -70,6 +70,7 @@ class RawFastqRecordSingle extends Component {
 		}
 	}
 
+	// TODO: Generic function duplicate of RawFastqRecordPaired
 	isFilePathValid (value) {
 		// Current check:
 		// - not empty

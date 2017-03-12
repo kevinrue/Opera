@@ -537,9 +537,13 @@ class RawFastqRecordPaired extends Component {
 	}
 
 	renderSequencerInput () {
+		// console.log(this.props.sequencers);
+
 		let options = this.props.sequencers.map((sequencer) => (
 			{label: sequencer.name, value: sequencer._id}
 		));
+
+		// console.log(options);
 
 		return(
 			<tr>
