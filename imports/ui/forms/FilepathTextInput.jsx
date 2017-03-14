@@ -76,7 +76,7 @@ export function autofillSecond (field1, field2, suffixesString) {
 	// console.log('suffixesList: ' + suffixesList);
 	let first = this.state.first;
 	if (!first.includes(suffixesList[0])){
-		alert('Pattern not found in first mate: ' +suffixesList[0]);
+		alert('Pattern not found in first mate: ' + suffixesList[0]);
 	} else {
 		let newSecond = first.replace(suffixesList[0], suffixesList[1]);
 		this.handleChangeFilepath(field2, newSecond);
