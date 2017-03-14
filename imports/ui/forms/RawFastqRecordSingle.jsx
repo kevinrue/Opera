@@ -24,10 +24,10 @@ export default class RawFastqRecordSingle extends Component {
 		let startDate = (props.record.dateRun ? moment(props.record.dateRun) : null);
 
 		this.state = {
-			filepath: props.record.filepath, // value of field
-			filepathIsInitial: true, // do not show any glyphicon if initial // TODO: remove: if filepath is present in keys(changedInputs) is proof enough
-			filepathIsValid: isFilepathValid(props.record.filepath), // for glyphicon & form validation
-			filepathCountInDatabase: 0, // for glyphicon & asynchronous form validation, not checked if value is initial
+			file: props.record.file, // value of field
+			fileIsInitial: true, // do not show any glyphicon if initial // TODO: remove: if file is present in keys(changedInputs) is proof enough
+			fileIsValid: isFilepathValid(props.record.file), // for glyphicon & form validation
+			fileCountInDatabase: 0, // for glyphicon & asynchronous form validation, not checked if value is initial
 
 			readLength: props.record.readLength,
 			readLengthIsInitial: true,
@@ -60,7 +60,7 @@ export default class RawFastqRecordSingle extends Component {
 				// console.log('submit new single FASTQ record !');
 				Meteor.call(
 					'rawFastqs.insertSingleEnd',
-					this.state.filepath,
+					this.state.file,
 					this.state.readLength,
 					this.state.sequencerId,
 					this.state.dateRunDate,
@@ -102,13 +102,13 @@ export default class RawFastqRecordSingle extends Component {
 
 	isFormPending () {
 		return(
-			this.state.filepathCountInDatabase === -1
+			this.state.fileCountInDatabase === -1
 		);
 	}
 
 	isFormComplete () {
 		return(
-			this.state.filepath !== '' &&
+			this.state.file !== '' &&
 			!isNaN(this.state.readLength) &&
 			this.state.sequencerId !== undefined &&
 			this.state.dateRunDate !== undefined
@@ -116,12 +116,12 @@ export default class RawFastqRecordSingle extends Component {
 	}
 
 	isFormValid (){
-		// console.log('filepathIsValid: ' + this.state.filepathIsValid);
+		// console.log('fileIsValid: ' + this.state.fileIsValid);
 		// console.log('readLengthIsValid: ' + this.state.readLengthIsValid);
 		// console.log('sequencerIsValid: ' + this.state.sequencerIdIsValid);
 		// console.log('dateRunIsValid: ' + this.state.dateRunIsValid);
 		return(
-			this.state.filepathIsValid &&
+			this.state.fileIsValid &&
 			this.state.readLengthIsValid &&
 			this.state.sequencerIdIsValid &&
 			this.state.dateRunIsValid
@@ -130,16 +130,16 @@ export default class RawFastqRecordSingle extends Component {
 
 	isInDatabase () {
 		return(
-			this.state.filepathCountInDatabase > 0
+			this.state.fileCountInDatabase > 0
 		);
 	}
 
 	resetForm () {
 		this.setState({
-			filepath: '',
-			filepathIsInitial: true,
-			filepathIsValid: false,
-			filepathCountInDatabase: 0,
+			file: '',
+			fileIsInitial: true,
+			fileIsValid: false,
+			fileCountInDatabase: 0,
 
 			readLength: NaN,
 			readLengthIsInitial: true,
@@ -160,7 +160,7 @@ export default class RawFastqRecordSingle extends Component {
 
 	render () {
 		// console.log(this.state);
-		// console.log('render: ' + this.state.filepath);
+		// console.log('render: ' + this.state.file);
 		return(
 			<form onSubmit={this.handleSubmit.bind(this)} >
 				<table className='table raw-fastq-record-table'>
@@ -173,15 +173,15 @@ export default class RawFastqRecordSingle extends Component {
 	      	</thead>
 	      	<tbody>
 						<FilepathTextInput
-							id='filepath'
+							id='file'
 							label='File path'
 							placeholder='Path to FASTQ file'
 
-							value={this.state.filepath}
+							value={this.state.file}
 
-							isInitial={this.state.filepathIsInitial}
-							isValid={this.state.filepathIsValid}
-							countInDatabase={this.state.filepathCountInDatabase}
+							isInitial={this.state.fileIsInitial}
+							isValid={this.state.fileIsValid}
+							countInDatabase={this.state.fileCountInDatabase}
 
 							onChange={this.handleChangeFilepath}
 						/>
@@ -234,7 +234,7 @@ RawFastqRecordSingle.propTypes = {
 RawFastqRecordSingle.defaultProps = {
 	record: {
 		_id: undefined,
-		filepath: '',
+		file: '',
 		readLength: NaN,
 		sequencerId: undefined,
 		dateRun: undefined,

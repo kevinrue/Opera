@@ -24,15 +24,15 @@ export default class RawFastqRecordPaired extends Component {
 		let startDate = (props.record.dateRun ? moment(props.record.dateRun) : null);
 
 		this.state = {
-			first: props.record.first, // value of field
-			firstIsInitial: true, // do not show any glyphicon if initial
-			firstIsValid: isFilepathValid(props.record.first), // for glyphicon & form validation
-			firstCountInDatabase: 0, // for glyphicon & asynchronous form validation, not checked if value is initial
+			file1: props.record.file1, // value of field
+			file1IsInitial: true, // do not show any glyphicon if initial
+			file1IsValid: isFilepathValid(props.record.file1), // for glyphicon & form validation
+			file1CountInDatabase: 0, // for glyphicon & asynchronous form validation, not checked if value is initial
 
-			second: props.record.second,
-			secondIsInitial: true,
-			secondIsValid: isFilepathValid(props.record.second),
-			secondCountInDatabase: 0,
+			file2: props.record.file2,
+			file2IsInitial: true,
+			file2IsValid: isFilepathValid(props.record.file2),
+			file2CountInDatabase: 0,
 
 			readLength: props.record.readLength,
 			readLengthIsInitial: true,
@@ -69,15 +69,15 @@ export default class RawFastqRecordPaired extends Component {
 
 	isFormPending () {
 		return(
-			this.state.firstCountInDatabase === -1 ||
-			this.state.secondInitial === -1
+			this.state.file1CountInDatabase === -1 ||
+			this.state.file2Initial === -1
 		);
 	}
 
 	isFormComplete () {
 		return(
-			this.state.first !== '' &&
-			this.state.second !== '' &&
+			this.state.file1 !== '' &&
+			this.state.file2 !== '' &&
 			!isNaN(this.state.readLength) &&
 			this.state.sequencerId !== undefined &&
 			this.state.dateRunDate !== undefined
@@ -85,14 +85,14 @@ export default class RawFastqRecordPaired extends Component {
 	}
 
 	isFormValid (){
-		// console.log('firstValid: ' + this.state.firstValid);
-		// console.log('secondValid: ' + this.state.secondValid);
+		// console.log('file1Valid: ' + this.state.file1Valid);
+		// console.log('file2Valid: ' + this.state.file2Valid);
 		// console.log('readLengthValid: ' + this.state.readLengthValid);
 		// console.log('sequencerIdIsValid: ' + this.state.sequencerIdIsValid);
 		// console.log('dateRunValid: ' + this.state.dateRunValid);
 		return(
-			this.state.firstIsValid &&
-			this.state.secondIsValid &&
+			this.state.file1IsValid &&
+			this.state.file2IsValid &&
 			this.state.readLengthIsValid &&
 			this.state.sequencerIdIsValid &&
 			this.state.dateRunIsValid
@@ -101,8 +101,8 @@ export default class RawFastqRecordPaired extends Component {
 
 	isInDatabase () {
 		return(
-			this.state.firstCountInDatabase > 0 ||
-			this.state.secondCountInDatabase > 0
+			this.state.file1CountInDatabase > 0 ||
+			this.state.file2CountInDatabase > 0
 		);
 	}
 
@@ -114,8 +114,8 @@ export default class RawFastqRecordPaired extends Component {
 				// console.log('submit new paired FASTQ record !');
 				Meteor.call(
 					'rawFastqs.insertPairedEnd',
-					this.state.first,
-					this.state.second,
+					this.state.file1,
+					this.state.file2,
 					parseInt(this.state.readLength),
 					this.state.sequencerId,
 					this.state.dateRunDate,
@@ -149,15 +149,15 @@ export default class RawFastqRecordPaired extends Component {
 
 	resetForm () {
 		this.setState({
-			first: '',
-			firstIsInitial: true,
-			firstIsValid: false,
-			firstCountInDatabase: 0,
+			file1: '',
+			file1IsInitial: true,
+			file1IsValid: false,
+			file1CountInDatabase: 0,
 
-			second: '',
-			secondIsInitial: true,
-			secondIsValid: false,
-			secondCountInDatabase: 0,
+			file2: '',
+			file2IsInitial: true,
+			file2IsValid: false,
+			file2CountInDatabase: 0,
 
 			readLength: NaN,
 			readLengthIsInitial: true,
@@ -191,33 +191,33 @@ export default class RawFastqRecordPaired extends Component {
 	      	</thead>
 	      	<tbody>
 						<FilepathTextInput
-							id='first'
+							id='file1'
 							label='First mate'
-							placeholder='Path to FASTQ file of first mate'
+							placeholder='Path to FASTQ file of file1 mate'
 
-							value={this.state.first}
+							value={this.state.file1}
 
-							isInitial={this.state.firstIsInitial}
-							isValid={this.state.firstIsValid}
-							countInDatabase={this.state.firstCountInDatabase}
+							isInitial={this.state.file1IsInitial}
+							isValid={this.state.file1IsValid}
+							countInDatabase={this.state.file1CountInDatabase}
 
 							onChange={this.handleChangeFilepath}
 						/>
 						<FilepathTextInput
-							id='second'
+							id='file2'
 							label='Second mate'
-							placeholder='Path to FASTQ file of second mate'
+							placeholder='Path to FASTQ file of file2 mate'
 
-							value={this.state.second}
+							value={this.state.file2}
 
-							isInitial={this.state.secondIsInitial}
-							isValid={this.state.secondIsValid}
-							countInDatabase={this.state.secondCountInDatabase}
+							isInitial={this.state.file2IsInitial}
+							isValid={this.state.file2IsValid}
+							countInDatabase={this.state.file2CountInDatabase}
 
 							onChange={this.handleChangeFilepath}
 
-							displayDropdown={(this.state.first !== '' && this.state.second === '')}
-							pairedFirst='first'
+							displayDropdown={(this.state.file1 !== '' && this.state.file2 === '')}
+							pairedFirst='file1'
 							onAutocomplete={this.handleAutocompleteButton}
 							onAutofill={this.handleAutofillButton}
 						/>
@@ -270,8 +270,8 @@ RawFastqRecordPaired.propTypes = {
 RawFastqRecordPaired.defaultProps = {
 	record: {
 		_id: undefined,
-		first: '',
-		second: '',
+		file1: '',
+		file2: '',
 		readLength: NaN,
 		sequencerId: undefined,
 		dateRun: undefined,

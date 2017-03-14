@@ -46,6 +46,7 @@ Meteor.methods({
         objectIds: objectIds,
         collection: collection,
         newValues: newValues,
+        date: new Date(),
       }, (err, res) => {
         if (err){
           // TODO: consider log rotation

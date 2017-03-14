@@ -61,8 +61,8 @@ export function autocompleteFilepaths (field1, field2, suffixesString) {
 	// console.log('suffixesString: ' + suffixesString);
 	let suffixesList = suffixesString.split('+');
 	// console.log('suffixesList: ' + suffixesList);
-	let newFirst = this.state.first + suffixesList[0];
-	let newSecond = this.state.first + suffixesList[1];
+	let newFirst = this.state[field1] + suffixesList[0];
+	let newSecond = this.state[field1] + suffixesList[1];
 	// console.log('newFirst: ' + newFirst);
 	// console.log('newSecond: ' + newSecond);
 	this.handleChangeFilepath(field1, newFirst);
@@ -74,11 +74,11 @@ export function autofillSecond (field1, field2, suffixesString) {
 	// console.log('suffixesString: ' + suffixesString);
 	let suffixesList = suffixesString.split('/');
 	// console.log('suffixesList: ' + suffixesList);
-	let first = this.state.first;
-	if (!first.includes(suffixesList[0])){
+	let file1 = this.state[field1];
+	if (!file1.includes(suffixesList[0])){
 		alert('Pattern not found in first mate: ' + suffixesList[0]);
 	} else {
-		let newSecond = first.replace(suffixesList[0], suffixesList[1]);
+		let newSecond = file1.replace(suffixesList[0], suffixesList[1]);
 		this.handleChangeFilepath(field2, newSecond);
 	}
 }

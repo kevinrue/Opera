@@ -27,7 +27,7 @@ Meteor.methods({
  
     return(RawFastqRecords.find({
       paired: false,
-      filepath: filePath,
+      file: filePath,
     }).count());
   },
 
@@ -43,8 +43,8 @@ Meteor.methods({
     let count = RawFastqRecords.find({
       paired: true,
       $or: [
-        {first: filePath},
-        {second: filePath}
+        {file1: filePath},
+        {file2: filePath}
       ]
     }).count();
     // console.log('countMethod: ' + count);
@@ -72,8 +72,8 @@ Meteor.methods({
     //   RawFastqRecords.find({
     //     paired: true,
     //     $or: [
-    //       {first: filePath},
-    //       {second: filePath}
+    //       {file1: filePath},
+    //       {file2: filePath}
     //     ]
     //   }).count())
     // );
@@ -93,7 +93,7 @@ Meteor.methods({
 
     let newValues = {
       paired: false,
-      filepath: filePath,
+      file: filePath,
       readLength: readLength,
       sequencerId: sequencer,
       dateRun: dateRun,
@@ -152,9 +152,9 @@ Meteor.methods({
     );
   },
 
-  'rawFastqs.insertPairedEnd'(first, second, readLength, sequencer, dateRun) {
-    check(first, String);
-    check(second, String);
+  'rawFastqs.insertPairedEnd'(file1, file2, readLength, sequencer, dateRun) {
+    check(file1, String);
+    check(file2, String);
     check(readLength, Number);
     check(sequencer, String);
     check(dateRun, Date);
@@ -167,8 +167,8 @@ Meteor.methods({
 
     let newValues = {
       paired: true,
-      first: first,
-      second: second,
+      file1: file1,
+      file2: file2,
       readLength: readLength,
       sequencerId: sequencer,
       dateRun: dateRun,
