@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
 
-import DatabaseLog from '../database-log/database-log.js'
+import DatabaseEvents from '../database-events/database-events.js'
  
 export const RawFastqRecords = new Mongo.Collection('rawFastqRecords');
 
@@ -105,7 +105,7 @@ Meteor.methods({
         // console.log('insertPairedEnd connection: ' + this.connection);
         if (!err){
           Meteor.call(
-            'databaseLog.insert',
+            'databaseEvents.insert',
             this.userId,
             'c', // 'create'
             Array(res),
@@ -140,7 +140,7 @@ Meteor.methods({
         // console.log('insertPairedEnd connection: ' + this.connection);
         if (!err){
           Meteor.call(
-            'databaseLog.insert',
+            'databaseEvents.insert',
             this.userId,
             'u', // 'create'
             Array(recordId),
@@ -180,7 +180,7 @@ Meteor.methods({
         // console.log('insertPairedEnd connection: ' + this.connection);
         if (!err){
           Meteor.call(
-            'databaseLog.insert',
+            'databaseEvents.insert',
             this.userId,
             'c', // 'create'
             Array(res),

@@ -2,20 +2,20 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
  
-export const DatabaseLog = new Mongo.Collection('databaseLog');
+export const DatabaseEvents = new Mongo.Collection('databaseEvents');
 
 if (Meteor.isServer) {
   // This code only runs on the server
   // Only publish experiments to users that are logged in
   // TODO: restrict log events sent to client according to permissions
-  Meteor.publish('DatabaseLog', function sequencersPublication() {
-  	return (DatabaseLog.find());
+  Meteor.publish('DatabaseEvents', function sequencersPublication() {
+  	return (DatabaseEvents.find());
   })
 }
 
 Meteor.methods({
-  'databaseLog.insert'(userId, action, objectIds, collection, newValues) {
-    // console.log('DatabaseLog.insert');
+  'databaseEvents.insert'(userId, action, objectIds, collection, newValues) {
+    // console.log('DatabaseEvents.insert');
     // console.log('userId: ' + userId);
     // console.log('action: ' + action);
     // console.log('objectIds: ' + objectIds);
@@ -35,12 +35,12 @@ Meteor.methods({
       check(newValues, Object);
 
       if (userId !== this.userId) {
-        throw new Meteor.Error('databaseLog.insert.unauthorized',
+        throw new Meteor.Error('databaseEvents.insert.unauthorized',
           'userId supplied does not match this.userId');
       }
       // console.log('userId confirmed');
    
-      DatabaseLog.insert({
+      DatabaseEvents.insert({
         userId: this.userId,
         action: action,
         objectIds: objectIds,

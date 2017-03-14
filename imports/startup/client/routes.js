@@ -14,9 +14,9 @@ import AddExperimentForm from '../../ui/AddExperimentForm.jsx';
 import RemoveExperimentForm from '../../ui/RemoveExperimentForm.jsx';
 
 import RawFastqRecordsInfo from '../../ui/RawFastqRecordsInfo.jsx';
-import AddRawFastqRecord from '../../ui/AddRawFastqRecord.jsx';
+import RawFastqRecord from '../../ui/forms/RawFastqRecord.jsx';
+import AddRawFastqRecord from '../../ui/forms/AddRawFastqRecord.jsx';
 import AddRawFastqRecords from '../../ui/AddRawFastqRecords.jsx';
-import RawFastqRecord from '../../ui/RawFastqRecord.jsx';
 
 import SequencersTable from '../../ui/SequencersTable.jsx';
 
