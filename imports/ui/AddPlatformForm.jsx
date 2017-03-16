@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 
 import { Platforms } from '/imports/api/platforms.js';
 
-import Loading from './loading.jsx'
+import Loading from '/imports/ui/loading.jsx';
 
 let classNames = require('classnames');
 

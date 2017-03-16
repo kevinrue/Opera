@@ -8,7 +8,7 @@ import Loading from './loading.jsx'
 
 import { Platforms } from '../api/platforms.js';
 
-import AddSequencerForm from './AddSequencerForm.jsx';
+import AddPlatformForm from './forms/AddPlatformForm.jsx';
 
 class PlatformsTable extends Component {
 
@@ -42,7 +42,7 @@ class PlatformsTable extends Component {
 		return(
 			<div>
 				<header><h2>Add</h2></header>
-				<AddSequencerForm
+				<AddPlatformForm
 					platforms={arrayNames}
 				/>
 			</div>
