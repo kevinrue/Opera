@@ -121,48 +121,13 @@ Meteor.methods({
     );
   },
 
-  'rawFastqs.updateRecord'(recordId, newValues) {
-    // console.log('rawFastqs.updateSingleEnd !');
-    // console.log('typeof: ' + recordId);
-    // console.log('newValues: ' + newValues);
-    check(recordId, String);
-    check(newValues, Object);
-    // TODO: check that file path exist on the system
- 
-    // Make sure the user is logged in before inserting a task
-    if (! this.userId) {
-      throw new Meteor.Error('not-authorized');
-    }
-
-    // TODO: only update (and record) necessary fields
-    RawFastqRecords.update(
-      recordId,
-      {
-        $set: newValues,
-      },
-      (err, res) => {
-        // console.log('insertPairedEnd connection: ' + this.connection);
-        if (!err){
-          Meteor.call(
-            'databaseEvents.insert',
-            this.userId,
-            'u', // 'create'
-            Array(recordId),
-            'rawFastqs',
-            newValues: newValues,
-          );
-        }
-      }
-    );
-  },
-
   'rawFastqs.insertPairedEnd'(file1, file2, readLength, platform, dateRun, run, lane) {
     check(file1, String);
     check(file2, String);
     check(readLength, Number);
     check(platform, String);
     check(dateRun, Date);
-    check(run, Date);
+    check(run, String);
     check(lane, String);
     // TODO: check that both file paths exist on the system
  
@@ -192,6 +157,41 @@ Meteor.methods({
             this.userId,
             'c', // 'create'
             Array(res),
+            'rawFastqs',
+            newValues: newValues,
+          );
+        }
+      }
+    );
+  },
+
+  'rawFastqs.updateRecord'(recordId, newValues) {
+    // console.log('rawFastqs.updateSingleEnd !');
+    // console.log('typeof: ' + recordId);
+    // console.log('newValues: ' + newValues);
+    check(recordId, String);
+    check(newValues, Object);
+    // TODO: check that file path exist on the system
+ 
+    // Make sure the user is logged in before inserting a task
+    if (! this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    // TODO: only update (and record) necessary fields
+    RawFastqRecords.update(
+      recordId,
+      {
+        $set: newValues,
+      },
+      (err, res) => {
+        // console.log('insertPairedEnd connection: ' + this.connection);
+        if (!err){
+          Meteor.call(
+            'databaseEvents.insert',
+            this.userId,
+            'u', // 'create'
+            Array(recordId),
             'rawFastqs',
             newValues: newValues,
           );

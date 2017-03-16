@@ -21,10 +21,27 @@ Meteor.methods({
     if (! this.userId) {
       throw new Meteor.Error('not-authorized');
     }
- 
-    Platforms.insert({
+
+    let newValues = {
       name: name,
-    });
+    };
+ 
+    Platforms.insert(
+      newValues,
+      (err, res) => {
+        // console.log('insertPairedEnd connection: ' + this.connection);
+        if (!err){
+          Meteor.call(
+            'databaseEvents.insert',
+            this.userId,
+            'c', // 'create'
+            Array(res),
+            'platforms',
+            newValues: newValues,
+          );
+        }
+      }
+    );
   },
 
   'platforms.remove'(sequencerId) {

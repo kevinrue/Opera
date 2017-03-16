@@ -44,9 +44,9 @@ export default class RawFastqRecordSingle extends Component {
 			dateRunIsInitial: true,
 			dateRunIsValid: isDateRunValid(startDate),
 
-			run: '',
+			run: props.record.run,
 			runIsInitial: true,
-			runIsValid: isRunValid(startDate),
+			runIsValid: isRunValid(props.record.run),
 
 			lane: props.record.lane,			
 			laneIsInitial: true,
