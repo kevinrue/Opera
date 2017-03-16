@@ -1,5 +1,5 @@
 
-import '../../api/sequencers.js';
+import '../../api/platforms.js';
 
 import '../../api/raw-fastq-records/raw-fastq-records.js';
 

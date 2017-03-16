@@ -79,11 +79,12 @@ Meteor.methods({
     // );
   },
 
-  'rawFastqs.insertSingleEnd'(filePath, readLength, sequencer, dateRun) {
+  'rawFastqs.insertSingleEnd'(filePath, readLength, platform, dateRun, lane) {
     check(filePath, String);
     check(readLength, Number);
-    check(sequencer, String);
+    check(platform, String);
     check(dateRun, Date);
+    check(lane, String);
     // TODO: check that filePath exists on the system
  
     // Make sure the user is logged in before inserting a task
@@ -95,8 +96,9 @@ Meteor.methods({
       paired: false,
       file: filePath,
       readLength: readLength,
-      sequencerId: sequencer,
+      platformId: platform,
       dateRun: dateRun,
+      lane: lane,
     };
  
     RawFastqRecords.insert(
@@ -152,12 +154,13 @@ Meteor.methods({
     );
   },
 
-  'rawFastqs.insertPairedEnd'(file1, file2, readLength, sequencer, dateRun) {
+  'rawFastqs.insertPairedEnd'(file1, file2, readLength, platform, dateRun, lane) {
     check(file1, String);
     check(file2, String);
     check(readLength, Number);
-    check(sequencer, String);
+    check(platform, String);
     check(dateRun, Date);
+    check(lane, String);
     // TODO: check that both file paths exist on the system
  
     // Make sure the user is logged in before inserting a task
@@ -170,8 +173,9 @@ Meteor.methods({
       file1: file1,
       file2: file2,
       readLength: readLength,
-      sequencerId: sequencer,
+      platformId: platform,
       dateRun: dateRun,
+      lane: lane,
     };
 
     RawFastqRecords.insert(

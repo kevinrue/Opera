@@ -18,7 +18,7 @@ import RawFastqRecord from '../../ui/forms/RawFastqRecord.jsx';
 import AddRawFastqRecord from '../../ui/forms/AddRawFastqRecord.jsx';
 import AddRawFastqRecords from '../../ui/AddRawFastqRecords.jsx';
 
-import SequencersTable from '../../ui/SequencersTable.jsx';
+import PlatformsTable from '../../ui/PlatformsTable.jsx';
 
 const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
@@ -39,7 +39,7 @@ const Nav = () => (
 	      <ul className="nav navbar-nav">
 			    <li><Link to='/rawFastq'>Raw FASTQ</Link></li>
 			    <li><Link to='/experiments'>Experiments</Link></li>
-			    <li><Link to='/sequencers'>Sequencers</Link></li>
+			    <li><Link to='/platforms'>Platforms</Link></li>
 	    	</ul>
 	    	<ul className="nav navbar-nav navbar-right" id="navbar-signin">
 		    	<li><AccountsUIWrapper /></li>
@@ -67,7 +67,7 @@ const renderRoutes = () => (
   		<Route path='/rawFastq/addOne' component={AddRawFastqRecord} />
   		<Route path='/rawFastq/addBatch' component={AddRawFastqRecords} />
   		<Route path='/rawFastq/:_id' component={RawFastqRecord} />
-  		<Route path='/sequencers' component={SequencersTable} />
+  		<Route path='/platforms' component={PlatformsTable} />
   	</Route>
   	<Route path='*' component={NotFound} />
   </Router>

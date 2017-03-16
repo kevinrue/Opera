@@ -10,8 +10,9 @@ import { updateChangedInputs, renderSubmitButton } from './generic.jsx';
 // Input half-dumb components (display & client-side validation)
 import FilepathTextInput, { handleChangeFilepath, isFilepathValid } from './FilepathTextInput.jsx';
 import ReadLengthInput, { handleChangeReadLength, isReadLengthValid } from './ReadLengthInput.jsx';
-import SequencerDropdownInput, { handleChangeSequencer, isSequencerValid } from './SequencerDropdownInput.jsx';
+import PlatformDropdownInput, { handleChangePlatform, isPlatformValid } from './PlatformDropdownInput.jsx';
 import DateInput, { handleChangeDateRun, isDateRunValid } from './DateInput.jsx';
+import SimpleTextInput, { handleChangeTextInput, isLaneValid } from './SimpleTextInput.jsx';
 
 import Loading from '/imports/ui/loading.jsx';
 
@@ -33,14 +34,18 @@ export default class RawFastqRecordSingle extends Component {
 			readLengthIsInitial: true,
 			readLengthIsValid: isReadLengthValid(props.record.readLength),
 
-			sequencerId: props.record.sequencerId,
-			sequencerIdIsInitial: true,
-			sequencerIdIsValid: isSequencerValid(props.record.sequencerId),
+			platformId: props.record.platformId,
+			platformIdIsInitial: true,
+			platformIdIsValid: isPlatformValid(props.record.platformId),
 
 			dateRun: startDate, // moment()
 			dateRunDate: props.record.dateRun, // Date()
 			dateRunIsInitial: true,
 			dateRunIsValid: isDateRunValid(startDate),
+
+			lane: props.record.lane,			
+			laneIsInitial: true,
+			laneIsValid: isLaneValid(startDate),
 
 			changedInputs: {},
 		}
@@ -48,8 +53,52 @@ export default class RawFastqRecordSingle extends Component {
 		this.updateChangedInputs = updateChangedInputs.bind(this);
 		this.handleChangeFilepath = handleChangeFilepath.bind(this);
 		this.handleChangeReadLength = handleChangeReadLength.bind(this);
-		this.handleChangeSequencer = handleChangeSequencer.bind(this);
+		this.handleChangePlatform = handleChangePlatform.bind(this);
 		this.handleChangeDateRun = handleChangeDateRun.bind(this);
+		this.handleChangeTextInput = handleChangeTextInput.bind(this);
+	}
+
+	isFormInitial () {
+		// console.log(this.state.changedInputs);
+		return(
+			Object.keys(this.state.changedInputs).length === 0
+		);
+	}
+
+	isFormPending () {
+		return(
+			this.state.fileCountInDatabase === -1
+		);
+	}
+
+	isFormComplete () {
+		return(
+			this.state.file !== '' &&
+			!isNaN(this.state.readLength) &&
+			this.state.platformId !== undefined &&
+			this.state.dateRunDate !== undefined &&
+			this.state.lane !== ''
+		)
+	}
+
+	isFormValid (){
+		// console.log('fileIsValid: ' + this.state.fileIsValid);
+		// console.log('readLengthIsValid: ' + this.state.readLengthIsValid);
+		// console.log('platformIsValid: ' + this.state.platformIdIsValid);
+		// console.log('dateRunIsValid: ' + this.state.dateRunIsValid);
+		return(
+			this.state.fileIsValid &&
+			this.state.readLengthIsValid &&
+			this.state.platformIdIsValid &&
+			this.state.dateRunIsValid &&
+			this.state.laneIsValid
+		);
+	}
+
+	isInDatabase () {
+		return(
+			this.state.fileCountInDatabase > 0
+		);
 	}
 
 	handleSubmit (event) {
@@ -62,8 +111,9 @@ export default class RawFastqRecordSingle extends Component {
 					'rawFastqs.insertSingleEnd',
 					this.state.file,
 					this.state.readLength,
-					this.state.sequencerId,
+					this.state.platformId,
 					this.state.dateRunDate,
+					this.state.lane,
 					(err, res) => {
 						if (err){
 							alert(err);
@@ -93,46 +143,7 @@ export default class RawFastqRecordSingle extends Component {
 		}
 	}
 
-	isFormInitial () {
-		// console.log(this.state.changedInputs);
-		return(
-			Object.keys(this.state.changedInputs).length === 0
-		);
-	}
-
-	isFormPending () {
-		return(
-			this.state.fileCountInDatabase === -1
-		);
-	}
-
-	isFormComplete () {
-		return(
-			this.state.file !== '' &&
-			!isNaN(this.state.readLength) &&
-			this.state.sequencerId !== undefined &&
-			this.state.dateRunDate !== undefined
-		)
-	}
-
-	isFormValid (){
-		// console.log('fileIsValid: ' + this.state.fileIsValid);
-		// console.log('readLengthIsValid: ' + this.state.readLengthIsValid);
-		// console.log('sequencerIsValid: ' + this.state.sequencerIdIsValid);
-		// console.log('dateRunIsValid: ' + this.state.dateRunIsValid);
-		return(
-			this.state.fileIsValid &&
-			this.state.readLengthIsValid &&
-			this.state.sequencerIdIsValid &&
-			this.state.dateRunIsValid
-		);
-	}
-
-	isInDatabase () {
-		return(
-			this.state.fileCountInDatabase > 0
-		);
-	}
+	
 
 	resetForm () {
 		this.setState({
@@ -145,14 +156,18 @@ export default class RawFastqRecordSingle extends Component {
 			readLengthIsInitial: true,
 			readLengthIsValid: false,
 
-			sequencerId: null,
-			sequencerIdIsInitial: true,
-			sequencerIdIsValid: false,
+			platformId: null,
+			platformIdIsInitial: true,
+			platformIdIsValid: false,
 
 			dateRun: null,
 			dateRunDate: null,
 			dateRunIsInitial: true,
 			dateRunIsValid: false,
+
+			lane: '',
+			laneIsInitial: true,
+			laneIsValid: false,
 
 			changedInputs: {},
 		})
@@ -196,16 +211,16 @@ export default class RawFastqRecordSingle extends Component {
 
 							onChange={this.handleChangeReadLength}
 						/>
-						<SequencerDropdownInput
-							id='sequencerId'
-							label='Sequencer'
+						<PlatformDropdownInput
+							id='platformId'
+							label='Platform'
 
-							value={this.state.sequencerId}
+							value={this.state.platformId}
 
-							isInitial={this.state.sequencerIdIsInitial}
-							isValid={this.state.sequencerIdIsValid}
+							isInitial={this.state.platformIdIsInitial}
+							isValid={this.state.platformIdIsValid}
 
-							onChange={this.handleChangeSequencer}
+							onChange={this.handleChangePlatform}
 						/>
 						<DateInput
 							id='dateRun'
@@ -217,6 +232,18 @@ export default class RawFastqRecordSingle extends Component {
 							isValid={this.state.dateRunIsValid}
 
 							onChange={this.handleChangeDateRun}
+						/>
+						<SimpleTextInput
+							id='lane'
+							label='Lane'
+							placeholder='Lane identifier'
+
+							value={this.state.lane}
+
+							isInitial={this.state.laneIsInitial}
+							isValid={this.state.laneIsValid}
+
+							onChange={this.handleChangeTextInput}
 						/>
 					</tbody>
 	      </table>
@@ -236,7 +263,8 @@ RawFastqRecordSingle.defaultProps = {
 		_id: undefined,
 		file: '',
 		readLength: NaN,
-		sequencerId: undefined,
+		platformId: undefined,
 		dateRun: undefined,
+		lane: '',
 	}
 };

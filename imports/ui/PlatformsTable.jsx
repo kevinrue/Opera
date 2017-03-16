@@ -6,11 +6,11 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 import Loading from './loading.jsx'
 
-import { Sequencers } from '../api/sequencers.js';
+import { Platforms } from '../api/platforms.js';
 
 import AddSequencerForm from './AddSequencerForm.jsx';
 
-class SequencersTable extends Component {
+class PlatformsTable extends Component {
 
 	constructor (props) {
 		super(props);
@@ -19,7 +19,7 @@ class SequencersTable extends Component {
 	renderTable () {
 		// console.log('renderTable');
 		return(
-			<BootstrapTable data={this.props.sequencers} striped={true} hover={true} keyField='_id' pagination={true}>
+			<BootstrapTable data={this.props.platforms} striped={true} hover={true} keyField='_id' pagination={true}>
         <TableHeaderColumn
         	dataField="name"
         	dataAlign="left"
@@ -32,18 +32,18 @@ class SequencersTable extends Component {
 
 	renderAddForm () {
 		// console.log(this.props);
-		// console.log(this.props.sequencers);
-		// console.log(typeof(this.props.sequencers));
-		// console.log(Array.isArray(this.props.sequencers));
-		// Pass name of sequencers (_id not necessary)
-		let arrayNames = this.props.sequencers.map((sequencer) => (sequencer.name));
+		// console.log(this.props.platforms);
+		// console.log(typeof(this.props.platforms));
+		// console.log(Array.isArray(this.props.platforms));
+		// Pass name of platforms (_id not necessary)
+		let arrayNames = this.props.platforms.map((platform) => (platform.name));
 		// console.log('arrayNames: ' + arrayNames);
   // 	console.log('nameTypes: ' + typeof(arrayNames));
 		return(
 			<div>
 				<header><h2>Add</h2></header>
 				<AddSequencerForm
-					sequencers={arrayNames}
+					platforms={arrayNames}
 				/>
 			</div>
 		);
@@ -52,7 +52,7 @@ class SequencersTable extends Component {
 	renderMainPanel() {
     return(
       <div className='main-panel'>
-        <header><h1>Sequencers</h1></header>
+        <header><h1>Platforms</h1></header>
         <header><h2>Table</h2></header>
         { this.renderTable() }
         { this.props.loading ? <Loading /> : this.renderAddForm() }
@@ -83,20 +83,20 @@ class SequencersTable extends Component {
 
 }
 
-SequencersTable.propTypes = {
-	sequencers: PropTypes.array,
+PlatformsTable.propTypes = {
+	platforms: PropTypes.array,
 };
 
-SequencersTable.defaultProps = {
+PlatformsTable.defaultProps = {
 };
 
 export default createContainer(() => {
-	const subscription = Meteor.subscribe('sequencers');
+	const subscription = Meteor.subscribe('platforms');
 	const loading = !subscription.ready();
 
 	return {
 		currentUser: Meteor.user(),
-		sequencers: Sequencers.find({}).fetch(),
+		platforms: Platforms.find({}).fetch(),
 		loading: loading,
 	};
-}, SequencersTable);
+}, PlatformsTable);

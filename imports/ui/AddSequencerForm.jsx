@@ -5,22 +5,22 @@ import { createContainer } from 'meteor/react-meteor-data';
 import ReactTooltip from 'react-tooltip';
 import { Button } from 'react-bootstrap';
 
-import { Sequencers } from '../api/sequencers.js';
+import { Platforms } from '/imports/api/platforms.js';
 
 import Loading from './loading.jsx'
 
 let classNames = require('classnames');
 
-class AddSequencerForm extends Component {
+class AddPlatformForm extends Component {
 
 	constructor (props) {
 		// console.log(props);
 		super(props);
 		this.state = {
-			sequencer: '',
-			sequencerInitial: true, // do not show any glyphicon if initial
-			sequencerValid: false, // for glyphicon & form validation
-			sequencerCountInDatabase: null, // for glyphicon & asynchronous form validation
+			platform: '',
+			platformInitial: true, // do not show any glyphicon if initial
+			platformValid: false, // for glyphicon & form validation
+			platformCountInDatabase: null, // for glyphicon & asynchronous form validation
 		};
 	}
 
@@ -28,14 +28,14 @@ class AddSequencerForm extends Component {
 		// Note: do not trim here (otherwise names cannot contain space characters)
 		let newValue = event.target.value;
 		// console.log('newValue: ' + newValue);
-		let isInitial = (newValue === this.props.sequencer);
+		let isInitial = (newValue === this.props.platform);
 		let isValid = (newValue !== '');
 
 		this.setState({
-			sequencer: newValue,
-			sequencerInitial: isInitial,
-			sequencerValid: isValid,
-			sequencerCountInDatabase: this.positionInDatabase(newValue) + 1 // dummy value = 0 if not in database
+			platform: newValue,
+			platformInitial: isInitial,
+			platformValid: isValid,
+			platformCountInDatabase: this.positionInDatabase(newValue) + 1 // dummy value = 0 if not in database
 		});
 	}
 
@@ -43,37 +43,39 @@ class AddSequencerForm extends Component {
     event.preventDefault();
  
     Meteor.call(
-    	'sequencers.insert',
-    	this.state.sequencer,
+    	'platforms.insert',
+    	this.state.platform,
     	(err, res) => {
     		if (err){
     			alert(err);
     		} else {
-    			alert('New sequencer successfully added !');
+    			alert('New platform successfully added !');
     		}
     	}
     );
  
     // Clear form
     this.setState({
-			sequencer: '',
+			platform: '',
+			platformInitial: true,
+			platformValid: false,
 		});
   }
 
   isFormInitial () {
   	return(
-  		this.state.sequencerInitial
+  		this.state.platformInitial
   	);
   }
 
   // Returns '-1' if not in database
   positionInDatabase (name) {
   	// console.log('name: ' + name);
-  	// console.log('props: ' + this.props.sequencers);
-  	// console.log('propType: ' + typeof(this.props.sequencers));
-  	// console.log('position: ' + this.props.sequencers.indexOf(name));
+  	// console.log('props: ' + this.props.platforms);
+  	// console.log('propType: ' + typeof(this.props.platforms));
+  	// console.log('position: ' + this.props.platforms.indexOf(name));
   	return(
-  		this.props.sequencers.indexOf(name)
+  		this.props.platforms.indexOf(name)
   	);
   }
 
@@ -127,22 +129,22 @@ class AddSequencerForm extends Component {
 	}
 
   renderSubmitButton () {
-  	isInitial = this.state.sequencerInitial;
-  	isValid = this.state.sequencerValid;
-  	countInDatabase = this.state.sequencerCountInDatabase;
+  	isInitial = this.state.platformInitial;
+  	isValid = this.state.platformValid;
+  	countInDatabase = this.state.platformCountInDatabase;
 		// console.log('initial: ' + isInitial);
 		// console.log('valid: ' + isValid);
 		// console.log('countInDB: ' + countInDatabase);
 		let buttonColour = (
 			isInitial ? 'primary' : (
 					!isValid ? 'danger' : (
-						this.state.sequencerCountInDatabase ? 'warning' : 'success'
+						this.state.platformCountInDatabase ? 'warning' : 'success'
 					)
 			)
 		);
 		// console.log('buttonColour: ' + buttonColour);
 		let disableButton = (
-			isInitial || !this.state.sequencerValid || (this.state.sequencerCountInDatabase > 0)
+			isInitial || !this.state.platformValid || (this.state.platformCountInDatabase > 0)
 		);
 		let buttonText = (
 			isInitial ? 'Submit' : (
@@ -154,7 +156,7 @@ class AddSequencerForm extends Component {
 		return(
 			<Button
 				type="submit" bsStyle={buttonColour} disabled={disableButton}
-				data-tip data-for={'submit-sequencer'}>
+				data-tip data-for={'submit-platform'}>
 				{buttonText}
 			</Button>
     );
@@ -162,29 +164,29 @@ class AddSequencerForm extends Component {
 
 	render() {
     return (
-    	<form className="new-sequencer" onSubmit={this.handleSubmit.bind(this)} >
-    	<table className='table sequencers-table'>
+    	<form className="new-platform" onSubmit={this.handleSubmit.bind(this)} >
+    	<table className='table platforms-table'>
       	<tbody>
       		<tr>
-      		<td className='sequencers-add-name'>
+      		<td className='platforms-add-name'>
       			<input
 	      			className='input-file-path'
 			        type="text"
-			        ref="newSequencer"
-			        placeholder="Type to add new sequencer"
-			        value={this.state.sequencer}
+			        ref="newPlatform"
+			        placeholder="Type to add new platform"
+			        value={this.state.platform}
 			        onChange={this.handleChange.bind(this)}
 			      />
       		</td>
-      		<td className='sequencers-add-check'>
+      		<td className='platforms-add-check'>
       			{ this.renderGlyphicon(
-	      				'sequencer-glyphicon',
-	      				this.state.sequencerInitial,
+	      				'platform-glyphicon',
+	      				this.state.platformInitial,
 	      				this.isFormValid(),
-	      				this.state.sequencerCountInDatabase,
+	      				this.state.platformCountInDatabase,
       			) }
       		</td>
-      		<td className='sequencers-add-button'>
+      		<td className='platforms-add-button'>
       			{ this.renderSubmitButton() }
       		</td>
       		</tr>
@@ -196,16 +198,16 @@ class AddSequencerForm extends Component {
 
 }
 
-AddSequencerForm.propTypes = {
-	sequencers: PropTypes.array.isRequired,
+AddPlatformForm.propTypes = {
+	platforms: PropTypes.array.isRequired,
 };
 
-AddSequencerForm.defaultProps = {
-	sequencer: '',
+AddPlatformForm.defaultProps = {
+	platform: '',
 };
 
 export default createContainer(() => {
 
 	return {
 	};
-}, AddSequencerForm);
+}, AddPlatformForm);

@@ -2,18 +2,18 @@ import { Meteor } from 'meteor/meteor';
 import { Mongo } from 'meteor/mongo';
 import { check } from 'meteor/check';
  
-export const Sequencers = new Mongo.Collection('sequencers');
+export const Platforms = new Mongo.Collection('platforms');
 
 if (Meteor.isServer) {
   // This code only runs on the server
   // Only publish experiments to users that are logged in
-  Meteor.publish('sequencers', function sequencersPublication() {
-  	return (Sequencers.find());
+  Meteor.publish('platforms', function platformsPublication() {
+  	return (Platforms.find());
   })
 }
 
 Meteor.methods({
-  'sequencers.insert'(name) {
+  'platforms.insert'(name) {
     check(name, String);
     // TODO: check that user is an admin
  
@@ -22,14 +22,14 @@ Meteor.methods({
       throw new Meteor.Error('not-authorized');
     }
  
-    Sequencers.insert({
+    Platforms.insert({
       name: name,
     });
   },
 
-  'sequencers.remove'(sequencerId) {
+  'platforms.remove'(sequencerId) {
     check(sequencerId, String);
  
-    Sequencers.remove(sequencerId);
+    Platforms.remove(sequencerId);
   },
 });

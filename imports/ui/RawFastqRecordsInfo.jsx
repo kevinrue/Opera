@@ -9,7 +9,7 @@ import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'moment/locale/en-gb';
 
 import { RawFastqRecords } from '../api/raw-fastq-records/raw-fastq-records.js';
-import { Sequencers } from '../api/sequencers.js';
+import { Platforms } from '../api/platforms.js';
 
 import Loading from './loading.jsx'
 
@@ -51,7 +51,7 @@ class RawFastqRecordsInfo extends Component {
 	  );
 	}
 
-	sequencerFormatter (cell, row, collection) {
+	platformFormatter (cell, row, collection) {
 		// console.log('cell: ' + cell);
 		// console.log('collection: ' + collection);
 	  return(
@@ -60,9 +60,9 @@ class RawFastqRecordsInfo extends Component {
 	}
 
   renderRecordTable() {
-  	// console.log(this.props.sequencers);
-  	let sequencersEnum = _.object(_.map(this.props.sequencers, (sequencer) => {return([sequencer._id, sequencer.name])}));
-  	// console.log(sequencersEnum);
+  	// console.log(this.props.platforms);
+  	let platformsEnum = _.object(_.map(this.props.platforms, (platform) => {return([platform._id, platform.name])}));
+  	// console.log(platformsEnum);
 
   	return(
   		<BootstrapTable data={this.props.rawFastqAll} striped={true} hover={true} pagination={true}>
@@ -85,10 +85,10 @@ class RawFastqRecordsInfo extends Component {
 	      	Read length
 	      </TableHeaderColumn>
 	      <TableHeaderColumn
-	      	dataField="sequencerId" dataAlign="center" width="20%" dataSort={true}
-	      	dataFormat={ this.sequencerFormatter } formatExtraData={ sequencersEnum }
-	      	filter={ { type: 'SelectFilter', options: sequencersEnum } }>
-	      	Sequencer
+	      	dataField="platformId" dataAlign="center" width="20%" dataSort={true}
+	      	dataFormat={ this.platformFormatter } formatExtraData={ platformsEnum }
+	      	filter={ { type: 'SelectFilter', options: platformsEnum } }>
+	      	Platform
 	      </TableHeaderColumn>
 	      <TableHeaderColumn
 	      	dataField="dateRun" dataAlign="center" width="40%" dataSort={true} dataFormat={ this.dateFormatter }
@@ -148,7 +148,7 @@ RawFastqRecordsInfo.propTypes = {
 	rawFastqSingleCount: PropTypes.number,
 	rawFastqSampleSingleRecord: PropTypes.object,
 	rawFastqSamplePairedRecord: PropTypes.object,
-	sequencersDistinctNames: PropTypes.array,
+	platformsDistinctNames: PropTypes.array,
 };
 
 RawFastqRecordsInfo.defaultProps = {
@@ -158,7 +158,7 @@ RawFastqRecordsInfo.defaultProps = {
 // and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
 	const subscription1 = Meteor.subscribe('rawFastqRecords');
-	const subscription2 = Meteor.subscribe('sequencers');
+	const subscription2 = Meteor.subscribe('platforms');
 	const loading = (!subscription1.ready() || !subscription2.ready());
 
 	return {
@@ -169,7 +169,7 @@ export default createContainer(() => {
 		rawFastqSingleCount: RawFastqRecords.find({paired : false}).count(),
 		rawFastqSampleSingleRecord: RawFastqRecords.findOne({paired : false}),
 		rawFastqSamplePairedRecord: RawFastqRecords.findOne({paired : true}),
-		rawFastqAll: RawFastqRecords.find({}, {_id: 1, paired: 1}).fetch(),
-		sequencers: Sequencers.find().fetch(),
+		rawFastqAll: RawFastqRecords.find({}).fetch(),
+		platforms: Platforms.find().fetch(),
 	};
 }, RawFastqRecordsInfo);

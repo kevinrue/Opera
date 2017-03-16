@@ -4,13 +4,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 // Third-party modules
 import Select from 'react-select';
 // Database subscriptions
-import { Sequencers } from '/imports/api/sequencers.js';
+import { Platforms } from '/imports/api/platforms.js';
 // Form validation
 import { renderGlyphicon } from './generic.jsx';
 
 import Loading from '/imports/ui/loading.jsx';
 
-export function isSequencerValid (newValue) {
+export function isPlatformValid (newValue) {
 	// console.log(newValue);
 	// Current check:
 	return(
@@ -18,12 +18,12 @@ export function isSequencerValid (newValue) {
 	);
 }
 
-export function	handleChangeSequencer (field, newValue) {
+export function	handleChangePlatform (field, newValue) {
 	// console.log(this.props); // this is the parent form
 	// console.log('newValue: ' + String(newValue)); // either String(value) or Object{label, value}
-	let isInitial = (newValue === this.props.record.sequencerId);
+	let isInitial = (newValue === this.props.record.plaformId);
 	this.updateChangedInputs(field, isInitial, newValue);
-	let isValid = isSequencerValid(newValue);
+	let isValid = isPlatformValid(newValue);
 
 	this.setState({
 		[field]: newValue,
@@ -32,7 +32,7 @@ export function	handleChangeSequencer (field, newValue) {
 	});
 }
 
-class SequencerDropdownInput extends Component {
+class PlatformDropdownInput extends Component {
 
 	constructor (props) {
 		super(props);
@@ -41,7 +41,7 @@ class SequencerDropdownInput extends Component {
 		this.handleChangeSelect = this.handleChangeSelect.bind(this);
 	}
 
-	// (Select event) handleChange function for RawFastqRecord sequencer dropdown
+	// (Select event) handleChange function for RawFastqRecord plaform dropdown
 	handleChangeSelect (newValue) {
 		// event.persist();
 		// console.log(event);
@@ -53,8 +53,8 @@ class SequencerDropdownInput extends Component {
 	render () {
 		// console.log(this.props.value);
 		// console.log(typeof(this.props.value));
-		let options = this.props.sequencers.map((sequencer) => (
-			{label: sequencer.name, value: sequencer._id}
+		let options = this.props.platforms.map((plaform) => (
+			{label: plaform.name, value: plaform._id}
 		));
 		// console.log(options);
 		return(
@@ -85,7 +85,7 @@ class SequencerDropdownInput extends Component {
 
 }
 
-SequencerDropdownInput.propTypes = {
+PlatformDropdownInput.propTypes = {
 	// HTML input
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string.isRequired,
@@ -102,17 +102,17 @@ SequencerDropdownInput.propTypes = {
 	onChange: PropTypes.func.isRequired,
 };
 
-SequencerDropdownInput.defaultProps = {
+PlatformDropdownInput.defaultProps = {
 	placeholder: 'Read length',
 	value: undefined,
 };
 
 export default createContainer((  ) => {
-	const subscription = Meteor.subscribe('sequencers');
+	const subscription = Meteor.subscribe('platforms');
 	const loading = !subscription.ready();
 
 	return {
-		sequencers: Sequencers.find({}).fetch(),
+		platforms: Platforms.find({}).fetch(),
 		loading: loading,
 	};
-}, SequencerDropdownInput);
+}, PlatformDropdownInput);
