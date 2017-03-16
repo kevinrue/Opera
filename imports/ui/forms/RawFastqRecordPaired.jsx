@@ -6,13 +6,13 @@ import { browserHistory } from 'react-router';
 // Third-party modules
 import 'moment/locale/en-gb';
 // Form validation
-import { updateChangedInputs, renderSubmitButton } from './generic.jsx';
+import { updateChangedInputs, renderSubmitButton } from './generics.jsx';
 // Input half-dumb components (display & client-side validation)
-import RawFastqFileInput, { handleChangeFastqPath, isFastqPathValid, autocompleteFilepaths, autofillSecond } from './RawFastqFileInput.jsx';
-import ReadLengthInput, { handleChangeReadLength, isReadLengthValid } from './ReadLengthInput.jsx';
-import PlatformDropdownInput, { handleChangePlatform, isPlatformValid } from './PlatformDropdownInput.jsx';
-import DateInput, { handleChangeDateRun, isDateRunValid } from './DateInput.jsx';
-import SimpleTextInput, { handleChangeTextInput, isRunValid, isLaneValid } from './SimpleTextInput.jsx';
+import RawFastqFileInput, { handleChangeFastqPath, isFastqPathValid, autocompleteFilepaths, autofillSecond } from './inputs/RawFastqFileInput.jsx';
+import ReadLengthInput, { handleChangeReadLength, isReadLengthValid } from './inputs/ReadLengthInput.jsx';
+import PlatformDropdownInput, { handleChangePlatform, isPlatformValid } from './inputs/PlatformDropdownInput.jsx';
+import DateInput, { handleChangeDateRun, isDateRunValid } from './inputs/DateInput.jsx';
+import SimpleTextInput, { handleChangeTextInput, isRunValid, isLaneValid } from './inputs/SimpleTextInput.jsx';
 
 import Loading from '/imports/ui/loading.jsx'
 

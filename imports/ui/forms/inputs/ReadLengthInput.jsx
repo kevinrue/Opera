@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 
 import { Button, ButtonGroup } from 'react-bootstrap';
 // Form validation
-import { renderGlyphicon } from './generic.jsx';
+import { renderGlyphicon } from './generics.jsx';
 
 // Assuming value is a Number (undefined if empty field)
 // check arbitrary rules to prevent submission of invalid forms

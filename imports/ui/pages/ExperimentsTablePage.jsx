@@ -2,14 +2,12 @@ import React, { Component, PropTypes } from 'react';
 import { createContainer } from 'meteor/react-meteor-data'; // 
 
 import { browserHistory } from 'react-router';
-
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import { ButtonToolbar, Button } from 'react-bootstrap';
 
-import { Experiments } from '../api/experiments.js';
+import { Experiments } from '/imports/api/experiments.js';
 
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-
-class ExperimentsTable extends Component {
+class ExperimentsTablePage extends Component {
 
 	renderExperiments() {
 		return (
@@ -66,11 +64,11 @@ class ExperimentsTable extends Component {
 	
 }
 
-ExperimentsTable.propTypes = {
+ExperimentsTablePage.propTypes = {
 	experiments: PropTypes.array.isRequired,
 };
 
-ExperimentsTable.defaultProps = {
+ExperimentsTablePage.defaultProps = {
 };
 
 // The wrapped 'App' component fetches tasks from the Tasks collection
@@ -82,4 +80,4 @@ export default createContainer(() => {
     currentUser: Meteor.user(),
     experiments: Experiments.find({}).fetch()
   };
-}, ExperimentsTable);
+}, ExperimentsTablePage);

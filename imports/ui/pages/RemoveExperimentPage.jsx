@@ -5,9 +5,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 import Select from 'react-select';
 import { Button } from 'react-bootstrap';
 
-import { Experiments } from '../api/experiments.js';
+import { Experiments } from '/imports/api/experiments.js';
 
-class RemoveExperimentForm extends Component {
+class RemoveExperimentPage extends Component {
 
 	constructor(props) {
 		super(props);
@@ -80,13 +80,13 @@ class RemoveExperimentForm extends Component {
 	}
 };
 
-RemoveExperimentForm.propTypes = {
+RemoveExperimentPage.propTypes = {
 	label: React.PropTypes.string,
 	searchable: React.PropTypes.bool,
 	experiments: PropTypes.array.isRequired,
 };
 
-RemoveExperimentForm.defaultProps = {
+RemoveExperimentPage.defaultProps = {
 	label: 'Delete an experiment',
 	searchable: true
 };
@@ -99,4 +99,4 @@ export default createContainer(() => {
   return {
     experiments: Experiments.find({}).fetch()
   };
-}, RemoveExperimentForm);
+}, RemoveExperimentPage);

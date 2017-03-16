@@ -5,20 +5,20 @@ import { Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
 import { Button } from 'react-bootstrap';
 
 // route components
-import App from '../../ui/App.jsx';
+import App from '/imports/ui/App.jsx';
 
-import AccountsUIWrapper from '../../ui/AccountsUIWrapper.jsx';
+import AccountsUIWrapper from '/imports/ui/AccountsUIWrapper.jsx';
 
-import ExperimentsTable from '../../ui/ExperimentsTable.jsx';
-import AddExperimentForm from '../../ui/AddExperimentForm.jsx';
-import RemoveExperimentForm from '../../ui/RemoveExperimentForm.jsx';
+import ExperimentsTablePage from '/imports/ui/pages/ExperimentsTablePage.jsx';
+import AddExperimentPage from '/imports/ui/pages/AddExperimentPage.jsx';
+import RemoveExperimentPage from '/imports/ui/pages/RemoveExperimentPage.jsx';
 
-import RawFastqRecordsInfo from '../../ui/RawFastqRecordsInfo.jsx';
-import RawFastqRecord from '../../ui/forms/RawFastqRecord.jsx';
-import AddRawFastqRecord from '../../ui/forms/AddRawFastqRecord.jsx';
-import AddRawFastqRecords from '../../ui/AddRawFastqRecords.jsx';
+import RawFastqTablePage from '/imports/ui/pages/RawFastqTablePage.jsx';
+import RawFastqRecord from '/imports/ui/forms/RawFastqRecord.jsx';
+import AddRawFastqRecordPage from '/imports/ui/pages/AddRawFastqRecordPage.jsx';
+import AddRawFastqBatchPage from '/imports/ui/pages/AddRawFastqBatchPage.jsx';
 
-import PlatformsTable from '../../ui/PlatformsTable.jsx';
+import PlatformsTablePage from '/imports/ui/pages/PlatformsTablePage.jsx';
 
 const NotFound = () => (
   <h1>404.. This page is not found!</h1>)
@@ -60,14 +60,14 @@ const renderRoutes = () => (
   <Router history={browserHistory}>
   	<Route path='/' component={Container}>
   		<IndexRoute component={App} />
-  		<Route path='/experiments' component={ExperimentsTable} />
-  		<Route path='/experiments/add' component={AddExperimentForm} />
-  		<Route path='/experiments/remove' component={RemoveExperimentForm} />
-  		<Route path='/rawFastq' component={RawFastqRecordsInfo} />
-  		<Route path='/rawFastq/addOne' component={AddRawFastqRecord} />
-  		<Route path='/rawFastq/addBatch' component={AddRawFastqRecords} />
+  		<Route path='/experiments' component={ExperimentsTablePage} />
+  		<Route path='/experiments/add' component={AddExperimentPage} />
+  		<Route path='/experiments/remove' component={RemoveExperimentPage} />
+  		<Route path='/rawFastq' component={RawFastqTablePage} />
+  		<Route path='/rawFastq/addOne' component={AddRawFastqRecordPage} />
+  		<Route path='/rawFastq/addBatch' component={AddRawFastqBatchPage} />
   		<Route path='/rawFastq/:_id' component={RawFastqRecord} />
-  		<Route path='/platforms' component={PlatformsTable} />
+  		<Route path='/platforms' component={PlatformsTablePage} />
   	</Route>
   	<Route path='*' component={NotFound} />
   </Router>

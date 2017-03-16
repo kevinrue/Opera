@@ -6,7 +6,7 @@ import Select from 'react-select';
 // Database subscriptions
 import { Platforms } from '/imports/api/platforms.js';
 // Form validation
-import { renderGlyphicon } from './generic.jsx';
+import { renderGlyphicon } from './generics.jsx';
 
 import Loading from '/imports/ui/loading.jsx';
 

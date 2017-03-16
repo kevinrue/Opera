@@ -3,11 +3,11 @@ import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
 import { RadioGroup, Radio } from 'react-radio-group';
+// Relative paths assume that /pages sits beside /forms
+import RawFastqRecordPaired from '../forms/RawFastqRecordPaired.jsx';
+import RawFastqRecordSingle from '../forms/RawFastqRecordSingle.jsx';
 
-import RawFastqRecordPaired from './RawFastqRecordPaired.jsx';
-import RawFastqRecordSingle from './RawFastqRecordSingle.jsx';
-
-class AddRawFastqRecord extends Component {
+class AddRawFastqRecordPage extends Component {
 
 	constructor (props) {
 		super(props);
@@ -69,14 +69,14 @@ class AddRawFastqRecord extends Component {
 
 }
 
-AddRawFastqRecord.propTypes = {
+AddRawFastqRecordPage.propTypes = {
 };
 
-AddRawFastqRecord.defaultProps = {
+AddRawFastqRecordPage.defaultProps = {
 };
 
 export default createContainer(() => {
 
 	return {
 	};
-}, AddRawFastqRecord);
+}, AddRawFastqRecordPage);

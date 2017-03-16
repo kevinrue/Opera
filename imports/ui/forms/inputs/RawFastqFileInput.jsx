@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 
 import { DropdownButton, MenuItem } from 'react-bootstrap';
 
-import { renderGlyphicon } from './generic.jsx';
+import { renderGlyphicon } from './generics.jsx';
 
 import { RawFastqRecords } from '/imports/api/raw-fastq-records/raw-fastq-records.js';
 

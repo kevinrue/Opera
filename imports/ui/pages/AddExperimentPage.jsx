@@ -3,9 +3,9 @@ import ReactDOM from 'react-dom';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
-import { Experiments } from '../api/experiments.js';
+import { Experiments } from '/imports/api/experiments.js';
 
-class AddExperimentForm extends Component {
+class AddExperimentPage extends Component {
 
 	constructor(props) {
 		super(props);
@@ -46,11 +46,11 @@ class AddExperimentForm extends Component {
 	}
 };
 
-AddExperimentForm.propTypes = {
+AddExperimentPage.propTypes = {
 	experiments: PropTypes.array.isRequired,
 };
 
-AddExperimentForm.defaultProps = {
+AddExperimentPage.defaultProps = {
 };
 
 // The wrapped 'App' component fetches tasks from the Tasks collection
@@ -61,4 +61,4 @@ export default createContainer(() => {
   return {
     experiments: Experiments.find({}).fetch()
   };
-}, AddExperimentForm);
+}, AddExperimentPage);

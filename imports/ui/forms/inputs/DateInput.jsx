@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import DatePicker from 'react-datepicker';
 import 'moment/locale/en-gb';
 
-import { renderGlyphicon } from './generic.jsx';
+import { renderGlyphicon } from './generics.jsx';
 import { momentToDate } from '/imports/ui/utils/datetime.jsx';
 
 export function isDateRunValid (moment) {

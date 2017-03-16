@@ -4,13 +4,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
-import Loading from './loading.jsx'
+import { Platforms } from '/imports/api/platforms.js';
+// Relative paths assume that /pages sits beside /forms
+import AddPlatformForm from '../forms/AddPlatformForm.jsx';
 
-import { Platforms } from '../api/platforms.js';
+import Loading from '/imports/ui/loading.jsx'
 
-import AddPlatformForm from './forms/AddPlatformForm.jsx';
-
-class PlatformsTable extends Component {
+class PlatformsTablePage extends Component {
 
 	constructor (props) {
 		super(props);
@@ -83,11 +83,11 @@ class PlatformsTable extends Component {
 
 }
 
-PlatformsTable.propTypes = {
+PlatformsTablePage.propTypes = {
 	platforms: PropTypes.array,
 };
 
-PlatformsTable.defaultProps = {
+PlatformsTablePage.defaultProps = {
 };
 
 export default createContainer(() => {
@@ -99,4 +99,4 @@ export default createContainer(() => {
 		platforms: Platforms.find({}).fetch(),
 		loading: loading,
 	};
-}, PlatformsTable);
+}, PlatformsTablePage);

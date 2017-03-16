@@ -4,9 +4,9 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import Textarea from 'react-textarea-autosize';
 
-import { RawFastqRecords } from '../api/raw-fastq-records/raw-fastq-records.js';
+import { RawFastqRecords } from '/imports/api/raw-fastq-records/raw-fastq-records.js';
 
-class AddRawFastqRecords extends Component {
+class AddRawFastqBatchPage extends Component {
 
 	constructor (props) {
 		super(props);
@@ -94,11 +94,11 @@ class AddRawFastqRecords extends Component {
 
 }
 
-AddRawFastqRecords.propTypes = {
+AddRawFastqBatchPage.propTypes = {
 	inputTextRawFastq: PropTypes.string,
 };
 
-AddRawFastqRecords.defaultProps = {
+AddRawFastqBatchPage.defaultProps = {
 	inputTextRawFastq: '',
 };
 
@@ -106,4 +106,4 @@ export default createContainer(() => {
 
 	return {
 	};
-}, AddRawFastqRecords);
+}, AddRawFastqBatchPage);

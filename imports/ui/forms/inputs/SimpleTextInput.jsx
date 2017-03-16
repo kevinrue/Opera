@@ -1,7 +1,7 @@
 import { Meteor } from 'meteor/meteor';
 import React, { Component, PropTypes } from 'react';
 
-import { renderGlyphicon } from './generic.jsx';
+import { renderGlyphicon } from './generics.jsx';
 
 // Assuming value is a String
 

@@ -8,12 +8,12 @@ import { ButtonToolbar, Button } from 'react-bootstrap';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import 'moment/locale/en-gb';
 
-import { RawFastqRecords } from '../api/raw-fastq-records/raw-fastq-records.js';
-import { Platforms } from '../api/platforms.js';
+import { RawFastqRecords } from '/imports/api/raw-fastq-records/raw-fastq-records.js';
+import { Platforms } from '/imports/api/platforms.js';
 
-import Loading from './loading.jsx'
+import Loading from '/imports/ui/loading.jsx';
 
-class RawFastqRecordsInfo extends Component {
+class RawFastqTablePage extends Component {
 
 	constructor (props) {
 		super(props);
@@ -142,7 +142,7 @@ class RawFastqRecordsInfo extends Component {
 
 }
 
-RawFastqRecordsInfo.propTypes = {
+RawFastqTablePage.propTypes = {
 	rawFastqAllCount: PropTypes.number,
 	rawFastqPairedCount: PropTypes.number,
 	rawFastqSingleCount: PropTypes.number,
@@ -151,7 +151,7 @@ RawFastqRecordsInfo.propTypes = {
 	platformsDistinctNames: PropTypes.array,
 };
 
-RawFastqRecordsInfo.defaultProps = {
+RawFastqTablePage.defaultProps = {
 };
 
 // The wrapped 'App' component fetches tasks from the Tasks collection
@@ -172,4 +172,4 @@ export default createContainer(() => {
 		rawFastqAll: RawFastqRecords.find({}).fetch(),
 		platforms: Platforms.find().fetch(),
 	};
-}, RawFastqRecordsInfo);
+}, RawFastqTablePage);
