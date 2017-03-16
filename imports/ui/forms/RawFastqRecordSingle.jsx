@@ -8,7 +8,8 @@ import 'moment/locale/en-gb';
 // Form validation
 import { updateChangedInputs, renderSubmitButton } from './generic.jsx';
 // Input half-dumb components (display & client-side validation)
-import FilepathTextInput, { handleChangeFilepath, isFilepathValid } from './FilepathTextInput.jsx';
+// import RawFastqFileInput, { handleChangeFastqPath } from './RawFastqFileInput.jsx';
+import RawFastqFileInput, { handleChangeFastqPath, isFastqPathValid } from './RawFastqFileInput.jsx';
 import ReadLengthInput, { handleChangeReadLength, isReadLengthValid } from './ReadLengthInput.jsx';
 import PlatformDropdownInput, { handleChangePlatform, isPlatformValid } from './PlatformDropdownInput.jsx';
 import DateInput, { handleChangeDateRun, isDateRunValid } from './DateInput.jsx';
@@ -27,7 +28,7 @@ export default class RawFastqRecordSingle extends Component {
 		this.state = {
 			file: props.record.file, // value of field
 			fileIsInitial: true, // do not show any glyphicon if initial // TODO: remove: if file is present in keys(changedInputs) is proof enough
-			fileIsValid: isFilepathValid(props.record.file), // for glyphicon & form validation
+			fileIsValid: isFastqPathValid(props.record.file), // for glyphicon & form validation
 			fileCountInDatabase: 0, // for glyphicon & asynchronous form validation, not checked if value is initial
 
 			readLength: props.record.readLength,
@@ -51,7 +52,7 @@ export default class RawFastqRecordSingle extends Component {
 		}
 
 		this.updateChangedInputs = updateChangedInputs.bind(this);
-		this.handleChangeFilepath = handleChangeFilepath.bind(this);
+		this.handleChangeFastqPath = handleChangeFastqPath.bind(this);
 		this.handleChangeReadLength = handleChangeReadLength.bind(this);
 		this.handleChangePlatform = handleChangePlatform.bind(this);
 		this.handleChangeDateRun = handleChangeDateRun.bind(this);
@@ -187,7 +188,7 @@ export default class RawFastqRecordSingle extends Component {
 	      		</tr>
 	      	</thead>
 	      	<tbody>
-						<FilepathTextInput
+						<RawFastqFileInput
 							id='file'
 							label='File path'
 							placeholder='Path to FASTQ file'
@@ -198,7 +199,7 @@ export default class RawFastqRecordSingle extends Component {
 							isValid={this.state.fileIsValid}
 							countInDatabase={this.state.fileCountInDatabase}
 
-							onChange={this.handleChangeFilepath}
+							onChange={this.handleChangeFastqPath}
 						/>
 						<ReadLengthInput
 							id='readLength'

@@ -8,7 +8,7 @@ import 'moment/locale/en-gb';
 // Form validation
 import { updateChangedInputs, renderSubmitButton } from './generic.jsx';
 // Input half-dumb components (display & client-side validation)
-import FilepathTextInput, { handleChangeFilepath, isFilepathValid, autocompleteFilepaths, autofillSecond } from './FilepathTextInput.jsx';
+import RawFastqFileInput, { handleChangeFastqPath, isFastqPathValid, autocompleteFilepaths, autofillSecond } from './RawFastqFileInput.jsx';
 import ReadLengthInput, { handleChangeReadLength, isReadLengthValid } from './ReadLengthInput.jsx';
 import PlatformDropdownInput, { handleChangePlatform, isPlatformValid } from './PlatformDropdownInput.jsx';
 import DateInput, { handleChangeDateRun, isDateRunValid } from './DateInput.jsx';
@@ -27,12 +27,12 @@ export default class RawFastqRecordPaired extends Component {
 		this.state = {
 			file1: props.record.file1, // value of field
 			file1IsInitial: true, // do not show any glyphicon if initial
-			file1IsValid: isFilepathValid(props.record.file1), // for glyphicon & form validation
+			file1IsValid: isFastqPathValid(props.record.file1), // for glyphicon & form validation
 			file1CountInDatabase: 0, // for glyphicon & asynchronous form validation, not checked if value is initial
 
 			file2: props.record.file2,
 			file2IsInitial: true,
-			file2IsValid: isFilepathValid(props.record.file2),
+			file2IsValid: isFastqPathValid(props.record.file2),
 			file2CountInDatabase: 0,
 
 			readLength: props.record.readLength,
@@ -56,7 +56,7 @@ export default class RawFastqRecordPaired extends Component {
 		}
 
 		this.updateChangedInputs = updateChangedInputs.bind(this);
-		this.handleChangeFilepath = handleChangeFilepath.bind(this);
+		this.handleChangeFastqPath = handleChangeFastqPath.bind(this);
 		this.handleChangeReadLength = handleChangeReadLength.bind(this);
 		this.handleChangePlatform = handleChangePlatform.bind(this);
 		this.handleChangeDateRun = handleChangeDateRun.bind(this);
@@ -203,7 +203,7 @@ export default class RawFastqRecordPaired extends Component {
 	      		</tr>
 	      	</thead>
 	      	<tbody>
-						<FilepathTextInput
+						<RawFastqFileInput
 							id='file1'
 							label='First mate'
 							placeholder='Path to FASTQ file of file1 mate'
@@ -214,9 +214,9 @@ export default class RawFastqRecordPaired extends Component {
 							isValid={this.state.file1IsValid}
 							countInDatabase={this.state.file1CountInDatabase}
 
-							onChange={this.handleChangeFilepath}
+							onChange={this.handleChangeFastqPath}
 						/>
-						<FilepathTextInput
+						<RawFastqFileInput
 							id='file2'
 							label='Second mate'
 							placeholder='Path to FASTQ file of file2 mate'
@@ -227,7 +227,7 @@ export default class RawFastqRecordPaired extends Component {
 							isValid={this.state.file2IsValid}
 							countInDatabase={this.state.file2CountInDatabase}
 
-							onChange={this.handleChangeFilepath}
+							onChange={this.handleChangeFastqPath}
 
 							displayDropdown={(this.state.file1 !== '' && this.state.file2 === '')}
 							pairedFirst='file1'

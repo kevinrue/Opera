@@ -9,7 +9,7 @@ import { RawFastqRecords } from '/imports/api/raw-fastq-records/raw-fastq-record
 
 // Assuming value is a String
 // check arbitrary rules to prevent submission of invalid forms
-export function isFilepathValid (value) {
+export function isFastqPathValid (value) {
 	// Current check:
 	// - not empty
 	return(
@@ -17,13 +17,13 @@ export function isFilepathValid (value) {
 	);
 }
 
-export function	handleChangeFilepath (field, newValue) {
+export function	handleChangeFastqPath (field, newValue) {
 	// console.log('newValue: ' + newValue);
 	// console.log('props: ' + this.props.record);
 	let isInitial = (newValue === this.props.record[field])
 	// Update the Object (dictionary) that tracks non-initial fields in the parent form
 	this.updateChangedInputs(field, isInitial, newValue);
-	let isValid = isFilepathValid(newValue);
+	let isValid = isFastqPathValid(newValue);
 	// console.log('is valid: ' + isValid);
 	// Update state of the parent form
 	this.setState({
@@ -65,8 +65,8 @@ export function autocompleteFilepaths (field1, field2, suffixesString) {
 	let newSecond = this.state[field1] + suffixesList[1];
 	// console.log('newFirst: ' + newFirst);
 	// console.log('newSecond: ' + newSecond);
-	this.handleChangeFilepath(field1, newFirst);
-	this.handleChangeFilepath(field2, newSecond);
+	this.handleChangeFastqPath(field1, newFirst);
+	this.handleChangeFastqPath(field2, newSecond);
 }
 
 // suffixesString must only contain a single '/' character to split it in two
@@ -79,11 +79,11 @@ export function autofillSecond (field1, field2, suffixesString) {
 		alert('Pattern not found in first mate: ' + suffixesList[0]);
 	} else {
 		let newSecond = file1.replace(suffixesList[0], suffixesList[1]);
-		this.handleChangeFilepath(field2, newSecond);
+		this.handleChangeFastqPath(field2, newSecond);
 	}
 }
 
-export default class FilepathTextInput extends Component {
+export default class RawFastqFileInput extends Component {
 
 	constructor (props) {
 		super(props);
@@ -166,7 +166,7 @@ export default class FilepathTextInput extends Component {
 
 }
 
-FilepathTextInput.propTypes = {
+RawFastqFileInput.propTypes = {
 	// HTML input
 	id: PropTypes.string.isRequired,
 	label: PropTypes.string.isRequired,
@@ -190,7 +190,7 @@ FilepathTextInput.propTypes = {
 	displayDropdown: PropTypes.bool,
 };
 
-FilepathTextInput.defaultProps = {
+RawFastqFileInput.defaultProps = {
 	placeholder: 'Path to file',
 	displayDropdown: false,
 
