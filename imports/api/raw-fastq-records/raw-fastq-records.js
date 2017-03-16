@@ -79,11 +79,12 @@ Meteor.methods({
     // );
   },
 
-  'rawFastqs.insertSingleEnd'(filePath, readLength, platform, dateRun, lane) {
+  'rawFastqs.insertSingleEnd'(filePath, readLength, platform, dateRun, run, lane) {
     check(filePath, String);
     check(readLength, Number);
     check(platform, String);
     check(dateRun, Date);
+    check(run, String);
     check(lane, String);
     // TODO: check that filePath exists on the system
  
@@ -98,6 +99,7 @@ Meteor.methods({
       readLength: readLength,
       platformId: platform,
       dateRun: dateRun,
+      run: run,
       lane: lane,
     };
  
@@ -154,12 +156,13 @@ Meteor.methods({
     );
   },
 
-  'rawFastqs.insertPairedEnd'(file1, file2, readLength, platform, dateRun, lane) {
+  'rawFastqs.insertPairedEnd'(file1, file2, readLength, platform, dateRun, run, lane) {
     check(file1, String);
     check(file2, String);
     check(readLength, Number);
     check(platform, String);
     check(dateRun, Date);
+    check(run, Date);
     check(lane, String);
     // TODO: check that both file paths exist on the system
  
@@ -175,6 +178,7 @@ Meteor.methods({
       readLength: readLength,
       platformId: platform,
       dateRun: dateRun,
+      run: run,
       lane: lane,
     };
 

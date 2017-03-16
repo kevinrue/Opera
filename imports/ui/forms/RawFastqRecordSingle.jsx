@@ -13,7 +13,7 @@ import RawFastqFileInput, { handleChangeFastqPath, isFastqPathValid } from './Ra
 import ReadLengthInput, { handleChangeReadLength, isReadLengthValid } from './ReadLengthInput.jsx';
 import PlatformDropdownInput, { handleChangePlatform, isPlatformValid } from './PlatformDropdownInput.jsx';
 import DateInput, { handleChangeDateRun, isDateRunValid } from './DateInput.jsx';
-import SimpleTextInput, { handleChangeTextInput, isLaneValid } from './SimpleTextInput.jsx';
+import SimpleTextInput, { handleChangeTextInput, isLaneValid, isRunValid } from './SimpleTextInput.jsx';
 
 import Loading from '/imports/ui/loading.jsx';
 
@@ -44,6 +44,10 @@ export default class RawFastqRecordSingle extends Component {
 			dateRunIsInitial: true,
 			dateRunIsValid: isDateRunValid(startDate),
 
+			run: '',
+			runIsInitial: true,
+			runIsValid: isRunValid(startDate),
+
 			lane: props.record.lane,			
 			laneIsInitial: true,
 			laneIsValid: isLaneValid(startDate),
@@ -52,11 +56,15 @@ export default class RawFastqRecordSingle extends Component {
 		}
 
 		this.updateChangedInputs = updateChangedInputs.bind(this);
+		
 		this.handleChangeFastqPath = handleChangeFastqPath.bind(this);
 		this.handleChangeReadLength = handleChangeReadLength.bind(this);
 		this.handleChangePlatform = handleChangePlatform.bind(this);
 		this.handleChangeDateRun = handleChangeDateRun.bind(this);
 		this.handleChangeTextInput = handleChangeTextInput.bind(this);
+
+		this.isLaneValid = isLaneValid.bind(this);
+		this.isRunValid = isRunValid.bind(this);
 	}
 
 	isFormInitial () {
@@ -78,6 +86,7 @@ export default class RawFastqRecordSingle extends Component {
 			!isNaN(this.state.readLength) &&
 			this.state.platformId !== undefined &&
 			this.state.dateRunDate !== undefined &&
+			this.state.run !== '' &&
 			this.state.lane !== ''
 		)
 	}
@@ -92,7 +101,8 @@ export default class RawFastqRecordSingle extends Component {
 			this.state.readLengthIsValid &&
 			this.state.platformIdIsValid &&
 			this.state.dateRunIsValid &&
-			this.state.laneIsValid
+			this.state.runIsValid &&
+			this.state.laneIsValid			
 		);
 	}
 
@@ -114,6 +124,7 @@ export default class RawFastqRecordSingle extends Component {
 					this.state.readLength,
 					this.state.platformId,
 					this.state.dateRunDate,
+					this.state.run,
 					this.state.lane,
 					(err, res) => {
 						if (err){
@@ -165,6 +176,10 @@ export default class RawFastqRecordSingle extends Component {
 			dateRunDate: null,
 			dateRunIsInitial: true,
 			dateRunIsValid: false,
+
+			run: '',
+			runIsInitial: true,
+			runIsValid: false,
 
 			lane: '',
 			laneIsInitial: true,
@@ -233,6 +248,19 @@ export default class RawFastqRecordSingle extends Component {
 							isValid={this.state.dateRunIsValid}
 
 							onChange={this.handleChangeDateRun}
+						/>						
+						<SimpleTextInput
+							id='run'
+							label='Run'
+							placeholder='Sequencing run'
+
+							value={this.state.run}
+
+							isInitial={this.state.runIsInitial}
+							isValid={this.state.runIsValid}
+
+							onChange={this.handleChangeTextInput}
+							check={this.isRunValid}
 						/>
 						<SimpleTextInput
 							id='lane'
@@ -245,10 +273,18 @@ export default class RawFastqRecordSingle extends Component {
 							isValid={this.state.laneIsValid}
 
 							onChange={this.handleChangeTextInput}
+							check={this.isLaneValid}
 						/>
 					</tbody>
 	      </table>
-	      {renderSubmitButton(this.isFormInitial(), this.isFormComplete(), this.isFormValid(), this.isFormPending(), this.isInDatabase())}
+	      {
+	      	renderSubmitButton(
+	      		this.isFormInitial(),
+	      		this.isFormComplete(),
+	      		this.isFormValid(),
+	      		this.isFormPending(),
+	      		this.isInDatabase())
+	      }
 			</form>
 		);
 	}
@@ -266,6 +302,7 @@ RawFastqRecordSingle.defaultProps = {
 		readLength: NaN,
 		platformId: undefined,
 		dateRun: undefined,
+		run: '',
 		lane: '',
 	}
 };

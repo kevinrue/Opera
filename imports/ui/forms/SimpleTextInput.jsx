@@ -4,8 +4,9 @@ import React, { Component, PropTypes } from 'react';
 import { renderGlyphicon } from './generic.jsx';
 
 // Assuming value is a String
-// check arbitrary rules to prevent submission of invalid forms
-export function isLaneValid (value) {
+
+export function isRunValid (value) {
+	// console.log('check run: ' + value);
 	// Current check:
 	// - not empty
 	return(
@@ -13,13 +14,24 @@ export function isLaneValid (value) {
 	);
 }
 
-export function	handleChangeTextInput (field, newValue) {
+// check arbitrary rules to prevent submission of invalid forms
+export function isLaneValid (value) {
+	// console.log('check lane: ' + value);
+	// Current check:
+	// - not empty
+	return(
+		value !== ''
+	);
+}
+
+export function	handleChangeTextInput (field, newValue, check) {
 	// console.log('newValue: ' + newValue);
 	// console.log('props: ' + this.props.record);
+	console.log('check: ' + check);
 	let isInitial = (newValue === this.props.record[field])
 	// Update the Object (dictionary) that tracks non-initial fields in the parent form
 	this.updateChangedInputs(field, isInitial, newValue);
-	let isValid = isLaneValid(newValue);
+	let isValid = check.call(this, newValue);
 	// console.log('is valid: ' + isValid);
 	// Update state of the parent form
 	this.setState({
@@ -45,7 +57,7 @@ handleChangeInput (event) {
 	let field = this.props.id;
 	// console.log(field);
 	let newValue = event.target.value;
-	this.handleChange(field, newValue);
+	this.handleChange(field, newValue, this.props.check);
 }
 
 render () {
@@ -79,24 +91,25 @@ render () {
 }
 
 SimpleTextInput.propTypes = {
-// HTML input
-id: PropTypes.string.isRequired,
-label: PropTypes.string.isRequired,
-placeholder: PropTypes.string,
-className: PropTypes.string,
+	// HTML input
+	id: PropTypes.string.isRequired,
+	label: PropTypes.string.isRequired,
+	placeholder: PropTypes.string,
+	className: PropTypes.string,
 
-// Current value
-value: PropTypes.string.isRequired,
+	// Current value
+	value: PropTypes.string.isRequired,
 
-// Glyphicon
-isInitial: PropTypes.bool.isRequired,
-isValid: PropTypes.bool.isRequired,
+	// Glyphicon
+	isInitial: PropTypes.bool.isRequired,
+	isValid: PropTypes.bool.isRequired,
 
-// Update parent state
-onChange: PropTypes.func.isRequired,
+	// Update parent state
+	onChange: PropTypes.func.isRequired,
+	check: PropTypes.func.isRequired,
 };
 
 SimpleTextInput.defaultProps = {
-placeholder: 'Placeholder text',
-className: 'input-file-path',
+	placeholder: 'Placeholder text',
+	className: 'input-file-path',
 };
