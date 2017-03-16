@@ -17,13 +17,18 @@ export function isFastqPathValid (value) {
 	);
 }
 
-export function	handleChangeFastqPath (field, newValue) {
+export function	handleChangeFastqPath (field, newValue, pairedField = undefined) {
 	// console.log('newValue: ' + newValue);
 	// console.log('props: ' + this.props.record);
 	let isInitial = (newValue === this.props.record[field])
 	// Update the Object (dictionary) that tracks non-initial fields in the parent form
 	this.updateChangedInputs(field, isInitial, newValue);
-	let isValid = isFastqPathValid(newValue);
+	// Second field is not valid if identical to first
+	let pairedValue = this.state[pairedField];
+	// console.log('pairedValue: ' + pairedValue);
+	let isValid = (
+		isFastqPathValid(newValue) &&
+		 (newValue !== pairedValue));
 	// console.log('is valid: ' + isValid);
 	// Update state of the parent form
 	this.setState({
@@ -104,7 +109,7 @@ export default class RawFastqFileInput extends Component {
 		let field = this.props.id;
 		// console.log(field);
 		let newValue = event.target.value;
-		this.handleChange(field, newValue);
+		this.handleChange(field, newValue, this.props.pairedFirst);
 	}
 
 	handleAutocompleteDropdown (suffixesString) {
