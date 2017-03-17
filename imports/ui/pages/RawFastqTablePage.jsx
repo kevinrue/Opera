@@ -11,7 +11,7 @@ import 'moment/locale/en-gb';
 import { RawFastqRecords } from '/imports/api/raw-fastq-records/raw-fastq-records.js';
 import { Platforms } from '/imports/api/platforms.js';
 
-import Loading from '/imports/ui/loading.jsx';
+import Loading from '/imports/ui/Loading.jsx';
 
 class RawFastqTablePage extends Component {
 
@@ -119,7 +119,7 @@ class RawFastqTablePage extends Component {
   renderAdminPanel() {
   	return(
   		<div className='admin-panel'>
-  			<h3>Admin panel</h3>
+  			<h4>Admin panel</h4>
 	      	<Button bsStyle="link" onClick={this.goToAddRawFastqOne.bind(this)}>Add single</Button><br/>
 	        <Button bsStyle="link" onClick={this.goToAddRawFastqBatch.bind(this)}>Add batch</Button>
 	    </div>
@@ -128,7 +128,7 @@ class RawFastqTablePage extends Component {
 
 	render() {
 		return(
-			<div>
+			<div id='page'>
 
 				{ this.renderMainPanel() }
 

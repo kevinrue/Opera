@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 
 import { renderGlyphicon } from './generics.jsx';
 
-// Assuming value is a String
+// Custom validation functions
 
 export function isRunValid (value) {
 	// console.log('check run: ' + value);
@@ -27,7 +27,7 @@ export function isLaneValid (value) {
 export function	handleChangeTextInput (field, newValue, check) {
 	// console.log('newValue: ' + newValue);
 	// console.log('props: ' + this.props.record);
-	console.log('check: ' + check);
+	// console.log('check: ' + check);
 	let isInitial = (newValue === this.props.record[field])
 	// Update the Object (dictionary) that tracks non-initial fields in the parent form
 	this.updateChangedInputs(field, isInitial, newValue);
@@ -43,50 +43,50 @@ export function	handleChangeTextInput (field, newValue, check) {
 
 export default class SimpleTextInput extends Component {
 
-constructor (props) {
-	super(props);
-	// console.log(props);
-	this.handleChange = props.onChange.bind(this);
-	this.handleChangeInput = this.handleChangeInput.bind(this);
-}
+	constructor (props) {
+		super(props);
+		// console.log(props);
+		this.handleChange = props.onChange.bind(this);
+		this.handleChangeInput = this.handleChangeInput.bind(this);
+	}
 
-// (Input event) handleChange function for RawFastqRecord read length
-handleChangeInput (event) {
-	// event.persist();
-	// console.log(event);
-	let field = this.props.id;
-	// console.log(field);
-	let newValue = event.target.value;
-	this.handleChange(field, newValue, this.props.check);
-}
+	// (Input event) handleChange function for RawFastqRecord read length
+	handleChangeInput (event) {
+		// event.persist();
+		// console.log(event);
+		let field = this.props.id;
+		// console.log(field);
+		let newValue = event.target.value;
+		this.handleChange(field, newValue, this.props.check);
+	}
 
-render () {
-	return(
-		<tr>
-			<td>
-				<label htmlFor={this.props.id}>{this.props.label}</label>
-			</td>
-			<td>
-				<input
-					className={this.props.className}
-					id={this.props.id}
-          type="text"
-          ref={this.props.id}
-          placeholder={this.props.placeholder}
-          value={this.props.value}
-          onChange={this.handleChangeInput}
-        />
-      </td>
-      <td>{renderGlyphicon(
-      	this.props.id+'-tip',
-      	this.props.isInitial,
-      	this.props.isValid,
-      	this.props.countInDatabase
-      	)}
-      </td>
-		</tr>
-	);
-}
+	render () {
+		return(
+			<tr>
+				<td>
+					<label htmlFor={this.props.id}>{this.props.label}</label>
+				</td>
+				<td>
+					<input
+						className={this.props.className}
+						id={this.props.id}
+	          type="text"
+	          ref={this.props.id}
+	          placeholder={this.props.placeholder}
+	          value={this.props.value}
+	          onChange={this.handleChangeInput}
+	        />
+	      </td>
+	      <td>{renderGlyphicon(
+	      	this.props.id+'-tip',
+	      	this.props.isInitial,
+	      	this.props.isValid,
+	      	this.props.countInDatabase
+	      	)}
+	      </td>
+			</tr>
+		);
+	}
 
 }
 

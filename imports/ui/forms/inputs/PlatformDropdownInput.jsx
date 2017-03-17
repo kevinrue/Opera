@@ -8,7 +8,7 @@ import { Platforms } from '/imports/api/platforms.js';
 // Form validation
 import { renderGlyphicon } from './generics.jsx';
 
-import Loading from '/imports/ui/loading.jsx';
+import Loading from '/imports/ui/Loading.jsx';
 
 export function isPlatformValid (newValue) {
 	// console.log(newValue);

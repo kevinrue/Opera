@@ -14,7 +14,7 @@ import PlatformDropdownInput, { handleChangePlatform, isPlatformValid } from './
 import DateInput, { handleChangeDateRun, isDateRunValid } from './inputs/DateInput.jsx';
 import SimpleTextInput, { handleChangeTextInput, isLaneValid, isRunValid } from './inputs/SimpleTextInput.jsx';
 
-import Loading from '/imports/ui/loading.jsx';
+import Loading from '/imports/ui/Loading.jsx';
 
 export default class RawFastqRecordSingle extends Component {
 
@@ -154,8 +154,6 @@ export default class RawFastqRecordSingle extends Component {
 		}
 	}
 
-	
-
 	resetForm () {
 		this.setState({
 			file: '',
@@ -168,13 +166,7 @@ export default class RawFastqRecordSingle extends Component {
 			readLengthIsValid: false,
 
 			platformId: null,
-			platformIdIsInitial: true,
-			platformIdIsValid: false,
 
-			dateRun: null,
-			dateRunDate: null,
-			dateRunIsInitial: true,
-			dateRunIsValid: false,
 
 			run: '',
 			runIsInitial: true,

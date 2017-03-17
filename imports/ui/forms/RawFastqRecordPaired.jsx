@@ -14,7 +14,7 @@ import PlatformDropdownInput, { handleChangePlatform, isPlatformValid } from './
 import DateInput, { handleChangeDateRun, isDateRunValid } from './inputs/DateInput.jsx';
 import SimpleTextInput, { handleChangeTextInput, isRunValid, isLaneValid } from './inputs/SimpleTextInput.jsx';
 
-import Loading from '/imports/ui/loading.jsx'
+import Loading from '/imports/ui/Loading.jsx'
 
 export default class RawFastqRecordPaired extends Component {
 

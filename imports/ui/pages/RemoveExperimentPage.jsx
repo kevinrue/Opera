@@ -5,7 +5,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import Select from 'react-select';
 import { Button } from 'react-bootstrap';
 
-import { Experiments } from '/imports/api/experiments.js';
+import { Experiments } from '/imports/api/experiments/experiments.js';
 
 class RemoveExperimentPage extends Component {
 
@@ -49,7 +49,7 @@ class RemoveExperimentPage extends Component {
 		));
 
 		return (
-			<div className="delete-dropdown-form">
+			<div id='page'>
 				<header><h1>Experiments</h1></header>
 				<p>There are currently {this.props.experiments.length} experiments in the database.</p>
 				<header><h2>{this.props.label}</h2></header>

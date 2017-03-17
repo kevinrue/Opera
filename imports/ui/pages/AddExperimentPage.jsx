@@ -3,13 +3,24 @@ import ReactDOM from 'react-dom';
 import { Meteor } from 'meteor/meteor';
 import { createContainer } from 'meteor/react-meteor-data';
 
-import { Experiments } from '/imports/api/experiments.js';
+import { browserHistory } from 'react-router';
+import { ButtonToolbar, Button } from 'react-bootstrap';
+
+import { Experiments } from '/imports/api/experiments/experiments.js';
+
+import AddExperimentForm from '../forms/AddExperimentForm.jsx';
+
+import Loading from '/imports/ui/Loading.jsx';
 
 class AddExperimentPage extends Component {
 
 	constructor(props) {
 		super(props);
 	}
+
+  goToListExperiments () {
+    browserHistory.push('/experiments');
+  }
 
 	handleSubmit(event) {
     event.preventDefault();
@@ -23,28 +34,42 @@ class AddExperimentPage extends Component {
     ReactDOM.findDOMNode(this.refs.newExperimentName).value = '';
   }
 
-	render () {
+  renderMainPanel () {
+    return(
+      <div className='main-panel'>
+        <header><h1>Add an experiment</h1></header>
+        { this.props.loading ? <Loading /> : <AddExperimentForm
+          existingNames={this.props.experiments.map((experiment) => (experiment.name))}
+        /> }
+        
+      </div>
+    );
+  }
 
-		let options = this.props.experiments.map((experiment) => (
-			{label: experiment.name, value: experiment._id}
-		));
+  renderAdminPanel () {
+    return(
+      <div className='admin-panel'>
+        <h4>Admin panel</h4>
+          <ButtonToolbar>
+            <Button bsStyle="link" onClick={this.goToListExperiments.bind(this)}>Back to list</Button>
+          </ButtonToolbar>
+      </div>
+    );
+  }
 
-		return (
-			<div>
-				<header><h1>Experiments</h1></header>
-				<p>There are currently {this.props.experiments.length} experiments in the database.</p>
-				<header><h2>Add an experiment</h2></header>
-          <form className="new-experiment" onSubmit={this.handleSubmit.bind(this)} >
-            <input
-              type="text"
-              ref="newExperimentName"
-              placeholder="Type to add new experiments"
-            />
-          </form>
-			</div>
-		);
-	}
-};
+	render() {
+    return (
+      <div id='page'>
+        { this.renderMainPanel() }
+
+        { this.renderAdminPanel() }
+
+        <div id="clearingdiv"></div>
+      </div>
+    );
+  }
+
+}
 
 AddExperimentPage.propTypes = {
 	experiments: PropTypes.array.isRequired,
@@ -56,9 +81,13 @@ AddExperimentPage.defaultProps = {
 // The wrapped 'App' component fetches tasks from the Tasks collection
 // and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
-	Meteor.subscribe('experiments');
+  const user = Meteor.user();
+	const subscription = Meteor.subscribe('experiments');
+  const loading = (user === undefined || !subscription.ready());
 	
   return {
-    experiments: Experiments.find({}).fetch()
+    currentUser: user, // pass as props so that it is fixed for this page
+    experiments: Experiments.find({}).fetch(),
+    loading: loading,
   };
 }, AddExperimentPage);

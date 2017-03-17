@@ -12,7 +12,7 @@ class AddRawFastqRecordPage extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-			paired: true
+			paired: true,
 		};
 	}
 
@@ -57,7 +57,7 @@ class AddRawFastqRecordPage extends Component {
 
 	render() {
     return (
-    	<div>
+    	<div id='page'>
         { this.renderMainPanel() }
 
         { this.props.currentUser ? this.renderAdminPanel() : '' }

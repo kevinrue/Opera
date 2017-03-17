@@ -26,9 +26,29 @@ Meteor.methods({
       Nsamples: 0,
     });
   },
-  'experiments.remove'(experimentId) {
-    check(experimentId, String);
+
+  'experiments.countRecordsWithTitle'(title) {
+    check(title, String);
+    // TODO: check that filePath exists on the system
  
-    Experiments.remove(experimentId);
+    // Make sure the user is logged in before inserting a task
+    if (! this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+ 
+    return (
+      Experiments.find(
+        {
+          title: title,
+        }
+      ).count()
+    );
   },
+
+  // 'experiments.remove'(experimentId) {
+  //   check(experimentId, String);
+ 
+  //   Experiments.remove(experimentId);
+  // },
+
 });

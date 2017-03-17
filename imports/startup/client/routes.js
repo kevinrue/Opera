@@ -1,27 +1,28 @@
 import React from 'react';
 import { render } from 'react-dom';
 
-import { Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
+import AccountsUIWrapper from '/imports/ui/AccountsUIWrapper.jsx';
+import { Link, Router, Route, IndexRoute, browserHistory} from 'react-router';
 import { Button } from 'react-bootstrap';
 
-// route components
-import App from '/imports/ui/App.jsx';
+// Components
+import RawFastqRecord from '/imports/ui/components/RawFastqRecord.jsx';
 
-import AccountsUIWrapper from '/imports/ui/AccountsUIWrapper.jsx';
+// Pages
+import WelcomePage from '/imports/ui/pages/WelcomePage.jsx';
 
 import ExperimentsTablePage from '/imports/ui/pages/ExperimentsTablePage.jsx';
 import AddExperimentPage from '/imports/ui/pages/AddExperimentPage.jsx';
 import RemoveExperimentPage from '/imports/ui/pages/RemoveExperimentPage.jsx';
-
 import RawFastqTablePage from '/imports/ui/pages/RawFastqTablePage.jsx';
-import RawFastqRecord from '/imports/ui/forms/RawFastqRecord.jsx';
+
 import AddRawFastqRecordPage from '/imports/ui/pages/AddRawFastqRecordPage.jsx';
 import AddRawFastqBatchPage from '/imports/ui/pages/AddRawFastqBatchPage.jsx';
-
 import PlatformsTablePage from '/imports/ui/pages/PlatformsTablePage.jsx';
 
-const NotFound = () => (
-  <h1>404.. This page is not found!</h1>)
+// Specific
+import Denied from '/imports/ui/Denied403.jsx';
+import NotFound from '/imports/ui/NotFound404.jsx';
 
 const Nav = () => (
 	<nav className="navbar navbar-inverse">
@@ -47,27 +48,27 @@ const Nav = () => (
 	    </div>
 		</div>
 	</nav>
-)
+);
 
-const Container = (props) => <div>
-  <Nav />
-  <div id='page'>
-  {props.children}
-  </div>
-</div>
+const Container = (props) => (
+	<div>
+	  <Nav />
+	  {props.children}
+	</div>
+);
 
 const renderRoutes = () => (
   <Router history={browserHistory}>
   	<Route path='/' component={Container}>
-  		<IndexRoute component={App} />
+  		<IndexRoute component={WelcomePage} />
   		<Route path='/experiments' component={ExperimentsTablePage} />
   		<Route path='/experiments/add' component={AddExperimentPage} />
-  		<Route path='/experiments/remove' component={RemoveExperimentPage} />
   		<Route path='/rawFastq' component={RawFastqTablePage} />
   		<Route path='/rawFastq/addOne' component={AddRawFastqRecordPage} />
-  		<Route path='/rawFastq/addBatch' component={AddRawFastqBatchPage} />
   		<Route path='/rawFastq/:_id' component={RawFastqRecord} />
   		<Route path='/platforms' component={PlatformsTablePage} />
+  		<Route path='/403' component={Denied} />
+  		<Route path='*' component={NotFound} />
   	</Route>
   	<Route path='*' component={NotFound} />
   </Router>

@@ -67,7 +67,7 @@ class AddRawFastqBatchPage extends Component {
 
 	render () {
 		return(
-			<div>
+			<div id='page'>
 				<header><h1>Raw FASTQ</h1></header>
 				<header><h2>Add raw FASTQ records</h2></header>
 				<form onSubmit={this.handleSubmit.bind(this)} >

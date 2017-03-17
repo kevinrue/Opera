@@ -8,7 +8,7 @@ import { Platforms } from '/imports/api/platforms.js';
 // Relative paths assume that /pages sits beside /forms
 import AddPlatformForm from '../forms/AddPlatformForm.jsx';
 
-import Loading from '/imports/ui/loading.jsx'
+import Loading from '/imports/ui/Loading.jsx'
 
 class PlatformsTablePage extends Component {
 
@@ -71,7 +71,7 @@ class PlatformsTablePage extends Component {
 	render() {
 		// console.log(this.props.currentUser);
     return (
-    	<div>
+    	<div id='page'>
         { this.renderMainPanel() }
 
         { this.props.currentUser ? this.renderAdminPanel() : '' }

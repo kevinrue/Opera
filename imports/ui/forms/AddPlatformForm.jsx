@@ -7,7 +7,7 @@ import { Button } from 'react-bootstrap';
 
 import { Platforms } from '/imports/api/platforms.js';
 
-import Loading from '/imports/ui/loading.jsx';
+import Loading from '/imports/ui/Loading.jsx';
 
 let classNames = require('classnames');
 
@@ -203,7 +203,6 @@ AddPlatformForm.propTypes = {
 };
 
 AddPlatformForm.defaultProps = {
-	platform: '',
 };
 
 export default createContainer(() => {
