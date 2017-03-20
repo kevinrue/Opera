@@ -91,7 +91,7 @@ class AddExperimentForm extends Component {
 	}
 
 	render () {
-		console.log(this.state);
+		// console.log(this.state);
 		// TODO: error if title of new experiment already exists
 
 		return (

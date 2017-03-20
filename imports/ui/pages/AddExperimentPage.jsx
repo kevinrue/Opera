@@ -6,7 +6,7 @@ import { createContainer } from 'meteor/react-meteor-data';
 import { browserHistory } from 'react-router';
 import { ButtonToolbar, Button } from 'react-bootstrap';
 
-import { Experiments } from '/imports/api/experiments/experiments.js';
+// import { Experiments } from '/imports/api/experiments/experiments.js';
 
 import AddExperimentForm from '../forms/AddExperimentForm.jsx';
 
@@ -38,9 +38,7 @@ class AddExperimentPage extends Component {
     return(
       <div className='main-panel'>
         <header><h1>Add an experiment</h1></header>
-        { this.props.loading ? <Loading /> : <AddExperimentForm
-          existingNames={this.props.experiments.map((experiment) => (experiment.name))}
-        /> }
+        { this.props.loading ? <Loading /> : <AddExperimentForm /> }
         
       </div>
     );
@@ -72,7 +70,6 @@ class AddExperimentPage extends Component {
 }
 
 AddExperimentPage.propTypes = {
-	experiments: PropTypes.array.isRequired,
 };
 
 AddExperimentPage.defaultProps = {
@@ -82,12 +79,10 @@ AddExperimentPage.defaultProps = {
 // and supplies them to the underlying 'App' component it wraps as the 'tasks' prop.
 export default createContainer(() => {
   const user = Meteor.user();
-	const subscription = Meteor.subscribe('experiments');
-  const loading = (user === undefined || !subscription.ready());
-	
+  const loading = (user === undefined);
+  
   return {
     currentUser: user, // pass as props so that it is fixed for this page
-    experiments: Experiments.find({}).fetch(),
     loading: loading,
   };
 }, AddExperimentPage);

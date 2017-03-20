@@ -29,7 +29,6 @@ Meteor.methods({
 
   'experiments.countRecordsWithTitle'(title) {
     check(title, String);
-    // TODO: check that filePath exists on the system
  
     // Make sure the user is logged in before inserting a task
     if (! this.userId) {
