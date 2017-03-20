@@ -22,7 +22,7 @@ Meteor.methods({
     }
  
     Experiments.insert({
-      name: experimentName,
+      title: experimentName,
       Nsamples: 0,
     });
   },
