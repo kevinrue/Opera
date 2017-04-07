@@ -1,0 +1,54 @@
+---
+title: 'Missing first mates'
+author: "Kevin Rue-Albrecht"
+date: "07/04/2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+stopifnot(
+    requireNamespace('DT')
+)
+```
+
+# fastq.gz
+
+```{r}
+detected.fastqGz <- scan('testdata/find/files_fastqgz.txt', 'character')
+```
+
+Identify first and second mates:
+
+```{r}
+mate1.fastqGz <- grepl('_1.fastq.gz', detected.fastqGz)
+sprintf("Count_1: %i", sum(mate1.fastqGz))
+```
+
+```{r}
+mate2.fastqGz <- grepl('_2.fastq.gz', detected.fastqGz)
+sprintf("Count_2: %i", sum(mate2.fastqGz))
+```
+
+Identify exceptions:
+
+```{r}
+mateNA.fastq <- (mate1.fastqGz + mate2.fastqGz == 0)
+sprintf("Count_others: %i", sum(mateNA.fastq))
+```
+
+Identify second mates missing their matching first mate:
+
+```{r}
+missing1.fastqGz <-
+    !gsub('_2.fastq.gz', '_1.fastq.gz', detected.fastqGz[mate2.fastqGz]) %in%
+    detected.fastqGz[mate1.fastqGz]
+sprintf("Count_missing: %i", sum(missing1.fastqGz))
+```
+
+```{r}
+DT::datatable(data.frame(
+    file = detected.fastqGz[mate2.fastqGz][missing1.fastqGz]
+))
+```
+
