@@ -14,10 +14,6 @@ class WelcomePage extends Component {
     browserHistory.push('/experiments');
   }
 
-  goToAddExperiment () {
-    browserHistory.push('/experiments/add');
-  }
-
   goToAddPlatform () {
     browserHistory.push('/platforms');
   }
@@ -43,7 +39,6 @@ class WelcomePage extends Component {
             <h5>Experiments</h5>
             <ButtonGroup vertical>
             <Button bsStyle="link" onClick={this.goToListExperiments.bind(this)}>List</Button>
-            <Button bsStyle="link" onClick={this.goToAddExperiment.bind(this)}>Add</Button>
             </ButtonGroup>
             
             <h5>Platforms</h5>
