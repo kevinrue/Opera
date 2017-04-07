@@ -120,8 +120,7 @@ class RawFastqTablePage extends Component {
   	return(
   		<div className='admin-panel'>
   			<h4>Admin panel</h4>
-	      	<Button bsStyle="link" onClick={this.goToAddRawFastqOne.bind(this)}>Add single</Button><br/>
-	        <Button bsStyle="link" onClick={this.goToAddRawFastqBatch.bind(this)}>Add batch</Button>
+	      	<Button bsStyle="link" onClick={this.goToAddRawFastqOne.bind(this)}>Add single</Button>
 	    </div>
     );
   }

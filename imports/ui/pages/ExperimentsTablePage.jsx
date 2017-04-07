@@ -22,12 +22,8 @@ class ExperimentsTablePage extends Component {
 	renderExperiments() {
 		return (
       <BootstrapTable data={this.props.experiments} striped={true} hover={true} keyField='_id'>
-        <TableHeaderColumn dataField="title" dataAlign="center" width="60%">
+        <TableHeaderColumn dataField="title" dataAlign="center" width="100%">
           Title
-        </TableHeaderColumn>
-        <TableHeaderColumn dataField="Nsamples" dataAlign="center" width="40%"
-          filter={ { type: 'NumberFilter', delay: 1000, numberComparators: [ '=', '>', '<=' ]  } }>
-          Number of samples
         </TableHeaderColumn>
       </BootstrapTable>
 		);

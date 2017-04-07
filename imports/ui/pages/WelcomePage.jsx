@@ -55,7 +55,7 @@ class WelcomePage extends Component {
   }
  
   render() {
-    console.log(this.props.currentUser);
+    // console.log(this.props.currentUser);
     return (
       <div id='page'>
         { this.renderMainPanel() }

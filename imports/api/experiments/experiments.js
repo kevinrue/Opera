@@ -20,11 +20,27 @@ Meteor.methods({
     if (! this.userId) {
       throw new Meteor.Error('not-authorized');
     }
- 
-    Experiments.insert({
+
+    let newValues = {
       title: experimentName,
-      Nsamples: 0,
-    });
+    };
+ 
+    Experiments.insert(
+      newValues,
+      (err, res) => {
+        // console.log('insertPairedEnd connection: ' + this.connection);
+        if (!err){
+          Meteor.call(
+            'databaseEvents.insert',
+            this.userId,
+            'c', // 'create'
+            Array(res),
+            'rawFastqs',
+            newValues: newValues,
+          );
+        }
+      }
+    );
   },
 
   'experiments.countRecordsWithTitle'(title) {
