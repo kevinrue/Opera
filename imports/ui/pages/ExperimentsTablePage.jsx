@@ -11,12 +11,8 @@ import Loading from '/imports/ui/Loading.jsx';
 
 class ExperimentsTablePage extends Component {
 
-  goToAddExperiment() {
-    browserHistory.push('/experiments/add');
-  }
-
-  goToRemoveExperiment() {
-    browserHistory.push('/experiments/remove');
+  goToAddBatchExperiment() {
+    browserHistory.push('/experiments/addBatch');
   }
 
 	renderExperiments() {
@@ -44,7 +40,7 @@ class ExperimentsTablePage extends Component {
       <div className='admin-panel'>
         <h4>Admin panel</h4>
           <ButtonToolbar>
-            <Button bsStyle="link" onClick={this.goToAddExperiment.bind(this)}>Add experiment</Button>
+            <Button bsStyle="link" onClick={this.goToAddBatchExperiment.bind(this)}>Add batch</Button>
           </ButtonToolbar>
       </div>
     );

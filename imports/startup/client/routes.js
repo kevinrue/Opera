@@ -12,12 +12,8 @@ import RawFastqRecord from '/imports/ui/components/RawFastqRecord.jsx';
 import WelcomePage from '/imports/ui/pages/WelcomePage.jsx';
 
 import ExperimentsTablePage from '/imports/ui/pages/ExperimentsTablePage.jsx';
-import AddExperimentPage from '/imports/ui/pages/AddExperimentPage.jsx';
-import RemoveExperimentPage from '/imports/ui/pages/RemoveExperimentPage.jsx';
-import RawFastqTablePage from '/imports/ui/pages/RawFastqTablePage.jsx';
+import AddExperimentBatchPage from '/imports/ui/pages/AddExperimentBatchPage.jsx';
 
-import AddRawFastqRecordPage from '/imports/ui/pages/AddRawFastqRecordPage.jsx';
-import AddRawFastqBatchPage from '/imports/ui/pages/AddRawFastqBatchPage.jsx';
 import PlatformsTablePage from '/imports/ui/pages/PlatformsTablePage.jsx';
 
 // Specific
@@ -38,7 +34,6 @@ const Nav = () => (
 	    </div>
 	    <div className="collapse navbar-collapse" id="bs-navbar">
 	      <ul className="nav navbar-nav">
-			    <li><Link to='/rawFastq'>Raw FASTQ</Link></li>
 			    <li><Link to='/experiments'>Experiments</Link></li>
 			    <li><Link to='/platforms'>Platforms</Link></li>
 	    	</ul>
@@ -62,10 +57,7 @@ const renderRoutes = () => (
   	<Route path='/' component={Container}>
   		<IndexRoute component={WelcomePage} />
   		<Route path='/experiments' component={ExperimentsTablePage} />
-  		<Route path='/experiments/add' component={AddExperimentPage} />
-  		<Route path='/rawFastq' component={RawFastqTablePage} />
-  		<Route path='/rawFastq/addOne' component={AddRawFastqRecordPage} />
-  		<Route path='/rawFastq/:_id' component={RawFastqRecord} />
+  		<Route path='/experiments/addBatch' component={AddExperimentBatchPage} />
   		<Route path='/platforms' component={PlatformsTablePage} />
   		<Route path='/403' component={Denied} />
   		<Route path='*' component={NotFound} />

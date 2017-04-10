@@ -24,10 +24,24 @@ if (Meteor.isServer) {
  
         // Set up a fake method invocation that looks like what the method expects
         const invocation = { userId }; // Note: short for {userId: userId}
-        const newName = 'test experiment';
+        const newId = 'e00001';
+        const newTitle = 'My experiment title';
+        const newType = 'RNA-sequencing'
+        const newOrganism = 'Homo sapiens';
+        const newContact = 'Kevin Rue-Albrecht';
+        const newDescription = 'My detailed description.';
+        const newNotes = 'My additional notes';
  
         // Run the method with `this` set to the fake invocation
-        addExperiment.apply(invocation, [newName]);
+        addExperiment.apply(invocation, [
+          newId,
+          newTitle,
+          newType,
+          newOrganism,
+          newContact,
+          newDescription,
+          newNotes
+        ]);
  
         // Verify that the method does what we expected
         assert.equal(Experiments.find().count(), 1);
