@@ -16,6 +16,8 @@ import AddExperimentBatchPage from '/imports/ui/pages/AddExperimentBatchPage.jsx
 
 import PlatformsTablePage from '/imports/ui/pages/PlatformsTablePage.jsx';
 
+import ResetPage from '/imports/ui/pages/ResetPage.jsx';
+
 // Specific
 import Denied from '/imports/ui/Denied403.jsx';
 import NotFound from '/imports/ui/NotFound404.jsx';
@@ -35,7 +37,7 @@ const Nav = () => (
 	    <div className="collapse navbar-collapse" id="bs-navbar">
 	      <ul className="nav navbar-nav">
 			    <li><Link to='/experiments'>Experiments</Link></li>
-			    <li><Link to='/platforms'>Platforms</Link></li>
+			    <li><Link to='/reset'>Reset</Link></li>
 	    	</ul>
 	    	<ul className="nav navbar-nav navbar-right" id="navbar-signin">
 		    	<li><AccountsUIWrapper /></li>
@@ -59,6 +61,7 @@ const renderRoutes = () => (
   		<Route path='/experiments' component={ExperimentsTablePage} />
   		<Route path='/experiments/addBatch' component={AddExperimentBatchPage} />
   		<Route path='/platforms' component={PlatformsTablePage} />
+  		<Route path='/reset' component={ResetPage} />
   		<Route path='/403' component={Denied} />
   		<Route path='*' component={NotFound} />
   	</Route>
