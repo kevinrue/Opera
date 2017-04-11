@@ -93,7 +93,7 @@ class AddExperimentBatchPage extends Component {
 
 				<p>A description of the expected input is detailed below the <code>textarea</code> input.</p>
 
-				<header><h2>Add raw FASTQ records</h2></header>
+				<header><h2>Form</h2></header>
 
 				{this.props.loading ? <Loading /> : this.renderExperimentCount()}
 
@@ -159,7 +159,9 @@ class AddExperimentBatchPage extends Component {
 }
 
 AddExperimentBatchPage.propTypes = {
-	inputTextValue: PropTypes.string,
+	currentUser: PropTypes.object,
+	countExperiments: PropTypes.number,
+	loading: PropTypes.bool,
 };
 
 AddExperimentBatchPage.defaultProps = {

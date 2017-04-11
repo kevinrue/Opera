@@ -55,7 +55,7 @@ Meteor.methods({
       sampleID: listFields[9],
     };
 
-    let recordId = RawFastqUnit.insert(
+    let recordId = RawFastqUnits.insert(
       newValues,
       (err, res) => {
         // console.log('samples.insert connection: ' + this.connection);

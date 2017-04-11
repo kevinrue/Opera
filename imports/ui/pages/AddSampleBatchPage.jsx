@@ -80,7 +80,7 @@ class AddSampleBatchPage extends Component {
 
 				A description of the expected input is detailed below the <code>textarea</code> input.
 
-				<header><h2>Add raw FASTQ records</h2></header>
+				<header><h2>Form</h2></header>
 
 				{this.props.loading ? <Loading /> : this.renderSampleCount()}
 
@@ -173,6 +173,9 @@ class AddSampleBatchPage extends Component {
 }
 
 AddSampleBatchPage.propTypes = {
+	currentUser: PropTypes.object,
+	countSamples: PropTypes.number,
+	loading: PropTypes.bool,
 };
 
 AddSampleBatchPage.defaultProps = {

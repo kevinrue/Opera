@@ -17,7 +17,7 @@ class ExperimentsTablePage extends Component {
 
 	renderExperiments() {
 		return (
-      <BootstrapTable data={this.props.experiments} striped={true} hover={true} keyField='_id'>
+      <BootstrapTable data={this.props.experiments} striped={true} hover={true} keyField='_id' pagination>
         <TableHeaderColumn dataField="title" dataAlign="center" width="33%">Title</TableHeaderColumn>
         <TableHeaderColumn dataField="type" dataAlign="center" width="10%">Type</TableHeaderColumn>
         <TableHeaderColumn dataField="organism" dataAlign="center" width="10%">Organism</TableHeaderColumn>
@@ -28,11 +28,22 @@ class ExperimentsTablePage extends Component {
 		);
   }
 
+  renderExperimentCount () {
+    return(
+      <p>
+        There are
+        currently {this.props.experiments.length} experiments
+        in the database.
+      </p>
+    );
+  }
+
   renderMainPanel() {
     return(
       <div className='main-panel'>
-        <header><h1>Experiment List</h1></header>
-        <p>There are currently {this.props.experiments.length} experiments in the database.</p>
+        <header><h1>Overview</h1></header>
+        { this.props.loading ? <Loading /> : this.renderExperimentCount() }
+        <header><h1>Table</h1></header>
         { this.props.loading ? <Loading /> : this.renderExperiments() }
       </div>
     );
