@@ -14,6 +14,8 @@ import WelcomePage from '/imports/ui/pages/WelcomePage.jsx';
 import ExperimentsTablePage from '/imports/ui/pages/ExperimentsTablePage.jsx';
 import AddExperimentBatchPage from '/imports/ui/pages/AddExperimentBatchPage.jsx';
 
+import AddSampleBatchPage from '/imports/ui/pages/AddSampleBatchPage.jsx'
+
 import PlatformsTablePage from '/imports/ui/pages/PlatformsTablePage.jsx';
 
 import ResetPage from '/imports/ui/pages/ResetPage.jsx';
@@ -37,6 +39,7 @@ const Nav = () => (
 	    <div className="collapse navbar-collapse" id="bs-navbar">
 	      <ul className="nav navbar-nav">
 			    <li><Link to='/experiments'>Experiments</Link></li>
+			    <li><Link to='/samples'>Samples</Link></li>
 			    <li><Link to='/reset'>Reset</Link></li>
 	    	</ul>
 	    	<ul className="nav navbar-nav navbar-right" id="navbar-signin">
@@ -60,6 +63,7 @@ const renderRoutes = () => (
   		<IndexRoute component={WelcomePage} />
   		<Route path='/experiments' component={ExperimentsTablePage} />
   		<Route path='/experiments/addBatch' component={AddExperimentBatchPage} />
+  		<Route path='/samples' component={AddSampleBatchPage} />
   		<Route path='/platforms' component={PlatformsTablePage} />
   		<Route path='/reset' component={ResetPage} />
   		<Route path='/403' component={Denied} />

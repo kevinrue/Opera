@@ -6,6 +6,7 @@ import { browserHistory } from 'react-router';
 import { Button } from 'react-bootstrap';
 
 import { Experiments } from '/imports/api/experiments/experiments.js';
+import { Samples } from '/imports/api/samples/samples.js';
 
 import Loading from '/imports/ui/Loading.jsx';
 
@@ -20,28 +21,49 @@ class ResetPage extends Component {
     this.clearExperiments.bind(this);
   }
 
+  // Clear methods
+
   clearExperiments () {
     Meteor.call(
       'experiments.clear',
       (err, res) => {
         if (!err){
-          console.log('Experimetns collection cleared');
+          console.log('Experiments collection cleared');
         }
       })
   }
 
-  goToAddPlatform () {
-    browserHistory.push('/platforms');
+  clearSamples () {
+    Meteor.call(
+      'samples.clear',
+      (err, res) => {
+        if (!err){
+          console.log('Samples collection cleared');
+        }
+      })
   }
+
+  // Render action buttons
 
   renderExperimentRow () {
     return(
-      <Button
+      <p><Button
         bsStyle="danger"
         onClick={this.clearExperiments}>Experiments ({this.props.countExperiments})
-      </Button>
+      </Button></p>
     );
   }
+
+  renderSampleRow () {
+    return(
+      <p><Button
+        bsStyle="danger"
+        onClick={this.clearSamples}>Samples ({this.props.countSamples})
+      </Button></p> 
+    );
+  }
+
+  // Render panels
 
   renderMainPanel () {
     let username = (this.props.currentUser ? this.props.currentUser.username : "stranger");
@@ -51,6 +73,7 @@ class ResetPage extends Component {
         <h1>Collections</h1>
         <p>The buttons below will clear the corresponding collections in the database:</p>
         {this.props.loadingExperiments ? <Loading /> : this.renderExperimentRow()}
+        {this.props.loadingSamples ? <Loading /> : this.renderSampleRow()}
       </div>
     );
   }
@@ -81,16 +104,27 @@ class ResetPage extends Component {
 
 ResetPage.propTypes = {
   currentUser: PropTypes.object,
+  loadingExperiments: PropTypes.bool,
+  loadingSamples: PropTypes.bool,
+  countExperiments: PropTypes.number,
+  countSamples: PropTypes.number,
 };
  
 export default createContainer(() => {
   const currentUser = Meteor.user();
   const sExperiment = Meteor.subscribe('experiments');
-  const loading = (currentUser === undefined || !sExperiment.ready());
+  const sSamples = Meteor.subscribe('samples');
+  const loading = (
+    currentUser === undefined ||
+    !sExperiment.ready() ||
+    !sSamples.ready()
+  );
 
   return {
     currentUser: currentUser,
+    loadingExperiments: !sExperiment.ready(),
+    loadingSamples: !sSamples.ready(),
     countExperiments: Experiments.find({}).count(),
-    loadingExperiments: loading,
+    countSamples: Samples.find({}).count(),
   };
 }, ResetPage);
