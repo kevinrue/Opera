@@ -24,7 +24,7 @@ Meteor.methods({
   },
 
   'samples.insert'(listFields) {
-    // , name, cellTypeTissue, geneticIntervention, condition, concentration, unit, duration, chipAntibody, notes, experimentId
+    // ID , name, cellTypeTissue, geneticIntervention, condition, concentration, unit, duration, chipAntibody, notes, experimentId
     check(listFields[0], String); // id
     check(listFields[1], String); // name
     check(listFields[2], String); // cellTypeTissue

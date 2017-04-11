@@ -4,13 +4,13 @@ import { createContainer } from 'meteor/react-meteor-data';
 
 import Textarea from 'react-textarea-autosize';
 
-import { Samples } from '/imports/api/samples/samples.js';
+import { RawFastqUnits } from '/imports/api/raw-fastq-units/raw-fastq-units.js';
 
 import { renderSubmitButton } from '/imports/ui/forms/generics.jsx';
 
 import Loading from '/imports/ui/Loading.jsx';
 
-class AddSampleBatchPage extends Component {
+class AddRawFastqUnitBatchPage extends Component {
 
 	constructor (props) {
 		super(props);
@@ -35,15 +35,15 @@ class AddSampleBatchPage extends Component {
     );
     dataLines.map(inputLine => {
 			inputFields = inputLine.split('\t');
-			if (inputFields.length != 11){
+			if (inputFields.length != 10){
 				console.log(
-					'Aborted: Expected 11 fields, found: ' + inputFields.length + ' (' + inputLine + ')'
+					'Aborted: Expected 10 fields, found: ' + inputFields.length + ' (' + inputLine + ')'
 				);
 				return(undefined);
 			}
 			return (
 				Meteor.call(
-					'samples.insert',
+					'rawFastqUnits.insert',
 					inputFields,
 					(err, res) => {
 						if (!err){
@@ -62,11 +62,11 @@ class AddSampleBatchPage extends Component {
 		});
   }
 
-  renderSampleCount () {
+  renderRawFastqUnitCount () {
   	return(
   		<p>
   			There are
-  			currently { this.props.countSamples } samples
+  			currently { this.props.countRawFastqUnits } raw FASTQ units
   			in the database.
   		</p>
   	);
@@ -76,13 +76,13 @@ class AddSampleBatchPage extends Component {
 		// console.log(this.refs);
 		return(
 			<div id='page'>
-				<header><h1>Add batch of samples</h1></header>
+				<header><h1>Add batch of raw FASTQ units</h1></header>
 
-				A description of the expected input is detailed below the <code>textarea</code> input.
+				<p>A description of the expected input is detailed below the <code>textarea</code> input.</p>
 
-				<header><h2>Add raw FASTQ records</h2></header>
+				<header><h2>Add raw FASTQ units</h2></header>
 
-				{this.props.loading ? <Loading /> : this.renderSampleCount()}
+				{this.props.loading ? <Loading /> : this.renderRawFastqUnitCount()}
 
 				<form onSubmit={this.handleSubmit.bind(this)} >
 					<Textarea
@@ -116,54 +116,47 @@ class AddSampleBatchPage extends Component {
 
 				<ol>
 					<li>
-						Public identifier. <strong>Unique</strong>.
-						Later used to assign assign a batch of FASTQ files to the sample.
+						First mate. <strong>Required; Free text</strong>.
+						Path to the FASTQ file that contains the first (or only) sequenced end of RNA framgents.
 					</li>
 					<li>
-						Name. <strong>Unique within an experiment</strong>.
-						A short identifier of the sample within the experiment.
+						Second mate. <strong>Free text</strong>.
+						Path to the FASTQ file that contains the second sequenced end of paired-end RNA framgents.
 					</li>
 					<li>
-						Cell type / Tissue. <strong>Controlled</strong>.
-						Name of a supported cell type or tissue. Refer to the database for valid choices.
+						Paired. <strong>Y/N</strong>.
+						Declares whether a pair of files should be expected (<code>Y</code>) or not (<code>N</code>).
 					</li>
 					<li>
-						Genetic intervention. <strong>Controlled</strong>.
-						In-house identifier of a genetic alternation applied to the cell type / tissue
-						(<em>e.g.</em>, VHLKO).
+						Read length. <strong>Numeric</strong>.
+						Length of sequenced reads.
 					</li>
 					<li>
-						Condition. <strong>Controlled</strong>.
-						Experimental variable
-						(<em>e.g.</em>, <code>Hypoxia</code>).
+						Sequencer. <strong>Controlled</strong>.
+						Type of sequencer that produced the reads (<em>e.g.</em>, <code>HiSeq2000</code>).
 					</li>
 					<li>
-						Concentration. <strong>Controlled</strong>.
+						Date run. <strong>DD/</strong>.
 						Concentration of the experimental variable; if applicable
 						(<em>e.g.</em>, <code>1</code>).
 					</li>
 					<li>
-						Unit. <strong>Controlled</strong>.
-						Unit of concentration of the experimental variable; if applicable
-						(<em>e.g.</em>, <code>%</code>).
+						Project number / sequencing run. <strong>Free text</strong>.
+						Typically, the WTCHG project number that defines the sequencing run which produced the file(s).
+						<em>Useful for quality control and batch correction across multiple runs.</em>
 					</li>
 					<li>
-						Duration. <strong>Numeric</strong>.
-						Duration of exposure to the experimental variable <em>in hours</em>; if applicable
-						(<em>e.g.</em>, <code>2</code>).
-					</li>
-					<li>
-						ChIP antibody. <strong>Controlled</strong>.
-						Name of a supported antibody used for ChIP; if applicable. Refer to the database for valid choices
-						(<em>e.g.</em>, <code>HIF-2a (PM9)</code>).
+						Lane. <strong>Free text</strong>.
+						Name of the lane on which libraries were sequenced.
+						<em>Useful for quality control and batch correction across multiple lanes.</em>
 					</li>
 					<li>
 						Notes. <strong>Free text</strong>.
 						Information of special significance about the experiment.
 					</li>
 					<li>
-						Experiment ID. <strong>Controlled</strong>.
-						Public identifier of the experiment to assign the sample to.
+						Sample ID. <strong>Controlled</strong>.
+						Public identifier of the sample to assign this raw FASTQ unit to.
 					</li>
 				</ol>
 			</div>
@@ -172,20 +165,20 @@ class AddSampleBatchPage extends Component {
 
 }
 
-AddSampleBatchPage.propTypes = {
+AddRawFastqUnitBatchPage.propTypes = {
 };
 
-AddSampleBatchPage.defaultProps = {
+AddRawFastqUnitBatchPage.defaultProps = {
 };
 
 export default createContainer(() => {
 	const user = Meteor.user();
-	const subscription = Meteor.subscribe('samples');
+	const subscription = Meteor.subscribe('rawFastqUnits');
   const loading = (user === undefined || !subscription.ready());
 
 	return {
 		currentUser: user, // pass as props so that it is fixed for this page
-    countSamples: Samples.find({}).count(),
+    countRawFastqUnits: RawFastqUnits.find({}).count(),
     loading: loading,
 	};
-}, AddSampleBatchPage);
+}, AddRawFastqUnitBatchPage);

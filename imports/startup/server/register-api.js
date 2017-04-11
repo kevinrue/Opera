@@ -1,7 +1,7 @@
 
 import '../../api/platforms.js';
 
-import '../../api/raw-fastq-records/raw-fastq-records.js';
+import '../../api/raw-fastq-units/raw-fastq-units.js';
 
 import '../../api/database-events/database-events.js';
 

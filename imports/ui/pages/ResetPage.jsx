@@ -7,6 +7,7 @@ import { Button } from 'react-bootstrap';
 
 import { Experiments } from '/imports/api/experiments/experiments.js';
 import { Samples } from '/imports/api/samples/samples.js';
+import { RawFastqUnits } from '/imports/api/raw-fastq-units/raw-fastq-units.js';
 
 import Loading from '/imports/ui/Loading.jsx';
 
@@ -43,6 +44,16 @@ class ResetPage extends Component {
       })
   }
 
+  clearRawFastqUnits () {
+    Meteor.call(
+      'rawFastqUnits.clear',
+      (err, res) => {
+        if (!err){
+          console.log('RawFastqUnits collection cleared');
+        }
+      })
+  }
+
   // Render action buttons
 
   renderExperimentRow () {
@@ -63,6 +74,15 @@ class ResetPage extends Component {
     );
   }
 
+  renderRawFastqUnitsRow () {
+    return(
+      <p><Button
+        bsStyle="danger"
+        onClick={this.clearRawFastqUnits}>Raw FASTQ units ({this.props.countRawFastqUnits})
+      </Button></p> 
+    );
+  }
+
   // Render panels
 
   renderMainPanel () {
@@ -74,6 +94,7 @@ class ResetPage extends Component {
         <p>The buttons below will clear the corresponding collections in the database:</p>
         {this.props.loadingExperiments ? <Loading /> : this.renderExperimentRow()}
         {this.props.loadingSamples ? <Loading /> : this.renderSampleRow()}
+        {this.props.loadingRawFastqUnits ? <Loading /> : this.renderRawFastqUnitsRow()}
       </div>
     );
   }
@@ -104,27 +125,34 @@ class ResetPage extends Component {
 
 ResetPage.propTypes = {
   currentUser: PropTypes.object,
+
   loadingExperiments: PropTypes.bool,
   loadingSamples: PropTypes.bool,
+  loadingRawFastqUnits: PropTypes.bool,
+
   countExperiments: PropTypes.number,
-  countSamples: PropTypes.number,
+  countSamplescount: PropTypes.number,
+  countRawFastqUnits: PropTypes.number,
 };
  
 export default createContainer(() => {
   const currentUser = Meteor.user();
+
   const sExperiment = Meteor.subscribe('experiments');
   const sSamples = Meteor.subscribe('samples');
-  const loading = (
-    currentUser === undefined ||
-    !sExperiment.ready() ||
-    !sSamples.ready()
-  );
+  const sRawFastqUnits = Meteor.subscribe('rawFastqUnits');
+  const loading = (currentUser === undefined);
 
   return {
     currentUser: currentUser,
+    loading: loading,
+
     loadingExperiments: !sExperiment.ready(),
     loadingSamples: !sSamples.ready(),
+    loadingRawFastqUnits: !sRawFastqUnits.ready(),
+
     countExperiments: Experiments.find({}).count(),
     countSamples: Samples.find({}).count(),
+    countRawFastqUnits: RawFastqUnits.find({}).count(),
   };
 }, ResetPage);

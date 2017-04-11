@@ -16,6 +16,8 @@ import AddExperimentBatchPage from '/imports/ui/pages/AddExperimentBatchPage.jsx
 
 import AddSampleBatchPage from '/imports/ui/pages/AddSampleBatchPage.jsx'
 
+import AddRawFastqUnitBatchPage from '/imports/ui/pages/AddRawFastqUnitBatchPage.jsx'
+
 import PlatformsTablePage from '/imports/ui/pages/PlatformsTablePage.jsx';
 
 import ResetPage from '/imports/ui/pages/ResetPage.jsx';
@@ -40,6 +42,7 @@ const Nav = () => (
 	      <ul className="nav navbar-nav">
 			    <li><Link to='/experiments'>Experiments</Link></li>
 			    <li><Link to='/samples'>Samples</Link></li>
+			    <li><Link to='/raw-fastq-units'>Raw FASTQ</Link></li>
 			    <li><Link to='/reset'>Reset</Link></li>
 	    	</ul>
 	    	<ul className="nav navbar-nav navbar-right" id="navbar-signin">
@@ -64,6 +67,7 @@ const renderRoutes = () => (
   		<Route path='/experiments' component={ExperimentsTablePage} />
   		<Route path='/experiments/addBatch' component={AddExperimentBatchPage} />
   		<Route path='/samples' component={AddSampleBatchPage} />
+  		<Route path='/raw-fastq-units' component={AddRawFastqUnitBatchPage} />
   		<Route path='/platforms' component={PlatformsTablePage} />
   		<Route path='/reset' component={ResetPage} />
   		<Route path='/403' component={Denied} />

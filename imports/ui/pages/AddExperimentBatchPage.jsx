@@ -15,14 +15,14 @@ class AddExperimentBatchPage extends Component {
 	constructor (props) {
 		super(props);
 		this.state = {
-			inputLines: [],
+			inputTextValue: '',
 		};
 	}
 
 	updateValue (event) {
 		let textInput = event.target.value;
 		this.setState({
-			inputLines: textInput.split('\n') // Store the list of data lines
+			inputLines: textInput
 		});
 	}
 
@@ -30,14 +30,14 @@ class AddExperimentBatchPage extends Component {
 		// Among others: do not reload the page
     event.preventDefault();
     // drop empty lines
-    let dataLines = this.state.inputLines.filter(
+    let dataLines = this.state.inputLines.split('\n').filter(
     	(textLine) => (textLine.trim() != '')
     );
     dataLines.map(inputLine => {
 			inputFields = inputLine.split('\t');
 			if (inputFields.length != 7){
 				console.log(
-					'Aborted: Expected 7 fields, found: ' + inputFields.length + '(' + inputLine + ')'
+					'Aborted: Expected 7 fields, found: ' + inputFields.length + ' (' + inputLine + ')'
 				);
 				return(undefined);
 			}
@@ -68,13 +68,17 @@ class AddExperimentBatchPage extends Component {
 				)
 			);
 		});
+		// Reset form
+		this.setState({
+			inputTextValue: '',
+		});
   }
 
   renderExperimentCount () {
   	return(
   		<p>
   			There are
-  			currently {this.props.loading ? <Loading /> : this.props.countExperiments} experiments
+  			currently {this.props.countExperiments} experiments
   			in the database.
   		</p>
   	);
@@ -85,11 +89,11 @@ class AddExperimentBatchPage extends Component {
 			<div id='page'>
 				<header><h1>Add batch of experiments</h1></header>
 
-				A description of the expected input is detailed below the <code>textarea</code> input.
+				<p>A description of the expected input is detailed below the <code>textarea</code> input.</p>
 
 				<header><h2>Add raw FASTQ records</h2></header>
 
-				{this.renderExperimentCount()}
+				{this.props.loading ? <Loading /> : this.renderExperimentCount()}
 
 				<form onSubmit={this.handleSubmit.bind(this)} >
 					<Textarea
