@@ -21,8 +21,9 @@ class AddExperimentBatchPage extends Component {
 
 	updateValue (event) {
 		let textInput = event.target.value;
+		// console.log(textInput);
 		this.setState({
-			inputLines: textInput
+			inputTextValue: textInput
 		});
 	}
 
@@ -30,7 +31,7 @@ class AddExperimentBatchPage extends Component {
 		// Among others: do not reload the page
     event.preventDefault();
     // drop empty lines
-    let dataLines = this.state.inputLines.split('\n').filter(
+    let dataLines = this.state.inputTextValue.split('\n').filter(
     	(textLine) => (textLine.trim() != '')
     );
     dataLines.map(inputLine => {
@@ -86,6 +87,7 @@ class AddExperimentBatchPage extends Component {
 
 	render () {
 		return(
+			
 			<div id='page'>
 				<header><h1>Add batch of experiments</h1></header>
 
