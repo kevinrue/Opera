@@ -85,18 +85,22 @@ Meteor.methods({
       }
       // Title
       if (newTitle === '') {
-        throw new Meteor.Error('invalid-input', 'Experiment title cannot be empty');
+        throw new Meteor.Error('invalid-input',
+          'Experiment title cannot be empty');
       }
       if (countTitleInDB(newTitle) > 0) {
-        throw new Meteor.Error('invalid-input', 'Experiment title already exist in database: ' + newTitle);
+        throw new Meteor.Error('invalid-input',
+          'At line ' + (lineIndex + 1) + ': Experiment title already exist in database: ' + newTitle);
       }
       // Type
       if(validTypes.indexOf(newType) === -1){
-        throw new Meteor.Error('invalid-input', 'Experiment type not supported (yet): ' + newType);
+        throw new Meteor.Error('invalid-input',
+          'At line ' + (lineIndex + 1) + ': Experiment type not supported (yet): ' + newType);
       }
       // Organism
       if(validOrganisms.indexOf(newOrganism) === -1){
-        throw new Meteor.Error('invalid-input', 'Organism not supported (yet): ' + newOrganism);
+        throw new Meteor.Error('invalid-input',
+          'At line ' + (lineIndex + 1) + ': Organism not supported (yet): ' + newOrganism);
       }
       let newExperiment = {
         id: newId,
