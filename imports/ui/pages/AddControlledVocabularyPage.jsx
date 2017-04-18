@@ -16,7 +16,7 @@ class AddControlledVocabularyPage extends Component {
 	}
 
   goToAddExperimentType () {
-    browserHistory.push('/experiment-type-add');
+    browserHistory.push('/controlled-vocabulary/experiment-type/add');
   }
 
   renderMainPanel () {

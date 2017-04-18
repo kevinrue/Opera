@@ -7,4 +7,6 @@ import '../../api/database-events/database-events.js';
 
 import '../../api/experiments/experiments.js';
 
+import '../../api/experiment-types/experiment-types.js';
+
 import '../../api/samples/samples.js';

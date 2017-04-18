@@ -19,6 +19,8 @@ import AddSampleBatchPage from '/imports/ui/pages/AddSampleBatchPage.jsx'
 import AddRawFastqUnitBatchPage from '/imports/ui/pages/AddRawFastqUnitBatchPage.jsx'
 
 import AddControlledVocabularyPage from '/imports/ui/pages/AddControlledVocabularyPage.jsx'
+import AddExperimentTypePage from '/imports/ui/pages/AddExperimentTypePage.jsx'
+
 import PlatformsTablePage from '/imports/ui/pages/PlatformsTablePage.jsx';
 
 import ResetPage from '/imports/ui/pages/ResetPage.jsx';
@@ -72,6 +74,7 @@ const renderRoutes = () => (
   		<Route path='/raw-fastq-units' component={AddRawFastqUnitBatchPage} />
   		<Route path='/platforms' component={PlatformsTablePage} />
   		<Route path='/controlled-vocabulary' component={AddControlledVocabularyPage} />
+  		<Route path='/controlled-vocabulary/experiment-type/add' component={AddExperimentTypePage} />
   		<Route path='/reset' component={ResetPage} />
   		<Route path='/403' component={Denied} />
   		<Route path='*' component={NotFound} />
