@@ -38,8 +38,8 @@ class RawFastqRecord extends Component {
 	}
 
 	renderForm() {
-		console.log('renderRawFqRec');
-		console.log(this.props);
+	// 	console.log('renderRawFqRec');
+	// 	console.log(this.props);
 		return(
 			this.props.record.paired ?
 				<RawFastqRecordPaired record={this.props.record} /> :
