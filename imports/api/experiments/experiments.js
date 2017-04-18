@@ -55,7 +55,7 @@ Meteor.methods({
       inputFields = inputLine.split('\t');
       if (inputFields.length != 7){
         throw new Meteor.Error('invalid-input',
-          'At line ' + (lineIndex + 1) + ': Expected 7 fields, found ' + inputFields.length
+          'At line ' + (lineIndex + 1) + ': Expected 7 fields, found: ' + inputFields.length
         );
       }
       newId = inputFields[0];
