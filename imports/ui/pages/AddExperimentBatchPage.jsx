@@ -115,34 +115,6 @@ class AddExperimentBatchPage extends Component {
 
 				{ this.state.latestImportError ? this.renderLatestImportError() : '' }
 
-				<header><h2>Expected input by column</h2></header>
-
-				<ol>
-					<li>
-						Public identifier. <strong>Unique</strong>.
-						Later used to assign assign a batch of samples to the experiment.
-					</li>
-					<li>
-						Title. <strong>Unique</strong>.
-						A short description of the experiment.
-					</li>
-					<li>
-						Organism. <strong>Controlled</strong>.
-						Name of a supported organism. Refer to the database for valid choices.
-					</li>
-					<li>
-						Contact. <strong>Controlled</strong>.
-						Identifier of the user responsible for the experiment, samples, and files.
-					</li>
-					<li>
-						Description. <strong>Free text</strong>.
-						A more detailed description of the experiment.
-					</li>
-					<li>
-						Notes. <strong>Free text</strong>.
-						Information of special significance about the experiment.
-					</li>
-				</ol>
 			</div>
 		);
 	}
