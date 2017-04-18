@@ -6,7 +6,7 @@ import Textarea from 'react-textarea-autosize';
 
 import { Experiments } from '/imports/api/experiments/experiments.js';
 
-import { renderSubmitButton } from '/imports/ui/forms/generics.jsx';
+import { ButtonToolbar, Button } from 'react-bootstrap';
 
 import Loading from '/imports/ui/Loading.jsx';
 
@@ -16,6 +16,7 @@ class AddExperimentBatchPage extends Component {
 		super(props);
 		this.state = {
 			inputTextValue: '',
+			latestImportError: null,
 		};
 	}
 
@@ -30,48 +31,31 @@ class AddExperimentBatchPage extends Component {
 	handleSubmit (event) {
 		// Among others: do not reload the page
     event.preventDefault();
-    // drop empty lines
-    let dataLines = this.state.inputTextValue.split('\n').filter(
-    	(textLine) => (textLine.trim() != '')
-    );
-    dataLines.map(inputLine => {
-			inputFields = inputLine.split('\t');
-			if (inputFields.length != 7){
-				console.log(
-					'Aborted: Expected 7 fields, found: ' + inputFields.length + ' (' + inputLine + ')'
-				);
-				return(undefined);
+    // Pass list of data lines to the insert method
+    let dataLines = this.state.inputTextValue.split('\n');
+		let newIdentifiers = Meteor.call(
+			'experiments.insertBatch',
+			dataLines,
+			(err, res) => {
+				if (!err){
+					this.setState({
+						latestImportError: null
+					});
+					console.log('handleSubmit res: ' + res);
+				} else {
+					this.setState({
+						latestImportError: err
+					});
+				}
 			}
-			newId = inputFields[0];
-			newTitle = inputFields[1];
-			newType = inputFields[2];
-			newOrganism = inputFields[3];
-			newContact = inputFields[4];
-			newDescription = inputFields[5];
-			newNotes = inputFields[6];
-			return (
-				Meteor.call(
-					'experiments.insert',
-					newId,
-					newTitle,
-					newType,
-					newOrganism,
-					newContact,
-					newDescription,
-					newNotes,
-					(err, res) => {
-						if (!err){
-							console.log('new identifier: ' + res);
-							// Return the identifier if successully added
-							// return(res);
-						}
-					}
-				)
-			);
-		});
+		)
+  }
+
+  handleReset (event) {
 		// Reset form
 		this.setState({
 			inputTextValue: '',
+			latestImportError: null,
 		});
   }
 
@@ -81,6 +65,15 @@ class AddExperimentBatchPage extends Component {
   			There are
   			currently {this.props.countExperiments} experiments
   			in the database.
+  		</p>
+  	);
+  }
+
+  renderLatestImportError () {
+  	// console.log(this.state.latestImportError);
+  	return(
+  		<p className={'msg-' + this.state.latestImportError.error}>
+  			<code>Error: {this.state.latestImportError.reason}</code>
   		</p>
   	);
   }
@@ -97,12 +90,12 @@ class AddExperimentBatchPage extends Component {
 
 				{this.props.loading ? <Loading /> : this.renderExperimentCount()}
 
-				<form onSubmit={this.handleSubmit.bind(this)} >
+				<form onSubmit={this.handleSubmit.bind(this)} onReset={this.handleReset.bind(this)}>
 					<Textarea
 					    minRows={3}
 					    maxRows={10}
 					    style={{
-					    	whiteSpace: "nowrap", // do not soft-wrap lines, collapse consecutive ' ' into a single one
+					    	whiteSpace: "nowrap", // do not soft-wrap lines, collapse consecutive ' ' into a single one; NOTE: does not work with TAB
 					    	fontFamily: '"Courier New", Courier, monospace',
 					    	maxHeight: 250,
 					    	width: "95%",
@@ -114,15 +107,13 @@ class AddExperimentBatchPage extends Component {
 					    value = {this.state.inputTextValue}
 					    onChange={this.updateValue.bind(this)}
 					/>
-					{
-	      	renderSubmitButton(
-	      		false,
-	      		true,
-	      		true,
-	      		false,
-	      		false)
-	      	}
+					<ButtonToolbar>
+						<Button type="submit" bsStyle='success' disabled={this.state.inputTextValue === ''}>Submit</Button>
+						<Button type="reset" bsStyle='warning' disabled={this.state.inputTextValue === ''}>Reset</Button>
+					</ButtonToolbar>
 				</form>
+
+				{ this.state.latestImportError ? this.renderLatestImportError() : '' }
 
 				<header><h2>Expected input by column</h2></header>
 

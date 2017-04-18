@@ -18,14 +18,21 @@ class ExperimentsTablePage extends Component {
 	renderExperiments() {
 		return (
       <BootstrapTable data={this.props.experiments} striped={true} hover={true} keyField='_id' pagination>
-        <TableHeaderColumn dataField="title" dataAlign="center" width="33%">Title</TableHeaderColumn>
+        <TableHeaderColumn dataField="title" dataAlign="center" width="70%">Title</TableHeaderColumn>
         <TableHeaderColumn dataField="type" dataAlign="center" width="10%">Type</TableHeaderColumn>
         <TableHeaderColumn dataField="organism" dataAlign="center" width="10%">Organism</TableHeaderColumn>
         <TableHeaderColumn dataField="contact" dataAlign="center" width="10%">Contact</TableHeaderColumn>
-        <TableHeaderColumn dataField="description" dataAlign="center" width="33%">Description</TableHeaderColumn>
-        <TableHeaderColumn dataField="notes" dataAlign="center" width="33%">Notes</TableHeaderColumn>
       </BootstrapTable>
 		);
+  }
+
+  renderExtraFields () {
+    return(
+      <ul>
+        <li>Description</li>
+        <li>Notes</li>
+      </ul>
+    );
   }
 
   renderExperimentCount () {
@@ -45,6 +52,8 @@ class ExperimentsTablePage extends Component {
         { this.props.loading ? <Loading /> : this.renderExperimentCount() }
         <header><h1>Table</h1></header>
         { this.props.loading ? <Loading /> : this.renderExperiments() }
+        <header><h2>Additional fields</h2></header>
+        { this.renderExtraFields() }
       </div>
     );
   }

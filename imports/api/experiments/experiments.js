@@ -12,6 +12,26 @@ if (Meteor.isServer) {
   })
 }
 
+function countIdInDB(text) {
+  return (
+    Experiments.find(
+      {
+        id: text,
+      }
+    ).count()
+  );
+}
+
+function countTitleInDB(text) {
+  return (
+    Experiments.find(
+      {
+        title: text,
+      }
+    ).count()
+  );
+}
+
 Meteor.methods({
   'experiments.clear'() {
  
@@ -21,6 +41,63 @@ Meteor.methods({
     }
  
     Experiments.remove({});
+  },
+
+  'experiments.insertBatch'(dataLines) {
+    check(dataLines, Array);
+ 
+    // Make sure the user is logged in before inserting a task
+    if (! this.userId) {
+      throw new Meteor.Error('not-authorized');
+    }
+
+    let recordIds = dataLines.map((inputLine, lineIndex) => {
+      inputFields = inputLine.split('\t');
+      if (inputFields.length != 7){
+        throw new Meteor.Error('invalid-input',
+          'At line ' + (lineIndex + 1) + ': Expected 7 fields, found ' + inputFields.length
+        );
+      }
+      newId = inputFields[0];
+      newTitle = inputFields[1];
+      newType = inputFields[2];
+      newOrganism = inputFields[3];
+      newContact = inputFields[4];
+      newDescription = inputFields[5];
+      newNotes = inputFields[6];
+      // Public ID
+      if (newId === '') {
+        throw new Meteor.Error('invalid-input',
+          'At line ' + (lineIndex + 1) + ': Experiment ID cannot be empty');
+      }
+      if (countIdInDB(newId) > 0) {
+        throw new Meteor.Error('invalid-input',
+          'At line ' + (lineIndex + 1) + ': Experiment ID already exist in database: ' + newId);
+      }
+      // Title
+      if (newTitle === '') {
+        throw new Meteor.Error('invalid-input', 'Experiment title cannot be empty');
+      }
+      if (countTitleInDB(newTitle) > 0) {
+        throw new Meteor.Error('invalid-input', 'Experiment title already exist in database: ' + newTitle);
+      }
+      let newExperiment = {
+        id: newId,
+        title: newTitle,
+        type: newType,
+        organism: newOrganism,
+        contact: newContact,
+        description: newDescription,
+        notes: newNotes,
+      };
+      return (
+        Experiments.insert(newExperiment)
+      );
+    });
+
+    // console.log('newExperimentId: ' + recordIds)
+    // return the array of new identifiers
+    return(recordIds);
   },
 
   'experiments.insert'(id, title, type, organism, contact, description, notes) {
@@ -69,23 +146,6 @@ Meteor.methods({
     console.log('newExperimentId: ' + recordId)
  
     return(recordId);
-  },
-
-  'experiments.countRecordsWithTitle'(title) {
-    check(title, String);
- 
-    // Make sure the user is logged in before inserting a task
-    if (! this.userId) {
-      throw new Meteor.Error('not-authorized');
-    }
- 
-    return (
-      Experiments.find(
-        {
-          title: title,
-        }
-      ).count()
-    );
   },
 
   // 'experiments.remove'(experimentId) {
