@@ -4,6 +4,10 @@ import { check } from 'meteor/check';
  
 export const Experiments = new Mongo.Collection('experiments');
 
+const validTypes = [
+  'RNA-seq',
+  'ChIP-seq'];
+
 if (Meteor.isServer) {
   // This code only runs on the server
   // Only publish experiments to users that are logged in
@@ -80,6 +84,10 @@ Meteor.methods({
       }
       if (countTitleInDB(newTitle) > 0) {
         throw new Meteor.Error('invalid-input', 'Experiment title already exist in database: ' + newTitle);
+      }
+      // Type
+      if(validTypes.indexOf(newType) === -1){
+        throw new Meteor.Error('invalid-input', 'Experiment type not supported (yet): ' + newType);
       }
       let newExperiment = {
         id: newId,
