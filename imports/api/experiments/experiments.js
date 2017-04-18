@@ -6,7 +6,12 @@ export const Experiments = new Mongo.Collection('experiments');
 
 const validTypes = [
   'RNA-seq',
-  'ChIP-seq'];
+  'ChIP-seq'
+];
+
+const validOrganisms = [
+  'Homo sapiens',
+];
 
 if (Meteor.isServer) {
   // This code only runs on the server
@@ -88,6 +93,10 @@ Meteor.methods({
       // Type
       if(validTypes.indexOf(newType) === -1){
         throw new Meteor.Error('invalid-input', 'Experiment type not supported (yet): ' + newType);
+      }
+      // Organism
+      if(validOrganisms.indexOf(newOrganism) === -1){
+        throw new Meteor.Error('invalid-input', 'Organism not supported (yet): ' + newOrganism);
       }
       let newExperiment = {
         id: newId,
