@@ -16,7 +16,7 @@ const validOrganisms = [
 if (Meteor.isServer) {
   // This code only runs on the server
   // Only publish experiments to users that are logged in
-  Meteor.publish('experiments', () => {
+  Meteor.publish('experiments', function publishExperiments() {
   	return (this.userId ? Experiments.find() : []);
   })
 }
